@@ -2,23 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Default colors */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --lime-yellow: #E4EA00;
+  --electric-blue: #0037EB;
+  --graphite: #212121;
+  --smoke: #F2F2F2;
+  --light-gray: #CBCBCB;
+  --dark-grey: #7F7F7F;
+  --blue: #0037EB;
 }
 
+
+/* globals.css fonts*/
+
+:root {
+  --font-apfel-grotezk-mittel: "ApfelGrotezk-Mittel", sans-serif;
+  --font-apfel-grotezk-regular: "ApfelGrotezk-Regular", sans-serif;
+  --font-qimano: "Qimano-aYxdE", sans-serif;
+}
+
+
+/* dark mode  */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --lime-yellow: #E4EA00;
+    --electric-blue: #0037EB;
+    --graphite: #212121;
+    --smoke: #F2F2F2;
+    --light-grey: #CBCBCB;
+    --dark-grey: #7F7F7F;
+    --blue: #0037EB;
   }
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  /* font-family: Arial, Helvetica, sans-serif; */
+  background-color: var(--smoke);
+  color: var(--graphite);
+   font-family: var(--font-qimano);
 }
+
 
 @layer utilities {
   .text-balance {
