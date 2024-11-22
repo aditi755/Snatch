@@ -1,16 +1,8 @@
-"use client"
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import Otp from "@/components/Otp";
 
 export default function Home() {
-
-  const router = useRouter();
-
-  const handleVerifyEmail = () => {
-    router.push('/signup/enter-otp'); 
-  };
-
   return (
     <div className="h-screen bg-smoke flex flex-col sm:flex-row overflow-hidden">
       {/* Left Section for Image */}
@@ -46,47 +38,26 @@ export default function Home() {
         />
 
                   {/* Mobile Logo */}
-    <Image
-    src="/assets/logo/snatch_white.svg"
-    alt="Logo"
-    width={189}
-    height={24}
-    className="block sm:hidden mx-auto absolute top-10 z-10"
-  />
+        <Image
+        src="/assets/logo/snatch_white.svg"
+        alt="Logo"
+        width={189}
+        height={24}
+        className="block sm:hidden mx-auto absolute top-10 z-10"
+    />
 
       </div>
 
       {/* Right Section for Text */}
       <div className="flex h-1/2 sm:h-full w-full sm:w-1/2 justify-center items-center bg-smoke mb-20 sm:mb-0 relative">
         <div className="flex flex-col justify-center items-center text-center w-full px-6 sm:px-10">
-          <h1 className="text-graphite text-2xl sm:text-5xl mb-8">Sign Up</h1>
+          <h1 className="text-graphite text-2xl sm:text-5xl mb-8">Enter OTP</h1>
 
-          <div className="relative w-full sm:w-[356px]">
-            <input
-              type="text"
-              placeholder="Enter email address"
-              className="w-full bg-transparent rounded-md border border-stroke py-3 pl-5 text-dark-6 outline-none transition focus:border-primary"
-            />
-          </div>
+          <Otp />
 
-          <button onClick={handleVerifyEmail}  className="w-full sm:w-[356px] h-12 bg-[#0037EB] text-white rounded-lg mt-4">
+          <button className="w-full sm:w-[356px] h-12 bg-[#0037EB] text-white rounded-lg mt-9">
             Verify email
           </button>
-
-          <div className="flex mt-10 items-center justify-center w-full">
-
-        <div className="border-b-2 border-[3D3D3D] w-[128px]"></div>
-
-          <span className="mx-4 text-[3D3D3] text-lg">or</span>
-  
-        <div className="border-b-2 border-[3D3D3D] w-[128px]"></div>
-        </div>
-
-        <div className="mt-5 text-dark-grey">Already have an account?
-      <Link href="/login">
-      <span className="text-electric-blue ml-2 cursor-pointer">Login</span>
-      </Link>
-        </div>
 
         </div>
       </div>

@@ -1,8 +1,9 @@
-"use client"
+//from tailgrids otp component
+"use client";
 import React, { useRef, useState } from "react";
 
-export default function Otp1() {
-  const [otp, setOtp] = useState(Array(4).fill("")); // Array with 6 empty strings
+export default function Otp() {
+  const [otp, setOtp] = useState(Array(5).fill("")); // Array with 5 empty strings
   const inputRefs = useRef([]); // Array of refs for each input field
 
   const handleKeyDown = (e) => {
@@ -59,7 +60,7 @@ export default function Otp1() {
   };
 
   return (
-    <section className="bg-white py-10 dark:bg-dark">
+    <section className="py-1">
       <div className="container">
         <form id="otp-form" className="flex gap-2">
           {otp.map((digit, index) => (
@@ -73,10 +74,9 @@ export default function Otp1() {
               onFocus={handleFocus}
               onPaste={handlePaste}
               ref={(el) => (inputRefs.current[index] = el)}
-              className="shadow-xs flex w-[64px] items-center justify-center rounded-lg border border-stroke bg-white p-2 text-center text-2xl font-medium text-gray-5 outline-none sm:text-4xl dark:border-dark-3 dark:bg-white/5"
+              className="shadow-xs flex w-[64px] h-[64px] items-center justify-center rounded-md border border-gray-300  text-center text-2xl font-medium text-electric-blue outline-none focus:border-electric-blue focus:ring-1 focus:ring-electric-blue sm:text-4xl"
             />
           ))}
-          {/* You can conditionally render a submit button here based on otp length */}
         </form>
       </div>
     </section>
