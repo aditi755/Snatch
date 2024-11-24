@@ -4,8 +4,19 @@
 import { FormProvider } from "./context";
 import Image from "next/image";
 import { useFormContext } from "./context";
+import Preview from "@/components/Preview";
+import { useRouter } from "next/navigation";
 
 export default function OnboardingLayout({ children }) {
+
+  const router = useRouter();
+  const handleNextClick = () => {
+    router.push("/onboarding/step-2");
+  }
+
+  const handlePrevClick = () => {
+    router.push("/onboarding/step-1");
+  }
   return (
     <FormProvider>
       <div className="flex h-screen bg-gray-100">
@@ -23,6 +34,16 @@ export default function OnboardingLayout({ children }) {
           </div>
         </div>
 
+<div className="absolute top-[640px] left-[700px] w-[200px] h-[74px] flex justify-center items-center gap-5 border-2 bg-white border-light-grey rounded-md">
+  <button onClick={handlePrevClick} className="w-[72px] h-[37px] bg-white text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
+    Prev
+  </button>
+
+  <button onClick={handleNextClick} className="w-[72px] h-[37px] bg-white text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
+  Next
+  </button>
+</div>
+
         {/* Right side: Form */}
         <div className="w-1/2 flex flex-col justify-center items-center bg-white">
           <div className="w-[100vw] max-w-xl">{children}</div>
@@ -32,56 +53,7 @@ export default function OnboardingLayout({ children }) {
   );
 }
 
-// Separate Preview Component
-function Preview() {
-  const { formData } = useFormContext(); // Access formData using context
-  
-  console.log("formdara from preview layout",formData)
-  return (
-    <div>
- 
-    <div className="flex gap-3 justify-center items-center">
-        <span class="bg-dark/10 text-dark-grey m-2 inline-block rounded border border-transparent py-1 px-2.5 text-xs font-medium ">
-            Indutsry
-          </span>
-          <span class="bg-dark/10 text-dark-grey m-2 inline-block rounded border border-transparent py-1 px-2.5 text-xs font-medium ">
-          Industry
-          </span>
-          <span class="bg-dark/10 text-dark-grey m-2 inline-block rounded border border-transparent py-1 px-2.5 text-xs font-medium ">
-            Industry
-          </span>
-    </div>
 
 
-    <Image className="mx-auto mt-5" width={80} height={40} alt="profile_pic" src="/assets/images/profile_defaultOnborad.svg"/>
 
-    <h2 className="text-dark-grey text-3xl text-center mt-4">Your Name</h2>
 
-    <div className="flex justify-center items-center gap-3 text-dark-grey ">
-        <h6>@username</h6>
-        <h6>she/her</h6>
-        <h6>Location</h6>
-    </div>
-
-    <div className="flex gap-5 px-5 text-dark-grey mt-[50px]">
-        <h5>Languages</h5>
-        <div>What Languages do you speak</div>
-    </div>
-
-    <div className="flex gap-5 px-5 text-dark-grey mt-5">
-        <h5>Open to</h5>
-        <div>What Comp methods are you open to?</div>
-    </div>
-
-    <div className="text-dark-grey px-10 flex flex-col justify-center items-center mt-10">
-     <h3 className="text-3xl">$ 00 - 00</h3>
-     <div>Charge per content piece</div>
-    </div>
-
-      {/* <h3 className="font-bold text-lg mb-2">Preview:</h3>
-      <p className="text-sm">Name: {formData.name || "Your name"}</p>
-      <p className="text-sm">Email: {formData.email || "Your email"}</p>
-      <p className="text-sm">Address: {formData.address || "Your address"}</p> */}
-    </div>
-  );
-}

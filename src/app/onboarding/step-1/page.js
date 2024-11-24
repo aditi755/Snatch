@@ -1,136 +1,163 @@
+
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormContext } from "../context";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import CustomDropdown from "@/components/CustomDropdown";
 import InstagramInput from "@/components/InstagramInput";
 import SocialLinksDropdown from "@/components/SocialLinksDropdown";
 import CustomFileInput from "@/components/CustomFileInput";
+import FormInput from "@/components/FormInput";
+import Preview from "@/components/Preview";
+
 
 export default function Step1() {
-  const { formData, updateFormData } = useFormContext(); // Access context
-  const [name, setName] = useState(formData.name || ""); // Initialize with context value
-  const [email, setEmail] = useState(formData.email || ""); // Initialize with context value
-  const [selectedOption, setSelectedOption] = useState(""); // Track dropdown selection
+  const { formData, updateFormData } = useFormContext();
   const router = useRouter();
 
-  // Sync state with formData (if necessary)
+  const [formState, setFormState] = useState({
+    firstName: "",
+    lastName: "",
+    gender: "",
+    links: [],
+    instagram: "",
+    profilePicture: null,
+    backgroundPicture: null,
+  });
+
+  // Synchronize formState with formData when formData updates
   useEffect(() => {
-    setName(formData.name);
-    setEmail(formData.email);
+    setFormState({
+      firstName: formData.firstName || "",
+      lastName: formData.lastName || "",
+      gender: formData.gender || "",
+      links: formData.links || [],
+      instagram: formData.instagram || "",
+      profilePicture: formData.profilePicture || null,
+      backgroundPicture: formData.backgroundPicture || null,
+    });
   }, [formData]);
 
-  const handleDropdownSelect = (option) => {
-    setSelectedOption(option);
-    updateFormData({ selectedOption: option }); // Update context if needed
+  // Update a specific field
+  const updateField = (field, value) => {
+    setFormState((prev) => ({ ...prev, [field]: value }));
+    updateFormData({ [field]: value }); // Update context immediately
   };
 
-  // Handle form submission
+  console.log("formState from step1 page", formState)
+
+  // Add a new social link
+  const handleAddSocialLink = () => {
+    console.log(formState.links)
+    updateField("links", [...formState.links, {}]);
+  };
+
+  // Update a specific social link
+  const handleLinkChange = (index, data) => {
+    const updatedLinks = [...formState.links];
+    updatedLinks[index] = data;
+    updateField("links", updatedLinks);
+  };
+
+  console.log("updated Links", formState.links)
+
+  // Submit form
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateFormData({ name, email, selectedOption }); // Update context
-    setTimeout(() => {
-      router.push("/onboarding/step-2");
-    }, 5000); // Navigate to Step 2
+    console.log("formstate from step-1 page sending to context", formState)
+    updateFormData(formState);
+    // router.push("/onboarding/step-2");
   };
-
-  const [links, setLinks] = useState([]);
-
-  const handleLinkChange = (index, data) => {
-    const updatedLinks = [...links];
-    updatedLinks[index] = data;
-    setLinks(updatedLinks);
-  };
-
-  const handleAddMore = () => setLinks([...links, {}]);
-
-  const handleFileChange = (file) => {
-    console.log("Selected file:", file);
-  }
 
   return (
-    <div className="w-full h-[100vh] overflow-hidden mx-auto">
-      <h2 className="text-2xl mt-20">Let's get Started</h2>
+    <form
+      className="w-full h-[100vh] overflow-hidden mx-auto space-y-6"
+      onSubmit={handleSubmit}
+    >
+      <h2 className="text-2xl mt-10">Let get Started</h2>
 
-      <div className="flex flex-row mt-6 gap-11">
-        <input
-          type="text"
+      {/* First and Last Name */}
+      <div className="flex flex-row gap-6">
+        <FormInput
           placeholder="First Name"
-          className="w-full bg-transparent rounded-md border border-stroke py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2"
+          value={formState.firstName}
+          onChange={(e) => updateField("firstName", e.target.value)}
         />
-        <input
-          type="text"
+        <FormInput
           placeholder="Last Name"
-          className="w-full bg-transparent rounded-md border border-stroke py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2"
+          value={formState.lastName}
+          onChange={(e) => updateField("lastName", e.target.value)}
         />
       </div>
 
-      <div className="mt-7 flex flex-row gap-10">
+      {/* Gender Dropdown */}
+      <div className="flex flex-row gap-6">
         <CustomDropdown
           options={["Male", "Female", "Other", "Prefer not to say"]}
-          placeholder="Select an Option"
-          onSelect={handleDropdownSelect}
+          placeholder="Select Gender"
+          onSelect={(option) => updateField("gender", option)}
+          selected={formState.gender}
         />
-        <input
-          type="text"
-          placeholder="Gender"
-          className="w-[250px] bg-transparent rounded-md border border-stroke py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2"
+
+          <FormInput
+          placeholder="Date of birth"
+          value={"Date of birth"}
+          onChange={(e) => updateField("lastName", e.target.value)}
         />
       </div>
 
-      <div className="mt-4 text-[#212121] font-regular">
-        <h6>Add social links</h6>
-      
-      <div className="mt-3">
-      <InstagramInput />
-      <SocialLinksDropdown />
-
-      {links.map((_, index) => (
-        <SocialLinksDropdown
-          key={index}
-          onChange={(data) => handleLinkChange(index, data)}
+      {/* Social Links */}
+      <div>
+        <h6 className="font-medium text-gray-700">Add social links</h6>
+        <div className="mt-3">
+        <InstagramInput
+          value={formState.instagram}
+          onChange={(value) => updateField("instagram", value)}
         />
-      ))}
-
-<button
-        className="mt-4 flex items-center gap-2 text-dark-grey cursor-pointer"
-        onClick={handleAddMore}
-      >
-      
-        Add More Links
-      </button>
-      </div> 
-      </div>
-
-
-      <div className="mt-5">
-
-        {/* For uploading picture */}
-      <CustomFileInput
-        onFileChange={handleFileChange}
-        placeholder="Upload a profile picture from your device"
-        iconSrc="/assets/icons/onboarding/Upload.svg"
-        label="Upload picture"  
-      />
-      
-      {/* For uploading background */}
-      <CustomFileInput
-        onFileChange={handleFileChange}
-        placeholder="Choose or upload a background picture"
-        iconSrc="/assets/icons/onboarding/Upload.svg"
-        label="Upload background"  
-      />
-      </div>
-
-      <div className="mt-4 flex justify-between">
-          <button type="submit" className="btn-primary">
-            Save and Continue
+          {formState.links.map((link, index) => (
+            <SocialLinksDropdown
+              key={index}
+              initialData={link}
+              onChange={(data) => handleLinkChange(index, data)}
+            />
+          ))}
+          <button
+            type="button"
+            className="mt-4 flex items-center gap-2 text-dark-grey cursor-pointer"
+            onClick={handleAddSocialLink}
+          >
+            Add More Links
           </button>
         </div>
+      </div>
 
-    </div>
+      {/* Upload Picture & Background */}
+      <div className="space-y-4">
+      <CustomFileInput
+    onFileChange={(file) => updateFormData({ profilePicture: file })}
+    placeholder="Upload a profile picture from your device"
+    iconSrc="/assets/icons/onboarding/Upload.svg"
+    label="Upload picture"
+    fileNameKey="profilePictureName" // Pass the key for the profile picture file name
+  />
+  <CustomFileInput
+    onFileChange={(file) => updateFormData({ backgroundPicture: file })}
+    placeholder="Choose or upload a background picture"
+    iconSrc="/assets/icons/onboarding/Upload.svg"
+    label="Upload background"
+    fileNameKey="backgroundPictureName" // Pass the key for the background picture file name
+  />
+      </div>
+
+      {/* Submit
+      <div className="mt-6">
+        <button type="submit" className="btn-primary w-full">
+          Save and Continue
+        </button>
+      </div> */}
+
+    </form>
   );
 }
 
@@ -138,159 +165,4 @@ export default function Step1() {
 
 
 
-
-
-
-  {/* <form onSubmit={handleSubmit} className="space-y-4 mt-10">
-        <div>
-          <label htmlFor="name" className="block text-sm">
-            Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="email" className="block text-sm">
-            Email
-          </label>
-          <input
-            type="text"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md"
-            required
-          />
-        </div>
-        <div className="mt-4 flex justify-between">
-          <button type="submit" className="btn-primary">
-            Save and Continue
-          </button>
-        </div>
-      </form> */}
-
-
-
-      // "use client";
-
-// import { useState, useEffect } from "react";
-// import { useFormContext } from "../context";
-// import { useRouter } from "next/navigation";
-
-// export default function Step1() {
-//   const { formData, updateFormData } = useFormContext(); // Access context
-//   const [name, setName] = useState(formData.name || ""); // Initialize with context value
-//   const [email, setEmail] = useState(formData.email || ""); // Initialize with context value
-//   const router = useRouter();
-
-//     // Use effect to sync state with formData (if necessary)
-//     useEffect(() => {
-//         setName(formData.name); // Sync name when formData changes
-//         setEmail(formData.email); // Sync email when formData changes
-//       }, [formData]);
-
-//   // Handle form submission
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     updateFormData({ name, email }); // Update context
-//     setTimeout(() => {
-//         router.push("/onboarding/step-2");
-//     }, [5000]) // Navigate to Step 2
-//   };
-
-//   return (
-//     <div className="w-full h-[100vh] overflow-hidden  mx-auto">
-//       <h2 className="text-2xl mt-20">Let's get Started</h2>
-
-//      <div className="flex flex-row mt-6 gap-11">
-//       <input
-//         type='text'
-//         placeholder='First Name'
-//         className='w-full bg-transparent rounded-md border border-stroke  py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2'
-//       />
-
-//       <input
-//         type='text'
-//         placeholder='Last Name'
-//         className='w-full bg-transparent rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2'
-//       />
-//      </div>
-
-//     <div classame="flex flex-row gap-10">
-//       {/* <div className='relative z-20'> */}
-//       <div className="mt-7 relative z-20 w-[268px]">
-//   <div className="rounded-lg border border-stroke bg-transparent py-[10px] px-5 text-dark-6 cursor-pointer">
-//     Select an Option
-//   </div>
-//   <ul className="absolute mt-2 w-full rounded-lg border border-stroke bg-light-grey py-2">
-//     <li
-//       className="px-5 py-2 text-graphite hover:text-electric-blue cursor-pointer"
-//     >
-//       Option 1
-//     </li>
-//     <li
-//       className="px-5 py-2 text-graphite hover:text-electric-blue cursor-pointer"
-//     >
-//       Option 2
-//     </li>
-//     <li
-//       className="px-5 py-2 text-graphite hover:text-electric-blue cursor-pointer"
-//     >
-//       Option 3
-//     </li>
-//   </ul>
-// </div>
-
-        
-//       {/* </div> */}
-
-//       <input
-//         type='text'
-//         placeholder='Gender'
-//         className='w-[250px]  ml-10 bg-transparent rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2'
-//       />
-//       </div>
-
-      
-
-//       <form onSubmit={handleSubmit} className="space-y-4">
-//         <div>
-//           <label htmlFor="name" className="block text-sm">Name</label>
-//           <input
-//             type="text"
-//             id="name"
-//             value={name}
-//             onChange={(e) => setName(e.target.value)}
-//             className="w-full p-2 border border-gray-300 rounded-md"
-//             required
-//           />
-//         </div>
-
-//         <div>
-//           <label htmlFor="email" className="block text-sm">Email</label>
-//           <input
-//             type="text"
-//             id="email"
-//             value={email}
-//             onChange={(e) => setEmail(e.target.value)}
-//             className="w-full p-2 border border-gray-300 rounded-md"
-//             required
-//           />
-//         </div>
-
-//         <div className="mt-4 flex justify-between">
-//           <button type="submit" className="btn-primary">
-//             Save and Continue
-//           </button>
-//         </div>
-//       </form>
-//     </div>
-//   );
-// }
-
+  

@@ -1,8 +1,7 @@
-
 "use client";
 
-import React, { useState } from "react";
-import Image from "next/image"; // Import the Image component
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
 
 const SOCIAL_OPTIONS = [
   { value: "facebook", label: "Facebook", icon: "/assets/icons/onboarding/Facebook.svg" },
@@ -11,24 +10,35 @@ const SOCIAL_OPTIONS = [
   { value: "default", label: "Select", icon: "/assets/icons/onboarding/Plusicon.svg" }, // Default Icon
 ];
 
-export default function SocialLinksDropdown({ onChange }) {
-  const [selectedOption, setSelectedOption] = useState(SOCIAL_OPTIONS[3]); // Default to "Select" option
-  const [url, setUrl] = useState("");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Track the dropdown visibility
+export default function SocialLinksDropdown({ initialData, onChange }) {
+  // Initialize state based on initialData or default
+  const [selectedOption, setSelectedOption] = useState(
+    initialData?.icon
+      ? SOCIAL_OPTIONS.find((opt) => opt.icon === initialData.icon) || SOCIAL_OPTIONS[3]
+      : SOCIAL_OPTIONS[3]
+  );
+  const [url, setUrl] = useState(initialData?.url || "");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  // Call onChange only when selectedOption or url explicitly changes
+  useEffect(() => {
+    if (onChange) {
+      onChange({ icon: selectedOption.icon, url });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedOption, url]); // Dependency array ensures useEffect runs only when necessary
 
   const handleIconSelect = (option) => {
     setSelectedOption(option);
-    setIsDropdownOpen(false); // Close the dropdown when an option is selected
-    if (onChange) onChange({ icon: option.icon, url });
+    setIsDropdownOpen(false);
   };
 
   const handleUrlChange = (e) => {
     setUrl(e.target.value);
-    if (onChange) onChange({ icon: selectedOption.icon, url: e.target.value });
   };
 
   const toggleDropdown = () => {
-    setIsDropdownOpen((prevState) => !prevState); // Toggle the dropdown visibility
+    setIsDropdownOpen((prevState) => !prevState);
   };
 
   return (
@@ -37,19 +47,14 @@ export default function SocialLinksDropdown({ onChange }) {
       <div className="flex items-center gap-2 w-full">
         {/* Left-most Icon inside the input field */}
         <div className="flex items-center justify-center w-10 h-10 absolute left-2">
-          <Image
-            src={selectedOption.icon}
-            alt={selectedOption.label}
-            width={10} 
-            height={24} 
-          />
+          <Image src={selectedOption.icon} alt={selectedOption.label} width={10} height={24} />
         </div>
 
         {/* URL Input */}
         <input
           type="url"
           placeholder="Enter Social Link URL"
-          className="flex-1 rounded-lg border border-stroke py-[10px] pl-12 pr-14 text-dark-6 outline-none" // Added padding-left for the icon space
+          className="flex-1 rounded-lg border border-stroke py-[10px] pl-12 pr-14 text-dark-6 outline-none"
           value={url}
           onChange={handleUrlChange}
         />
@@ -62,8 +67,8 @@ export default function SocialLinksDropdown({ onChange }) {
           <Image
             src="/assets/icons/onboarding/Dropdownarrow.svg" // Path to the dropdown arrow SVG
             alt="Dropdown Arrow"
-            width={16} 
-            height={16} 
+            width={16}
+            height={16}
           />
         </div>
       </div>
@@ -77,12 +82,7 @@ export default function SocialLinksDropdown({ onChange }) {
               className="px-5 py-2 text-graphite hover:text-electric-blue cursor-pointer flex items-center gap-2"
               onClick={() => handleIconSelect(option)}
             >
-              <Image
-                src={option.icon}
-                alt={option.label}
-                width={10} 
-                height={24} 
-              />
+              <Image src={option.icon} alt={option.label} width={10} height={24} />
               {option.label}
             </li>
           ))}
@@ -91,4 +91,3 @@ export default function SocialLinksDropdown({ onChange }) {
     </div>
   );
 }
-

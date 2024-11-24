@@ -1,16 +1,4 @@
-// "use client";
-// import { useRouter } from "next/navigation";
-
-// export default function OnboardingPage() {
-//   const router = useRouter();
-
-//   // Redirect to step 1 by default
-//   router.push("/onboarding/step-1");
-
-//   return null; // Empty as it only handles redirection
-// }
-
-
+//app/onboardin/page.js
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
