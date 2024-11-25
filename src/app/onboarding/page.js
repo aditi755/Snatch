@@ -11,5 +11,5 @@ export default function OnboardingPage() {
     router.replace("/onboarding/step-1"); // Use `replace` to avoid going back to this page
   }, [router]);
 
-  return null; // Empty component as it only handles redirection
+  return null; 
 }

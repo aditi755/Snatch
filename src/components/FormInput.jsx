@@ -3,7 +3,7 @@
   
       <input
         {...props}
-        className=" w-full bg-transparent rounded-md border border-stroke py-[10px] px-5 text-dark-grey outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2"
+        className=" w-full bg-transparent rounded-md border border-stroke py-[10px] px-5 text-graphite outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2"
       />
     </div>
   );

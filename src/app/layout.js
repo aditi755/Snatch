@@ -1,38 +1,37 @@
 import localFont from "next/font/local";
 import "./globals.css";
 
-// Load the .otf fonts using localFont
 const apfelGrotezkMittel = localFont({
   src: [
     {
-      path: "./fonts/ApfelGrotezk-Mittel.otf", // Path to the font
-      weight: "400", // Adjust weight as needed
-      style: "normal", // Adjust style as needed
+      path: "./fonts/ApfelGrotezk-Mittel.otf", 
+      weight: "400", 
+      style: "normal", 
     },
   ],
-  variable: "--font-apfel-grotezk-mittel", // CSS variable to apply font globally
+  variable: "--font-apfel-grotezk-mittel", 
 });
 
 const apfelGrotezkRegular = localFont({
   src: [
     {
-      path: "./fonts/ApfelGrotezk-Regular.otf", // Path to the font
-      weight: "400", // Adjust weight as needed
-      style: "normal", // Adjust style as needed
+      path: "./fonts/ApfelGrotezk-Regular.otf", 
+      weight: "400",
+      style: "normal", 
     },
   ],
-  variable: "--font-apfel-grotezk-regular", // CSS variable to apply font globally
+  variable: "--font-apfel-grotezk-regular", 
 });
 
 const qimano = localFont({
   src: [
     {
-      path: "./fonts/Qimano-aYxdE.otf", // Path to the font
-      weight: "400", // Adjust weight as needed
-      style: "normal", // Adjust style as needed
+      path: "./fonts/Qimano-aYxdE.otf", 
+      weight: "400", 
+      style: "normal", 
     },
   ],
-  variable: "--font-qimano", // CSS variable to apply font globally
+  variable: "--font-qimano", 
 });
 
 export const metadata = {

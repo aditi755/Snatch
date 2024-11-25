@@ -1,9 +1,9 @@
 // app/onboarding/layout.js
 "use client";
 
-import { FormProvider } from "./context";
+import { FormProvider } from "../onboarding/context";
 import Image from "next/image";
-import { useFormContext } from "./context";
+import { useFormContext } from "../onboarding/context";
 import Preview from "@/components/Preview";
 import { useRouter } from "next/navigation";
 
@@ -19,9 +19,9 @@ export default function OnboardingLayout({ children }) {
   }
   return (
     <FormProvider>
-      <div className="flex h-screen bg-gray-100">
+      <div className="flex h-screen bg-smoke">
         {/* Left side: Image with Preview */}
-        <div className="w-1/2 relative flex items-center justify-center bg-white shadow-md">
+        <div className="w-[660px] overflow-hidden relative flex items-center justify-center bg-white shadow-md">
           <Image
             src="/assets/images/signup_background.png"
             alt="Background Image"
@@ -33,7 +33,7 @@ export default function OnboardingLayout({ children }) {
           </div>
         </div>
 
-        <div className="absolute top-[640px] left-[650px] w-[200px] h-[74px] flex justify-center items-center gap-5 border-2 bg-smoke border-light-grey rounded-md">
+        <div className="absolute top-[640px] left-[650px] w-[200px] h-[74px] flex justify-center items-center gap-5 border-2 bg-white border-light-grey rounded-md ">
           <button onClick={handlePrevClick} className="w-[72px] h-[37px] bg-white text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
             Prev
           </button>
@@ -44,7 +44,7 @@ export default function OnboardingLayout({ children }) {
         </div>
 
         {/* Right side: Form */}
-        <div className="w-1/2 flex flex-col justify-center items-center bg-white">
+        <div className="w-[900px] flex flex-col justify-center items-center bg-white">
           <div className="w-[100vw] max-w-xl">{children}</div>
         </div>
       </div>

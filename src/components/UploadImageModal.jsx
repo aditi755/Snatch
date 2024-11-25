@@ -7,7 +7,7 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect }) {
     "/assets/images/sample1.jpg",
     "/assets/images/sample2.jpg",
     "/assets/images/sample3.jpg",
-    "/assets/images/sample4.jpg", // Replace with your image paths
+    "/assets/images/sample4.jpg",
   ]);
 
   const handleFileUpload = (event) => {
@@ -15,7 +15,7 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect }) {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       onImageSelect(imageUrl);
-      onClose(); // Close the modal
+      onClose(); 
     }
   };
 

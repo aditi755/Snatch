@@ -11,7 +11,6 @@ const SOCIAL_OPTIONS = [
 ];
 
 export default function SocialLinksDropdown({ initialData, onChange }) {
-  // Initialize state based on initialData or default
   const [selectedOption, setSelectedOption] = useState(
     initialData?.icon
       ? SOCIAL_OPTIONS.find((opt) => opt.icon === initialData.icon) || SOCIAL_OPTIONS[3]
@@ -26,7 +25,7 @@ export default function SocialLinksDropdown({ initialData, onChange }) {
       onChange({ icon: selectedOption.icon, url });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedOption, url]); // Dependency array ensures useEffect runs only when necessary
+  }, [selectedOption, url]);
 
   const handleIconSelect = (option) => {
     setSelectedOption(option);
@@ -54,7 +53,7 @@ export default function SocialLinksDropdown({ initialData, onChange }) {
         <input
           type="url"
           placeholder="Enter Social Link URL"
-          className="flex-1 rounded-lg border border-stroke py-[10px] pl-12 pr-14 text-dark-6 outline-none"
+          className="flex-1 rounded-lg border border-stroke py-[10px] pl-12 pr-14 text-graphite outline-none"
           value={url}
           onChange={handleUrlChange}
         />
@@ -65,7 +64,7 @@ export default function SocialLinksDropdown({ initialData, onChange }) {
           onClick={toggleDropdown}
         >
           <Image
-            src="/assets/icons/onboarding/Dropdownarrow.svg" // Path to the dropdown arrow SVG
+            src="/assets/icons/onboarding/Dropdownarrow.svg" 
             alt="Dropdown Arrow"
             width={16}
             height={16}

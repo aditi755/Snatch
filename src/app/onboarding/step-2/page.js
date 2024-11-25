@@ -1,65 +1,9 @@
-// // app/onboarding/step-2/page.js
-// "use client";
-
-// import { useState } from "react";
-// import { useFormContext } from "../context";
-// import MultiSelectInput from "@/components/MultiSelectInput";
-
-// export default function Step2() {
-
-//   // Sample JSON options
-// const industryOptions = [
-//   "Design",
-//   "Marketing",
-//   "Development",
-//   "Product",
-//   "Sales",
-//   "Human Resources",
-// ];
-
-// const contentOptions = [
-//   "Story",
-//   "Reels",
-//   "Posts"
-// ]
-
-// const compensationOptions = [
-//   "Gifting", 
-//   "Sponsorships",
-//   "Affiliate"
-// ]
-
-//   const { formData, updateFormData } = useFormContext();
-//   const [address, setAddress] = useState("");
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     updateFormData({ address }); 
-//   };
-
-//   return (
-//     <form
-//     className="w-full h-[100vh] overflow-hidden mx-auto space-y-6"
-//     onSubmit={handleSubmit}
-//     >
-
-// <h2 className="text-2xl mt-10">And we're almost there!</h2>
-// <div className="flex flex-row gap-6">
-// <MultiSelectInput fieldName="industry" label="Choose Industry" options={industryOptions} />
-
-//   </div>
-//   <MultiSelectInput fieldName="contentType" label="Choose Content Type" options={contentOptions} />
-//   <MultiSelectInput fieldName="compensation" label="Choose Compensation" options={compensationOptions} />
-//     </form>
-//   );
-// }
-
-
 "use client";
 
 import { useState } from "react";
 import { useFormContext } from "../context";
 import MultiSelectInput from "@/components/MultiSelectInput";
+import MoneyInput from "@/components/MoneyInput";
 
 export default function Step2() {
   const { formData, updateFormData } = useFormContext();
@@ -77,6 +21,7 @@ export default function Step2() {
   const handleRemoveValue = (fieldName, value) => {
     const updatedValues = (formData[fieldName] || []).filter((item) => item !== value);
     updateFormData({ [fieldName]: updatedValues });
+    console.log('remove click ')
   };
 
   return (
@@ -105,6 +50,30 @@ export default function Step2() {
         onAddValue={(value) => handleAddValue("compensation", value)}
         onRemoveValue={(value) => handleRemoveValue("compensation", value)}
       />
+
+       <div className="space-x-0 flex flex-col">
+        <h4 className="mb-5">Add pricing for your services</h4>
+        <div className="flex flex-row gap-3">
+          <MoneyInput
+          title="Post"
+          placeholder="Enter amount"
+          value={formData.post}
+          onChange={(value) => updateFormData({ post: value })}
+        />
+        <MoneyInput
+          title="Story"
+          placeholder="Enter amount"
+          value={formData.story}
+          onChange={(value) => updateFormData({ story: value })}
+        />
+        <MoneyInput
+          title="Reel"
+          placeholder="Enter amount"
+          value={formData.reels}
+          onChange={(value) => updateFormData({ reels: value })}
+        />
+        </div>
+        </div>
     </form>
   );
 }

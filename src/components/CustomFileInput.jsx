@@ -11,12 +11,12 @@ import { useFormContext } from "@/app/onboarding/context";
     // Load the file name directly from context when the component mounts
     useEffect(() => {
       if (formData && formData[fileNameKey]) {
-        setFileName(formData[fileNameKey]); // Retrieve and set the file name from formData
+        setFileName(formData[fileNameKey]); 
       }
-    }, [formData, fileNameKey]); // Dependency on formData and fileNameKey
+    }, [formData, fileNameKey]); 
   
     const handleButtonClick = () => {
-      fileInputRef.current.click(); // Trigger file input click
+      fileInputRef.current.click(); 
     };
   
     const handleFileChange = (event) => {
@@ -29,13 +29,13 @@ import { useFormContext } from "@/app/onboarding/context";
   
     return (
       <div className="mt-4">
-        <h5>{label}</h5> {/* Dynamic label */}
+        <h5>{label}</h5> 
         <div
           className="mt-4 flex gap-8 cursor-pointer rounded-md border border-stroke px-5 py-3 text-dark-grey outline-none transition hover:border-primary active:border-primary"
           onClick={handleButtonClick}
         >
           <Image src={iconSrc} alt="upload" width={30} height={20} />
-          <span>{fileName || placeholder}</span> {/* Display file name or placeholder */}
+          <span>{fileName || placeholder}</span> 
         </div>
         <input
           type="file"

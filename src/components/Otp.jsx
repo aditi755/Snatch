@@ -1,10 +1,9 @@
-//from tailgrids otp component
 "use client";
 import React, { useRef, useState } from "react";
 
 export default function Otp() {
-  const [otp, setOtp] = useState(Array(5).fill("")); // Array with 5 empty strings
-  const inputRefs = useRef([]); // Array of refs for each input field
+  const [otp, setOtp] = useState(Array(5).fill("")); 
+  const inputRefs = useRef([]); 
 
   const handleKeyDown = (e) => {
     if (

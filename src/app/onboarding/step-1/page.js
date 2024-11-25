@@ -20,6 +20,7 @@ export default function Step1() {
     firstName: "",
     lastName: "",
     gender: "",
+    location:"",
     links: [],
     instagram: "",
     profilePicture: null,
@@ -32,6 +33,7 @@ export default function Step1() {
       firstName: formData.firstName || "",
       lastName: formData.lastName || "",
       gender: formData.gender || "",
+      location: formData.location || "",
       links: formData.links || [],
       instagram: formData.instagram || "",
       profilePicture: formData.profilePicture || null,
@@ -75,7 +77,7 @@ export default function Step1() {
       className="w-full h-[100vh] overflow-hidden mx-auto space-y-6"
       onSubmit={handleSubmit}
     >
-      <h2 className="text-2xl mt-10">Let get Started</h2>
+      <h2 className="text-2xl mt-10">Let's get Started</h2>
 
       {/* First and Last Name */}
       <div className="flex flex-row gap-6">
@@ -95,7 +97,7 @@ export default function Step1() {
       <div className="flex flex-row gap-6">
         <CustomDropdown
           options={["Male", "Female", "Other", "Prefer not to say"]}
-          placeholder="Select Gender"
+          placeholder="Gender"
           onSelect={(option) => updateField("gender", option)}
           selected={formState.gender}
         />
@@ -107,9 +109,16 @@ export default function Step1() {
         />
       </div>
 
+      <FormInput
+          placeholder="Location"
+          value={formState.location}
+          onChange={(e) => updateField("location", e.target.value)}
+        />
+     
+
       {/* Social Links */}
       <div>
-        <h6 className="font-medium text-gray-700">Add social links</h6>
+        <h6 className="font-medium text-graphite">Add social links</h6>
         <div className="mt-3">
         <InstagramInput
           value={formState.instagram}
@@ -139,14 +148,14 @@ export default function Step1() {
     placeholder="Upload a profile picture from your device"
     iconSrc="/assets/icons/onboarding/Upload.svg"
     label="Upload picture"
-    fileNameKey="profilePictureName" // Pass the key for the profile picture file name
+    fileNameKey="profilePictureName" 
   />
   <CustomFileInput
     onFileChange={(file) => updateFormData({ backgroundPicture: file })}
     placeholder="Choose or upload a background picture"
     iconSrc="/assets/icons/onboarding/Upload.svg"
     label="Upload background"
-    fileNameKey="backgroundPictureName" // Pass the key for the background picture file name
+    fileNameKey="backgroundPictureName"
   />
       </div>
 

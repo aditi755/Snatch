@@ -1,10 +1,8 @@
 "use client";
 import React, { createContext, useState, useContext, useEffect } from "react";
 
-// Create context
 const FormContext = createContext();
 
-// Custom hook to use the Form Context
 export const useFormContext = () => useContext(FormContext);
 
 // Provider Component
@@ -13,6 +11,7 @@ export const FormProvider = ({ children }) => {
     firstName: "",
     lastName: "",
     gender: "",
+    location:"",
     links: [],
     instagram: "",
     profilePicture: null,
@@ -22,6 +21,9 @@ export const FormProvider = ({ children }) => {
     industry: [], 
     contentType: [], 
     compensation: [], 
+    post: 0,
+    story: 0,
+    reels:0
   });
 
   // Load from localStorage when the component mounts
@@ -32,6 +34,7 @@ export const FormProvider = ({ children }) => {
       setFormData(JSON.parse(savedData));
     }
   }, []);
+
   const updateFormData = (newData) => {
     if (newData.profilePicture && newData.profilePicture instanceof File) {
       const reader = new FileReader();
@@ -59,7 +62,8 @@ export const FormProvider = ({ children }) => {
       reader.readAsDataURL(newData.backgroundPicture); // Read file as data URL
     } else {
       // If no file is selected, proceed as usual
-      const updatedData = { ...formData, ...newData };
+      const updatedData = { ...formData, ...newData}
+      
       setFormData(updatedData);
       if (typeof window !== "undefined") {
         localStorage.setItem("formData", JSON.stringify(updatedData));
@@ -67,10 +71,6 @@ export const FormProvider = ({ children }) => {
     }
   };
 
-  const clearLinks = () => {
-    localStorage.removeItem("links");
-    updateField("links", []); // Ensure state reflects the cleared localStorage
-  };
 
   console.log("formdata from context client", formData);
 

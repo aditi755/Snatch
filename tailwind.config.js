@@ -12,7 +12,7 @@ module.exports = {
         'electric-blue': 'var(--electric-blue)',
         graphite: 'var(--graphite)',
         smoke: 'var(--smoke)',
-        'light-grey': 'var(--light-gray)',
+        'light-grey': 'var(--light-grey)',
         'dark-grey': 'var(--dark-grey)',
         blue: 'var(--blue)',
       },
