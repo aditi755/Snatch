@@ -1,7 +1,8 @@
 "use client"
-import React, {useState} from 'react'
+import React from 'react'
+import { useState } from "react";
 
-const profile = () => {
+const Profile = () => {
     const [activeTab, setActiveTab] = useState("portfolio");
 
     const menuItems = ["portfolio", "about", "audience"];
@@ -48,4 +49,4 @@ const profile = () => {
   )
 }
 
-export default profile
+export default Profile
