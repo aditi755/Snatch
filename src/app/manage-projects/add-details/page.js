@@ -160,7 +160,7 @@ export default function AddDetails() {
            </div>
           
            <p className="text-md mt-4">Selected projects</p>
-           <p className="text-light-grey">{activeTab === "instagram" ? selectionState.instagramSelected.length : selectionState.uploadedFiles.length} selected</p>
+           <p className="text-light-grey">{activeTab === "instagram" ? selectionState.svgSelected.length : selectionState.uploadedFiles.length} selected</p>
           
            {/* Display Projects */}
            {renderProjects()}

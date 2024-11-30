@@ -21,11 +21,7 @@ export default function PickProjects() {
 
   const { 
     selectionState, 
-    addProject, 
-    removeProject, 
     handleFileUpload, 
-    removeFile, 
-    addInstagramSelection, 
     addSVGSelection
   } = useSelectedProjects();
 
@@ -63,7 +59,7 @@ export default function PickProjects() {
     <div className="flex gap-10 mt-5">
       <div className="w-[278px] h-[60vh] bg-smoke text-black p-3 overflow-auto">
         <p className="text-md">Selected projects from Instagram</p>
-        <p className="text-light-grey">{selectionState.instagramSelected.length} selected</p>
+        <p className="text-light-grey">{selectionState.svgSelected.length || "0"} selected</p>
         <div className="grid grid-cols-2 gap-2 mt-4">
         {selectionState.svgSelected.map((project) => (
   <div key={project.id} className="flex justify-center items-center">
