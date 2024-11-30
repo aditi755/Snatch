@@ -77,7 +77,7 @@ export default function Step1() {
       className="w-full h-[100vh] overflow-hidden mx-auto space-y-6"
       onSubmit={handleSubmit}
     >
-      <h2 className="text-2xl mt-10">Let's get Started</h2>
+      <h2 className="text-2xl mt-10">Let&apos;s get Started</h2>
 
       {/* First and Last Name */}
       <div className="flex flex-row gap-6">
