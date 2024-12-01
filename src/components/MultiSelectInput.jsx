@@ -9,14 +9,13 @@ const MultiSelectInput = ({ label, options, selectedValues, onAddValue, onRemove
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);
   };
-
   const handleOptionSelect = (option) => {
     if (!selectedValues.includes(option)) {
       onAddValue(option);
     }
     setIsDropdownOpen(false);
   };
-
+  
   return (
     <div className="relative w-full">
       {/* Label */}
@@ -26,12 +25,12 @@ const MultiSelectInput = ({ label, options, selectedValues, onAddValue, onRemove
 
       {/* Input container */}
       <div
-        className="relative z-20 w-full bg-transparent rounded-md border border-stroke p-[2px] pr-8 text-graphite outline-none transition focus:border-primary active:border-primary cursor-pointer"
+        className="relative z-20 w-full bg-transparent rounded-md border border-gray-300 p-[2px] pr-8 text-graphite outline-none transition focus:border-primary active:border-primary cursor-pointer"
         onClick={toggleDropdown}
       >
         <div className="flex flex-wrap items-center gap-2 min-h-[40px]" style={{ padding: "5px" }}>
           {/* Display selected values */}
-          {selectedValues.map((value, index) => (
+          {Array.isArray(selectedValues) && selectedValues.map((value, index) => (
             <span
               key={`${label}-${index}`}
               className="m-[5px] flex items-center justify-center rounded border-[.5px] border-stroke bg-gray-2 py-[7px] px-[20px] text-sm font-medium text-graphite relative -z-50"

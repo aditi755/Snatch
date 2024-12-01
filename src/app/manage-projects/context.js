@@ -15,12 +15,14 @@ export function SelectedProjectsProvider({ children }) {
       const savedState = localStorage.getItem("selectionState");
       return savedState ? JSON.parse(savedState) : {
         uploadedFiles: [],
-        svgSelected: []
+        svgSelected: [],
+        formData: {},
       };
     }
     return {
       uploadedFiles: [],
-      svgSelected: []
+      svgSelected: [],
+      formData: {},
     };
   });
 
@@ -52,7 +54,17 @@ export function SelectedProjectsProvider({ children }) {
     });
   };
   
-  
+  //formdata update function
+  const updateFormDataForImage = (imageId, newFormData) => {
+    updateSelectionState((prevState) => ({
+      ...prevState,
+      formData: {
+        ...prevState.formData,
+        [imageId]: newFormData,
+      },
+    }));
+  };
+
 
   // Handle file upload by converting the file to base64
   const handleFileUpload = (file) => {
@@ -141,6 +153,7 @@ export function SelectedProjectsProvider({ children }) {
         addSVGSelection,
         removeSVGSelection,
         removeFile,
+        updateFormDataForImage
       }}
     >
       {children}
@@ -156,41 +169,41 @@ export function SelectedProjectsProvider({ children }) {
 
 
 
-  // // Convert image URL to Base64 (in prod)
-  // const convertImageToBase64 = async (imageUrl) => {
-  //   try {
-  //     const response = await fetch(imageUrl);
-  //     const blob = await response.blob();
-  //     const reader = new FileReader();
-  //     return new Promise((resolve, reject) => {
-  //       reader.onloadend = () => {
-  //         resolve(reader.result); 
-  //       };
-  //       reader.onerror = reject; 
-  //       reader.readAsDataURL(blob); 
-  //     });
-  //   } catch (error) {
-  //     console.error("Error converting image to base64:", error);
-  //   }
-  // };
+//   // // Convert image URL to Base64 (in prod)
+//   // const convertImageToBase64 = async (imageUrl) => {
+//   //   try {
+//   //     const response = await fetch(imageUrl);
+//   //     const blob = await response.blob();
+//   //     const reader = new FileReader();
+//   //     return new Promise((resolve, reject) => {
+//   //       reader.onloadend = () => {
+//   //         resolve(reader.result); 
+//   //       };
+//   //       reader.onerror = reject; 
+//   //       reader.readAsDataURL(blob); 
+//   //     });
+//   //   } catch (error) {
+//   //     console.error("Error converting image to base64:", error);
+//   //   }
+//   // };
 
-    // Remove Instagram selection
-  // const removeInstagramSelection = (selectionId) => {
-  //   updateSelectionState({
-  //     instagramSelected: selectionState.instagramSelected.filter(
-  //       (selection) => selection.id !== selectionId
-  //     )
-  //   });
-  // };
+//     // Remove Instagram selection
+//   // const removeInstagramSelection = (selectionId) => {
+//   //   updateSelectionState({
+//   //     instagramSelected: selectionState.instagramSelected.filter(
+//   //       (selection) => selection.id !== selectionId
+//   //     )
+//   //   });
+//   // };
 
   
-  // // Add Instagram selection
-  // const addInstagramSelection = async (imageUrl, name) => {
-  //   const base64Image = await convertImageToBase64(imageUrl);
-  //   updateSelectionState({
-  //     instagramSelected: [
-  //       ...selectionState.instagramSelected,
-  //       { id: Date.now(), name, imageUrl: base64Image }
-  //     ]
-  //   });
-  // }
+//   // // Add Instagram selection
+//   // const addInstagramSelection = async (imageUrl, name) => {
+//   //   const base64Image = await convertImageToBase64(imageUrl);
+//   //   updateSelectionState({
+//   //     instagramSelected: [
+//   //       ...selectionState.instagramSelected,
+//   //       { id: Date.now(), name, imageUrl: base64Image }
+//   //     ]
+//   //   });
+//   // }

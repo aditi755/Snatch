@@ -12,7 +12,7 @@ export default function PickProjects() {
     { id: 4, name: "Project 1", path: "/assets/images/projects.svg" },
     { id: 5, name: "Project 2", path: "/assets/images/projects.svg" },
     { id: 6, name: "Project 3", path: "/assets/images/projects.svg" },
-    { id: 7, name: "Project 1", path: "/assets/images/projects.svg" },
+    { id: 7, name: "Project 1", path: "/assets/images/influencer.svg" },
     { id: 8, name: "Project 2", path: "/assets/images/projects.svg" },
     { id: 9, name: "Project 3", path: "/assets/images/projects.svg" },
     { id: 10, name: "Project 2", path: "/assets/images/projects.svg" },
@@ -64,7 +64,7 @@ export default function PickProjects() {
         {selectionState.svgSelected.map((project) => (
   <div key={project.id} className="flex justify-center items-center">
     <div className="w-[200px] h-[150px] border-2 border-light-grey rounded-md flex justify-center items-center">
-      {project.imageUrl.startsWith("data:image/svg+xml") ? (
+      {project.imageUrl && project.imageUrl.startsWith("data:image/svg+xml") ? (
         <Image
           src={project.imageUrl}
           alt={`Project ${project.id}`}

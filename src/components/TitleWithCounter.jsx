@@ -1,31 +1,23 @@
-import React, { useState } from "react";
-
-const TitleWithCounter = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const maxTitleLength = 100;
-
+const TitleWithCounter = ({ label, value, onChange, maxLength = 100, name }) => {
   return (
     <div className="p-4 border border-gray-200 rounded-lg shadow-md w-[534px]">
-      <label className="block text-md text-black mb-1">
-        Give it a title
-      </label>
+      <label className="block text-md font-bold text-black mb-1">{label}</label>
       <div className="flex items-center justify-between">
         <textarea
-          type="text"
-          maxLength={maxTitleLength}
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          name={name} // Pass the name prop
+          maxLength={maxLength}
+          value={value}
+          onChange={onChange} // Forward onChange
           placeholder="Enter title here"
-          className="w-full border-b bg-transparent border-gray-300 focus:outline-none focus:border-gray-500 text-gray-800 text-lg mb-2"
+          className="w-full border-b bg-transparent border-gray-300 focus:outline-none focus:border-gray-500 text-gray-800 text-sm font-apfelgrotesk mb-2"
         />
         <span className="text-sm text-gray-500">
-          {title.length}/{maxTitleLength}
+          {value.length}/{maxLength}
         </span>
       </div>
-     
     </div>
   );
 };
 
-export default TitleWithCounter;
+
+export default TitleWithCounter
