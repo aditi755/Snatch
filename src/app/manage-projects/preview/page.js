@@ -144,20 +144,83 @@ export default function Preview() {
                      
 
           {/* Location and Event Type */}
-      <div className="mt-4 text-gray-600 text-sm flex flex-col space-y-2">
+      {/* <div className="mt-4 text-gray-600 text-sm flex flex-col space-y-2">
         <p>• Mumbai, India</p>
         <p>• Casa Cai Mumbai • Launch Event</p>
-      </div>        
+      </div>         */}
+
+
+<div className="flex mt-4">
+  {/* Logo Section */}
+  <div className="flex items-center justify-start">
+    <Image
+      src="/assets/images/logo.svg" // Replace with your actual logo URL
+      alt="Logo"
+      width={50}
+      height={50}
+      className="rounded-full"
+    />
+    <div className="ml-2 font-bold text-lg">CAI</div>
+  </div>
+
+  {/* Description Section */}
+  <div className="ml-5 mt-2 flex flex-col">
+    {/* Location and Event Details */}
+    <div className="text-sm text-gray-600">
+      <p className="flex items-center">
+        <span className="mr-2">•</span>
+        Mumbai, India
+      </p>
+      <p className="flex items-center">
+        <span className="mr-2">•</span>
+        Casa Cai Mumbai • Launch Event
+      </p>
+    </div>
+
+    {/* Lorem Ipsum Paragraph */}
+    <div className="mt-4 text-sm text-gray-500">
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id nisi sit amet libero auctor ullamcorper a ut mi. Curabitur vitae dui nec nunc pharetra vehicula. Duis sit amet nisl ut turpis aliquet facilisis vel sed lectus. Donec interdum, mi ut tincidunt ullamcorper, justo libero cursus enim, at viverra felis lorem a purus.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<div className="-mt-32 ml-32 flex gap-4 text-black absolute top-[85%]">
+      <div className="flex-row text-center">
+       <p>1.2M</p>
+       <p>Views</p>
+       </div>
+
+       <div className="flex-col text-center">
+       <p>56K</p>
+       <p>Likes</p>
+       </div>
+
+       <div className="flex-col text-center">
+       <p>40K</p>
+       <p>Shares</p>
+       </div>
+
+       <div className="flex-col text-center">
+       <p>30K</p>
+       <p>Comments</p>
+       </div>
+            </div>
+          </div>
+        </div>
+
             </div>
             </div>
 
-          </div>
+    
 
 
 
 
 
-          </div>
+         
           </div>
     );
   }

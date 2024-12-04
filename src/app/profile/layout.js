@@ -11,7 +11,7 @@ export default function OnboardingLayout({ children }) {
 
   const router = useRouter();
   const handleNextClick = () => {
-    router.push("/onboarding/step-2");
+    router.push("/manage-projects/pick-projects");
   }
 
   const handleProfileClick = () => {
@@ -19,7 +19,7 @@ export default function OnboardingLayout({ children }) {
   }
   return (
     <FormProvider>
-      <div className="flex h-screen bg-smoke">
+      <div className="flex h-screen bg-smoke justify-center">
         {/* Left side: Image with Preview */}
         <div className="w-[660px] overflow-hidden relative flex items-center justify-center bg-white shadow-md">
           <Image

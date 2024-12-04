@@ -11,7 +11,7 @@ export default function OnboardingLayout({ children }) {
 
   const router = useRouter();
   const handleNextClick = () => {
-    router.push("/onboarding/step-2");
+    router.push("/dashboard");
   }
 
   const handleProfileClick = () => {

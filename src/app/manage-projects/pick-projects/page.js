@@ -12,7 +12,7 @@ export default function PickProjects() {
     { id: 4, name: "Project 1", path: "/assets/images/projects.svg" },
     { id: 5, name: "Project 2", path: "/assets/images/projects.svg" },
     { id: 6, name: "Project 3", path: "/assets/images/projects.svg" },
-    { id: 7, name: "Project 1", path: "/assets/images/influencer.svg" },
+    { id: 7, name: "Project 1", path: "/assets/images/projects.svg" },
     { id: 8, name: "Project 2", path: "/assets/images/projects.svg" },
     { id: 9, name: "Project 3", path: "/assets/images/projects.svg" },
     { id: 10, name: "Project 2", path: "/assets/images/projects.svg" },
@@ -201,7 +201,7 @@ export default function PickProjects() {
           }`}
         >
           <Image
-            src="/assets/icons/onboarding/upload.svg"
+            src="/assets/icons/onboarding/Upload2.svg"
             alt="Upload Icon"
             width={30}
             height={34}

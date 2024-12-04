@@ -55,9 +55,15 @@ export default function Home() {
 
           <Otp />
 
-          <button className="w-full sm:w-[356px] h-12 bg-[#0037EB] text-white rounded-lg mt-9">
+          {/* <button className="w-full sm:w-[356px] h-12 bg-[#0037EB] text-white rounded-lg mt-9">
             Verify email
-          </button>
+          </button> */}
+
+    <Link href="/onboarding">
+      <button className="w-full sm:w-[356px] h-12 bg-[#0037EB] text-white rounded-lg mt-9">
+        Verify email
+      </button>
+    </Link>
 
         </div>
       </div>

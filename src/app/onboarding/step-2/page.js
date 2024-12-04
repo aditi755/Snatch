@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useFormContext } from "../context";
 import MultiSelectInput from "@/components/MultiSelectInput";
 import MoneyInput from "@/components/MoneyInput";
-
+import Link from "next/link";
 export default function Step2() {
   const { formData, updateFormData } = useFormContext();
 
@@ -72,7 +72,14 @@ export default function Step2() {
           value={formData.reels}
           onChange={(value) => updateFormData({ reels: value })}
         />
+
         </div>
+
+        <Link href="/dashboard">
+      <button className="w-full sm:w-[156px] h-12 bg-[#0037EB] text-white rounded-lg mt-9">
+        Go to Dashboard
+      </button>
+    </Link>
         </div>
     </form>
   );

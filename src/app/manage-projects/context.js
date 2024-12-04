@@ -31,6 +31,8 @@ export function SelectedProjectsProvider({ children }) {
     if (typeof window !== "undefined") {
       console.log("Saving to localStorage:", selectionState); // Log before saving
       localStorage.setItem("selectionState", JSON.stringify(selectionState));
+      const serializedData = JSON.stringify(selectionState);
+      console.log("Data size in bytes:", serializedData.length);
     }
   }, [selectionState]);
   
@@ -48,8 +50,11 @@ export function SelectedProjectsProvider({ children }) {
       // Save updated state to localStorage
       if (typeof window !== "undefined") {
         localStorage.setItem("selectionState", JSON.stringify(updatedState));
+        const serializedData = JSON.stringify(selectionState);
+      console.log("Data size in bytes:", serializedData.length);
       }
   
+
       return updatedState;
     });
   };
