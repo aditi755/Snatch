@@ -67,7 +67,7 @@ export default function Preview() {
   };
 
     return (
-      <div className="flex flex-col h-[77vh] bg-gray-200 w-full space-x-8 overflow-x-hidden overflow-y-auto">
+      <div className="flex flex-col items-start 2xl:items-center h-[77vh] bg-gray-200 w-full space-x-8 overflow-x-hidden overflow-y-auto">
       <div className="flex flex-col mx-auto items-start">
         <p className="text-2xl text-black">
           Pick content that you wish to highlight in your profile kit

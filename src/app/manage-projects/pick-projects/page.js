@@ -56,7 +56,7 @@ export default function PickProjects() {
 
   // Render the Instagram projects tab
   const renderInstagramTab = () => (
-    <div className="flex gap-10 mt-5">
+    <div className="flex  justify-center gap-10 mt-5">
       <div className="w-[278px] h-[60vh] bg-smoke text-black p-3 overflow-auto">
         <p className="text-md">Selected projects from Instagram</p>
         <p className="text-light-grey">{selectionState.svgSelected.length || "0"} selected</p>

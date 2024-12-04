@@ -33,7 +33,7 @@ export default function OnboardingLayout({ children }) {
           </div>
         </div>
 
-        <div className="absolute top-[640px] left-[650px] w-[200px] h-[74px] flex justify-center items-center gap-5 border-2 bg-smoke border-light-grey rounded-md">
+        <div className="absolute sm:top-[87%] sm:left-[43%] w-[200px] h-[74px] flex justify-center items-center gap-5 border-2 bg-smoke border-light-grey rounded-md">
           <button onClick={handlePrevClick} className="w-[72px] h-[37px] bg-white text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
             Prev
           </button>

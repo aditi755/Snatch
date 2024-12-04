@@ -1,23 +1,37 @@
-
-
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 const MultiSelectInput = ({ label, options, selectedValues, onAddValue, onRemoveValue }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const wrapperRef = useRef(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);
   };
+
   const handleOptionSelect = (option) => {
     if (!selectedValues.includes(option)) {
       onAddValue(option);
     }
     setIsDropdownOpen(false);
   };
-  
+
   return (
-    <div className="relative w-full">
+    <div ref={wrapperRef} className="relative w-full">
       {/* Label */}
       <label htmlFor={label} className="block text-md font-medium text-graphite mb-2">
         {label}
@@ -29,35 +43,38 @@ const MultiSelectInput = ({ label, options, selectedValues, onAddValue, onRemove
         onClick={toggleDropdown}
       >
         <div className="flex flex-wrap items-center gap-2 min-h-[40px]" style={{ padding: "5px" }}>
-          {/* Display selected values */}
-          {Array.isArray(selectedValues) && selectedValues.map((value, index) => (
-            <span
-              key={`${label}-${index}`}
-              className="m-[5px] flex items-center justify-center rounded border-[.5px] border-stroke bg-gray-2 py-[7px] px-[20px] text-sm font-medium text-graphite relative -z-50"
-            >
-              {value}
+          {/* Display selected values here it was -z-50  made it to z-20 to make cross clickable and remove work*/}
+          {Array.isArray(selectedValues) &&
+            selectedValues.map((value, index) => (
               <span
-                className="cursor-pointer z-20 pl-2 text-graphite hover:text-red absolute right-[5px] top-1/2 transform -translate-y-1/2"
-                onClick={() => onRemoveValue(value)}
-                
+                key={`${label}-${index}`}
+                className="m-[5px] flex items-center justify-center rounded border-[.5px] border-stroke bg-gray-2 py-[7px] px-[20px] text-sm font-medium text-graphite relative z-20"
               >
-                <svg
-                  width={12}
-                  height={12}
-                  viewBox="0 0 12 12"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+                {value}
+                <span
+                  className="cursor-pointer z-20 pl-2 text-graphite hover:text-red absolute right-[5px] top-1/2 transform -translate-y-1/2"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent the click from toggling the dropdown
+                    onRemoveValue(value); // Call the remove handler
+                  }}
                 >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M9.35355 3.35355C9.54882 3.15829 9.54882 2.84171 9.35355 2.64645C9.15829 2.45118 8.84171 2.45118 8.64645 2.64645L6 5.29289L3.35355 2.64645C3.15829 2.45118 2.84171 2.45118 2.64645 2.64645C2.45118 2.84171 2.45118 3.15829 2.64645 3.35355L5.29289 6L2.64645 8.64645C2.45118 8.84171 2.45118 9.15829 2.64645 9.35355C2.84171 9.54882 3.15829 9.54882 3.35355 9.35355L6 6.70711L8.64645 9.35355C8.84171 9.54882 9.15829 9.54882 9.35355 9.35355C9.54882 9.15829 9.54882 8.84171 9.35355 8.64645L6.70711 6L9.35355 3.35355Z"
-                    fill="currentColor"
-                  />
-                </svg>
+                  <svg
+                    width={12}
+                    height={12}
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M9.35355 3.35355C9.54882 3.15829 9.54882 2.84171 9.35355 2.64645C9.15829 2.45118 8.84171 2.45118 8.64645 2.64645L6 5.29289L3.35355 2.64645C3.15829 2.45118 2.84171 2.45118 2.64645 2.64645C2.45118 2.84171 2.45118 3.15829 2.64645 3.35355L5.29289 6L2.64645 8.64645C2.45118 8.84171 2.45118 9.15829 2.64645 9.35355C2.84171 9.54882 3.15829 9.54882 3.35355 9.35355L6 6.70711L8.64645 9.35355C8.84171 9.54882 9.15829 9.54882 9.35355 9.35355C9.54882 9.15829 9.54882 8.84171 9.35355 8.64645L6.70711 6L9.35355 3.35355Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </span>
               </span>
-            </span>
-          ))}
+            ))}
         </div>
         {/* Dropdown Icon */}
         <span className="absolute top-1/2 right-4 z-10 -translate-y-1/2">
@@ -82,12 +99,11 @@ const MultiSelectInput = ({ label, options, selectedValues, onAddValue, onRemove
 
       {/* Dropdown List */}
       {isDropdownOpen && (
-        // made z-50 to keep teh dropdown above evrything and not overlap it - remove z-50 to make cross icon remove work
         <ul className="absolute mt-2 w-full rounded-lg border border-stroke bg-light-grey py-2 z-50">
           {options.map((option, idx) => (
             <li
               key={idx}
-              className="px-5 py-2 text-graphite hover:text-electric-blue cursor-pointer flex items-center gap-2 "
+              className="px-5 py-2 text-graphite hover:text-electric-blue cursor-pointer flex items-center gap-2"
               onClick={() => handleOptionSelect(option)}
             >
               {option}
