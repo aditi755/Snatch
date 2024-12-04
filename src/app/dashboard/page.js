@@ -19,7 +19,7 @@ const page = () => {
 
 
     <div className="absolute top-[340px] ">
-    <div className="w-[699px] h-[330px] bg-light-grey">
+    <div className="w-[699px] h-[330px] bg-gray-200">
 
 
   <div className="flex gap-4">

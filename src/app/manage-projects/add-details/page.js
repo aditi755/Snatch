@@ -169,7 +169,7 @@ const handleEventTypeRemove = (value) => {
         </p>
       </div>
 
-      <div className="flex flex-row">
+      <div className="flex flex-row font-apfel-grotezk-regular">
         <div className="w-[278px] bg-smoke text-black p-3 overflow-auto">
           <div className="flex justify-between">
             <button

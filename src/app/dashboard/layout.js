@@ -55,24 +55,24 @@ export default function OnboardingLayout({ children }) {
 
         </div>
 
-        <div className="absolute top-[87%] left-[37%] w-[530px] h-[74px] flex justify-center items-center gap-3 border-2 bg-white border-light-grey rounded-md z-20">
-          <button onClick={handleProfileClick} className="w-[72px] h-[37px] bg-light-grey text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
+        <div className="absolute top-[87%] left-[37%] w-[530px] h-[79px] flex justify-center items-center gap-3 border-2 bg-white border-light-grey rounded-md z-20 font-apfel-grotezk-regular">
+          <button onClick={handleProfileClick} className="w-[80px] h-[50px] bg-gray-100 text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
             Profile
           </button>
  
-          <button onClick={handleNextClick} className="w-[72px] h-[37px] bg-light-grey text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
+          <button onClick={handleNextClick} className="w-[80px] h-[50px] bg-gray-100 text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
             Explore
           </button>
 
-          <button onClick={handleNextClick} className="w-[80px] h-[37px] bg-light-grey text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
+          <button onClick={handleNextClick} className="w-[90px] h-[50px] bg-gray-100 text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
             Dashboard
           </button>
 
-          <button onClick={handleNextClick} className="w-[72px] h-[37px] bg-light-grey text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
+          <button onClick={handleNextClick} className="w-[80px] h-[50px] bg-gray-100 text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
            Settings
           </button>
 
-          <button onClick={handleNextClick} className="w-[72px] h-[37px] bg-light-grey text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
+          <button onClick={handleNextClick} className="w-[90px] h-[50px] bg-gray-100 text-electric-blue text-2xl font-semibold  border border-light-grey  text-center">
            Snatch
           </button>
         </div>

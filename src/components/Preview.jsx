@@ -49,7 +49,7 @@ export default function Preview() {
           <h6>{formData.location || "Location"}</h6>
       </div>
   
-      <div className="flex flex-wrap mx-auto  gap-5 px-10 text-dark-grey mt-[30px] max-w-[500px]">
+      <div className="flex flex-wrap mx-auto  gap-5 px-10 text-dark-grey mt-[30px] max-w-[500px] font-apfel-grotezk-regular">
         <Image 
         width={24}
         height={20}
@@ -59,7 +59,7 @@ export default function Preview() {
           <div className="text-graphite"> What Languages do you speak</div>
       </div>
   
-      <div className="flex flex-wrap mx-auto  gap-9 px-10 text-dark-grey mt-[30px] max-w-[500px]">
+      <div className="flex flex-wrap mx-auto  gap-9 px-10 text-dark-grey mt-[30px] max-w-[500px] font-apfel-grotezk-regular">
       <Image 
         width={24}
         height={20}

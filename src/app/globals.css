@@ -22,6 +22,18 @@
   --font-qimano: "Qimano-aYxdE", sans-serif;
 }
 
+.font-apfel-grotezk-regular {
+  font-family: var(--font-apfel-grotezk-regular);
+}
+
+.font-apfel-grotezk-mittel {
+  font-family: var(--font-apfel-grotezk-mittel);
+}
+
+.font-qimano {
+  font-family: var(--font-qimano);
+}
+
 
 /* dark mode  */
 @media (prefers-color-scheme: dark) {

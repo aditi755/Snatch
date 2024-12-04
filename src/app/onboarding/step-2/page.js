@@ -25,7 +25,7 @@ export default function Step2() {
   };
 
   return (
-    <form className="w-full h-[100vh] overflow-hidden mx-auto space-y-6">
+    <form className="w-full h-[100vh] overflow-hidden mx-auto space-y-6 font-apfel-grotezk-regular">
       <h2 className="text-2xl mt-10">And we&apos;re almost there!</h2>
       <div className="flex flex-row gap-6">
         <MultiSelectInput

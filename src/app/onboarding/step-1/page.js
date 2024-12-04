@@ -74,7 +74,7 @@ export default function Step1() {
 
   return (
     <form
-      className="w-full h-[100vh] overflow-hidden mx-auto space-y-6"
+      className="w-full h-[100vh] overflow-hidden mx-auto space-y-6 font-apfel-grotezk-regular"
       onSubmit={handleSubmit}
     >
       <h2 className="text-2xl mt-10">Let&apos;s get Started</h2>
