@@ -77,43 +77,51 @@ export default function Preview() {
         </p>
       </div>
 
-      <div className="flex flex-row">
-        <div className="w-[278px] bg-smoke text-black p-3 overflow-auto">
-          <div className="flex justify-between">
-            <button
-              className={`px-4 py-2 ${
-                activeTab === "instagram"
-                  ? "bg-blue-500 text-white"
-                  : "bg-white text-black"
-              }`}
-              onClick={() => setActiveTab("instagram")}
-            >
-              IG
-            </button>
-            <button
-              className={`px-4 py-2 ${
-                activeTab === "uploaded"
-                  ? "bg-blue-500 text-white"
-                  : "bg-white text-black"
-              }`}
-              onClick={() => setActiveTab("uploaded")}
-            >
-              Uploaded
-            </button>
+      <div className="flex flex-row font-apfel-grotezk-regular">
+      <div className="w-[278px] bg-smoke text-black p-3">
+      {/* Tabs */}
+      <div className="flex justify-between items-center border-b border-light-grey">
+        {/* IG Tab */}
+        <button
+          className={`relative px-4 py-2 text-lg font-medium ${
+            activeTab === "instagram" ? "text-electric-blue" : "text-light-grey"
+          }`}
+          onClick={() => setActiveTab("instagram")}
+        >
+          IG
+          {/* Active underline */}
+          {activeTab === "instagram" && (
+            <span className="absolute bottom-[-1px] left-0 w-full h-[2px] bg-electric-blue"></span>
+          )}
+        </button>
 
-          </div>
-          
-          <p className="text-md mt-4">Selected projects</p>
-          <p className="text-light-grey">
-            {activeTab === "instagram"
+        {/* Uploaded Tab */}
+        <button
+          className={`relative px-4 py-2 text-lg font-medium ${
+            activeTab === "uploaded" ? "text-electric-blue" : "text-light-grey"
+          }`}
+          onClick={() => setActiveTab("uploaded")}
+        >
+          Uploaded
+          {/* Active underline */}
+          {activeTab === "uploaded" && (
+            <span className="absolute bottom-[-1px] left-0 w-full h-[2px] bg-electric-blue"></span>
+          )}
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="mt-4">
+        <p className="text-md font-semibold">Selected Projects</p>
+        <p className="text-light-grey text-sm">
+        {activeTab === "instagram"
               ? selectionState.svgSelected.length
               : selectionState.uploadedFiles.length}{" "}
-            selected
-          </p>
+        </p>
 
-          {renderProjects()}
-          </div>
-        
+        {renderProjects()}
+      </div>
+      </div>       
 
           {/* preview card */}
           <div className="w-[864px] h-[447px] bg-white ml-28 mt-5">
