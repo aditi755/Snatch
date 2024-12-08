@@ -1,6 +1,6 @@
 // app/onboarding/layout.js
 "use client";
-
+import { useEffect } from "react";
 import { FormProvider } from "../onboarding/context";
 import Image from "next/image";
 import { useFormContext } from "../onboarding/context";
@@ -11,17 +11,13 @@ import { useAuth } from "@clerk/nextjs";
 export default function OnboardingLayout({ children }) {
   const { isLoaded, isSignedIn } = useAuth();
   const router = useRouter();
-  
-  
-  if (!isLoaded) {
-    return <div className="flex justify-center items-center text-2xl h-screen">Loading...</div>
- }
 
-  if (!isSignedIn) {
-    router.push("/signup"); 
-    return null;
-  }
-
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.push('/signup');
+    }
+  }, [isLoaded, isSignedIn]);
+  
   const handleNextClick = () => {
     router.push("/dashboard");
   }
