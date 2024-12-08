@@ -6,10 +6,22 @@ import Image from "next/image";
 import { useFormContext } from "../onboarding/context";
 import Preview from "@/components/Preview";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
 
 export default function OnboardingLayout({ children }) {
-
+  const { isLoaded, isSignedIn } = useAuth();
   const router = useRouter();
+  
+  
+  if (!isLoaded) {
+    return <div className="flex justify-center items-center text-2xl h-screen">Loading...</div>
+ }
+
+  if (!isSignedIn) {
+    router.push("/signup"); 
+    return null;
+  }
+
   const handleNextClick = () => {
     router.push("/dashboard");
   }

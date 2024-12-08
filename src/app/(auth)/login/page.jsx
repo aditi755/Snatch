@@ -1,15 +1,40 @@
 "use client"
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSignIn } from "@clerk/nextjs";
 
 export default function Home() {
-
+  const { isLoaded, signIn, setActive, sessions } = useSignIn()
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleVerifyEmail = () => {
-    router.push('/login/enter-otp'); 
+  const handleVerifyEmail = async () => {
+    if (!isLoaded) return;
+
+    try {
+
+      if (sessions.length > 0) {
+        throw new Error("Session already exists");
+      }
+      // Ensure the email_address is passed correctly in the sign-up process
+      const { session, user } = await signIn.create({
+        identifier: email, 
+      });
+
+      // Prepare the email address for OTP verification
+      await signIn.prepareEmailAddressVerification();
+
+      // Navigate to OTP entry page
+      router.push(`/login/enter-otp?email=${email}`);
+    } catch (err) {
+      // setError(err.errors[0]?.message || "Something went wrong.");
+      setError(err.message || "Something went wrong.");
+    }
   };
+
 
   return (
     <div className="h-screen bg-smoke flex flex-col sm:flex-row overflow-hidden">

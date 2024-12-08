@@ -56,7 +56,26 @@ export default function Preview() {
         src="/assets/icons/onboarding/Language.svg"
         alt="languages"/>
           <h5 className="text-electric-blue -ml-1">Languages</h5>
-          <div className="text-graphite"> What Languages do you speak</div>
+          <div className="flex flex-wrap items-center gap-0">
+      {formData.languages && formData.languages.length > 0 ? (
+        formData.languages.map((item, index) => (
+        <div key={index} className="flex items-center gap-0 text-graphite">
+          <span>{item}</span>
+          {index < formData.languages.length - 1 && (
+            <Image
+              width={10}
+              height={20}
+              src="/assets/icons/onboarding/Fullstop.svg"
+              className="mx-1"
+              alt="separator"
+            />
+          )}
+        </div>
+      ))
+    ) : (
+      <span>What Languages do you know?</span>
+    )}
+  </div>
       </div>
   
       <div className="flex flex-wrap mx-auto  gap-9 px-10 text-dark-grey mt-[30px] max-w-[500px] font-apfel-grotezk-regular">

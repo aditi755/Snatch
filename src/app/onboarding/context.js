@@ -20,10 +20,12 @@ export const FormProvider = ({ children }) => {
     backgroundPictureName: "",
     industry: [], 
     contentType: [], 
+    languages: [],
     compensation: [], 
     post: 0,
     story: 0,
-    reels:0
+    reels:0,
+    dateOfBirth: "",
   });
 
   // Load from localStorage when the component mounts
@@ -71,7 +73,54 @@ export const FormProvider = ({ children }) => {
     }
   };
 
-
+  // const updateFormData = (newData) => {
+  //   if (newData.profilePicture && newData.profilePicture instanceof File) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       const updatedData = {
+  //         ...formData,
+  //         profilePicture: reader.result,
+  //         profilePictureName: newData.profilePicture.name,
+  //       };
+  //       setFormData(updatedData);
+  
+  //       // Save updated data to localStorage
+  //       if (typeof window !== "undefined") {
+  //         localStorage.setItem("formData", JSON.stringify(updatedData));
+  //       }
+  //     };
+  //     reader.readAsDataURL(newData.profilePicture); // Read file as data URL
+  //   } else if (newData.backgroundPicture && newData.backgroundPicture instanceof File) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       const updatedData = {
+  //         ...formData,
+  //         backgroundPicture: reader.result,
+  //         backgroundPictureName: newData.backgroundPicture.name,
+  //       };
+  //       setFormData(updatedData);
+  
+  //       // Save updated data to localStorage
+  //       if (typeof window !== "undefined") {
+  //         localStorage.setItem("formData", JSON.stringify(updatedData));
+  //       }
+  //     };
+  //     reader.readAsDataURL(newData.backgroundPicture); // Read file as data URL
+  //   } else {
+  //     // If no file is selected, proceed as usual
+  //     const updatedData = { 
+  //       ...formData, 
+  //       ...newData,
+  //       dateOfBirth: newData.dateOfBirth ? new Date(newData.dateOfBirth).toLocaleDateString() : formData.dateOfBirth // Ensure DateOfBirth is in correct format
+  //     };
+      
+  //     setFormData(updatedData);
+  //     if (typeof window !== "undefined") {
+  //       localStorage.setItem("formData", JSON.stringify(updatedData));
+  //     }
+  //   }
+  // };
+  
   console.log("formdata from context client", formData);
 
   return (

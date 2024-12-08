@@ -8,10 +8,6 @@ import Link from "next/link";
 export default function Step2() {
   const { formData, updateFormData } = useFormContext();
 
-  const industryOptions = ["Design", "Marketing", "Development", "Product", "Sales", "Human Resources"];
-  const contentOptions = ["Story", "Reels", "Posts"];
-  const compensationOptions = ["Gifting", "Sponsorships", "Affiliate"];
-
   // Handle changes for a specific field
   const handleAddValue = (fieldName, value) => {
     const updatedValues = [...(formData[fieldName] || []), value];
@@ -27,25 +23,30 @@ export default function Step2() {
   return (
     <form className="w-full h-[100vh] overflow-hidden mx-auto space-y-6 font-apfel-grotezk-regular">
       <h2 className="text-2xl mt-10">And we&apos;re almost there!</h2>
-      <div className="flex flex-row gap-6">
+   
         <MultiSelectInput
           label="Choose Industry"
-          options={industryOptions}
           selectedValues={formData.industry || []}
           onAddValue={(value) => handleAddValue("industry", value)}
           onRemoveValue={(value) => handleRemoveValue("industry", value)}
         />
-      </div>
+     
       <MultiSelectInput
         label="Choose Content Type"
-        options={contentOptions}
         selectedValues={formData.contentType || []}
         onAddValue={(value) => handleAddValue("contentType", value)}
         onRemoveValue={(value) => handleRemoveValue("contentType", value)}
       />
+      
+      <MultiSelectInput
+        label="Choose Languages"
+        selectedValues={formData.languages || []}
+        onAddValue={(value) => handleAddValue("languages", value)}
+        onRemoveValue={(value) => handleRemoveValue("languages", value)}
+      />
+
       <MultiSelectInput
         label="Choose Compensation"
-        options={compensationOptions}
         selectedValues={formData.compensation || []}
         onAddValue={(value) => handleAddValue("compensation", value)}
         onRemoveValue={(value) => handleRemoveValue("compensation", value)}

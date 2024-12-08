@@ -1,6 +1,11 @@
 import localFont from "next/font/local";
 import "./globals.css";
-
+import {
+  ClerkProvider,
+  SignedIn,
+  SignedOut,
+} from '@clerk/nextjs'
+// import Head from "next/head";
 const apfelGrotezkMittel = localFont({
   src: [
     {
@@ -41,12 +46,22 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
+    <ClerkProvider>
     <html lang="en">
+     {/* <Head>
+          
+           <script
+            src="https://cdn.clerk.dev/clerk.js"
+            type="text/javascript"
+            async
+          ></script>
+        </Head> */}
       <body
         className={`${apfelGrotezkMittel.variable} ${apfelGrotezkRegular.variable} ${qimano.variable} antialiased`}
       >
         {children}
       </body>
     </html>
+    </ClerkProvider>
   );
 }

@@ -255,18 +255,18 @@ const handleEventTypeRemove = (value) => {
           <TitleWithCounter label={"Give it a title"} name="titleName"  value={currentFormData.titleName || ""} onChange={handleInputChange}/>
 
           <MultiSelectInput label="Choose Industry"
-        options={industries}
-        selectedValues={currentFormData.industries || []}
-        onAddValue={handleIndustryAdd}
-        onRemoveValue={handleIndustryRemove}/>
+          options={industries}
+          selectedValues={currentFormData.industries || []}
+          onAddValue={handleIndustryAdd}
+          onRemoveValue={handleIndustryRemove}/>
 
           <div className="text-black flex flex-col gap-5">
             <p className="font-bold text-md">About the event</p>
             <MultiSelectInput label="Choose Event type"
-        options={eventTypes}
-        selectedValues={currentFormData.eventTypes || []}
-        onAddValue={handleEventTypeAdd}
-        onRemoveValue={handleEventTypeRemove} />
+            options={eventTypes}
+            selectedValues={currentFormData.eventTypes || []}
+            onAddValue={handleEventTypeAdd}
+            onRemoveValue={handleEventTypeRemove} />
             <FormInput
               placeholder="Name of the event"
               name="eventName"

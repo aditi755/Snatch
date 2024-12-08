@@ -1,9 +1,9 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 
-export default function Otp() {
-  const [otp, setOtp] = useState(Array(5).fill("")); 
-  const inputRefs = useRef([]); 
+// Otp component now receives `otp` and `setOtp` from parent
+export default function Otp({ otp, setOtp }) {
+  const inputRefs = useRef([]);
 
   const handleKeyDown = (e) => {
     if (
@@ -73,7 +73,7 @@ export default function Otp() {
               onFocus={handleFocus}
               onPaste={handlePaste}
               ref={(el) => (inputRefs.current[index] = el)}
-              className="shadow-xs flex w-[64px] h-[64px] items-center justify-center rounded-md border border-gray-300  text-center text-2xl font-medium text-electric-blue outline-none focus:border-electric-blue focus:ring-1 focus:ring-electric-blue sm:text-4xl"
+              className="shadow-xs flex w-[64px] h-[64px] items-center justify-center rounded-md border border-gray-300 text-center text-2xl font-medium text-electric-blue outline-none focus:border-electric-blue focus:ring-1 focus:ring-electric-blue sm:text-4xl"
             />
           ))}
         </form>
@@ -81,3 +81,4 @@ export default function Otp() {
     </section>
   );
 }
+

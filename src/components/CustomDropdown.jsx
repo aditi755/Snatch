@@ -16,7 +16,9 @@ const CustomDropdown = ({ options, placeholder, onSelect, selected }) => {
     <div className="relative w-[568px]">
       {/* Display selected option or placeholder */}
       <div
-        className="rounded-lg border border-stroke bg-transparent py-[10px] px-5 text-graphite cursor-pointer"
+       className={`rounded-lg border border-stroke bg-transparent py-[10px] px-5 cursor-pointer ${
+        selected ? "text-graphite" : "text-gray-400"
+      }`}
         onClick={toggleDropdown}
       >
         {selected || placeholder}

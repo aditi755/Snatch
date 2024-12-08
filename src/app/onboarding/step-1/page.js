@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -9,26 +8,38 @@ import InstagramInput from "@/components/InstagramInput";
 import SocialLinksDropdown from "@/components/SocialLinksDropdown";
 import CustomFileInput from "@/components/CustomFileInput";
 import FormInput from "@/components/FormInput";
-import Preview from "@/components/Preview";
-
+import { useAuth } from "@clerk/nextjs";
+import DateInput from "@/components/DateInput";
 
 export default function Step1() {
   const { formData, updateFormData } = useFormContext();
   const router = useRouter();
-
+  const { userId, isSignedIn, user, isLoaded } = useAuth(); // Fetch auth info from Clerk
   const [formState, setFormState] = useState({
     firstName: "",
     lastName: "",
     gender: "",
-    location:"",
+    location: "",
     links: [],
     instagram: "",
     profilePicture: null,
     backgroundPicture: null,
+    dateOfBirth: "",
   });
 
-  // Synchronize formState with formData when formData updates
+  console.log(userId, isSignedIn, user);
+
   useEffect(() => {
+    if (!isLoaded) return; 
+    
+    if (!isSignedIn) {
+      router.push("/signup");
+    }
+  }, [isLoaded, isSignedIn, router]);
+  
+
+  useEffect(() => {
+    // Synchronize formState with formData when formData updates
     setFormState({
       firstName: formData.firstName || "",
       lastName: formData.lastName || "",
@@ -38,39 +49,38 @@ export default function Step1() {
       instagram: formData.instagram || "",
       profilePicture: formData.profilePicture || null,
       backgroundPicture: formData.backgroundPicture || null,
+      dateOfBirth: formData.dateOfBirth || "",
     });
   }, [formData]);
 
-  // Update a specific field
   const updateField = (field, value) => {
     setFormState((prev) => ({ ...prev, [field]: value }));
     updateFormData({ [field]: value }); // Update context immediately
   };
 
-  console.log("formState from step1 page", formState)
-
-  // Add a new social link
   const handleAddSocialLink = () => {
-    console.log(formState.links)
     updateField("links", [...formState.links, {}]);
   };
 
-  // Update a specific social link
   const handleLinkChange = (index, data) => {
     const updatedLinks = [...formState.links];
     updatedLinks[index] = data;
     updateField("links", updatedLinks);
   };
 
-  console.log("updated Links", formState.links)
-
-  // Submit form
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("formstate from step-1 page sending to context", formState)
     updateFormData(formState);
-    // router.push("/onboarding/step-2");
   };
+
+    // Example usage
+    if (!isLoaded) {
+      return <div>Loading...</div>; // Wait until Clerk has fully loaded the auth state
+    }
+
+  if (!isSignedIn) {
+    return <div>Redirecting to sign-in...</div>;
+  }
 
   return (
     <form
@@ -94,36 +104,34 @@ export default function Step1() {
       </div>
 
       {/* Gender Dropdown */}
-      <div className="flex flex-row gap-6">
+      <div className="flex flex-row gap-0">
         <CustomDropdown
           options={["Male", "Female", "Other", "Prefer not to say"]}
           placeholder="Gender"
           onSelect={(option) => updateField("gender", option)}
           selected={formState.gender}
         />
-
-          <FormInput
-          placeholder="Date of birth"
-          value={"Date of birth"}
-          onChange={(e) => updateField("lastName", e.target.value)}
-        />
+        <DateInput 
+        placeholder="Date of birth"
+        value={formState.dateOfBirth}
+        onChange={(value) => updateField("dateOfBirth", value)}/>
       </div>
 
+      {/* Location */}
       <FormInput
-          placeholder="Location"
-          value={formState.location}
-          onChange={(e) => updateField("location", e.target.value)}
-        />
-     
+        placeholder="Location"
+        value={formState.location}
+        onChange={(e) => updateField("location", e.target.value)}
+      />
 
       {/* Social Links */}
       <div>
         <h6 className="font-medium text-graphite">Add social links</h6>
         <div className="mt-3">
-        <InstagramInput
-          value={formState.instagram}
-          onChange={(value) => updateField("instagram", value)}
-        />
+          <InstagramInput
+            value={formState.instagram}
+            onChange={(value) => updateField("instagram", value)}
+          />
           {formState.links.map((link, index) => (
             <SocialLinksDropdown
               key={index}
@@ -143,35 +151,21 @@ export default function Step1() {
 
       {/* Upload Picture & Background */}
       <div className="space-y-4">
-      <CustomFileInput
-    onFileChange={(file) => updateFormData({ profilePicture: file })}
-    placeholder="Upload a profile picture from your device"
-    iconSrc="/assets/icons/onboarding/Upload.svg"
-    label="Upload picture"
-    fileNameKey="profilePictureName" 
-  />
-  <CustomFileInput
-    onFileChange={(file) => updateFormData({ backgroundPicture: file })}
-    placeholder="Choose or upload a background picture"
-    iconSrc="/assets/icons/onboarding/Upload.svg"
-    label="Upload background"
-    fileNameKey="backgroundPictureName"
-  />
+        <CustomFileInput
+          onFileChange={(file) => updateFormData({ profilePicture: file })}
+          placeholder="Upload a profile picture from your device"
+          iconSrc="/assets/icons/onboarding/Upload.svg"
+          label="Upload picture"
+          fileNameKey="profilePictureName"
+        />
+        <CustomFileInput
+          onFileChange={(file) => updateFormData({ backgroundPicture: file })}
+          placeholder="Choose or upload a background picture"
+          iconSrc="/assets/icons/onboarding/Upload.svg"
+          label="Upload background"
+          fileNameKey="backgroundPictureName"
+        />
       </div>
-
-      {/* Submit
-      <div className="mt-6">
-        <button type="submit" className="btn-primary w-full">
-          Save and Continue
-        </button>
-      </div> */}
-
     </form>
   );
 }
-
-
-
-
-
-  
