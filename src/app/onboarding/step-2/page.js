@@ -17,7 +17,7 @@ export default function Step2() {
   const handleRemoveValue = (fieldName, value) => {
     const updatedValues = (formData[fieldName] || []).filter((item) => item !== value);
     updateFormData({ [fieldName]: updatedValues });
-    console.log('remove click ')
+
   };
 
   return (

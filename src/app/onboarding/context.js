@@ -32,7 +32,7 @@ export const FormProvider = ({ children }) => {
   useEffect(() => {
     const savedData = localStorage.getItem("formData");
     if (savedData) {
-      console.log("Loaded formData from localStorage:", JSON.parse(savedData));
+      // console.log("Loaded formData from localStorage:", JSON.parse(savedData));
       setFormData(JSON.parse(savedData));
     }
   }, []);
@@ -121,7 +121,7 @@ export const FormProvider = ({ children }) => {
   //   }
   // };
   
-  console.log("formdata from context client", formData);
+  //console.log("formdata from context client", formData);
 
   return (
     <FormContext.Provider value={{ formData, updateFormData }}>

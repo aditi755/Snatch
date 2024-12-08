@@ -12,11 +12,37 @@ export default function OnboardingLayout({ children }) {
   const { isLoaded, isSignedIn } = useAuth();
   const router = useRouter();
 
+  // useEffect(() => {
+  //   if (isLoaded && !isSignedIn) {
+  //     router.push('/signup');
+  //     console.log('signed in or not', isSignedIn, isLoaded)
+  //   }
+  // }, [isLoaded, isSignedIn]);
+
+  // useEffect(() => {
+  //   console.log("Auth Status: ", { isLoaded, isSignedIn });
+  //   if (isLoaded && !isSignedIn) {
+  //     router.push('/signup');
+  //   } else if (isLoaded && isSignedIn) {
+  //     console.log("User is signed in");
+  //     console.log("Auth Status: ", { isLoaded, isSignedIn });
+  //   }
+  // }, [isLoaded, isSignedIn, router]);
+  
+  
   useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      router.push('/signup');
+    console.log("Auth Status: ", { isLoaded, isSignedIn });
+  
+    if (isLoaded) {
+      if (!isSignedIn) {
+        router.push('/signup');
+      } else {
+        console.log("User is signed in");
+        console.log("Auth Status: ", { isLoaded, isSignedIn });
+      }
     }
-  }, [isLoaded, isSignedIn]);
+  }, [isLoaded, isSignedIn, router]);
+
   
   const handleNextClick = () => {
     router.push("/dashboard");

@@ -9,7 +9,7 @@ export default function Preview() {
  if (formData.profilePicture) {
   profileImageSrc = formData.profilePicture;
 }   
-    console.log("formdara from preview layout",formData)
+    //console.log("formdara from preview layout",formData)
     
     return (
       <div>
