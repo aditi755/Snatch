@@ -6,43 +6,11 @@ import Image from "next/image";
 import { useFormContext } from "../onboarding/context";
 import Preview from "@/components/Preview";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
+
 
 export default function OnboardingLayout({ children }) {
-  const { isLoaded, isSignedIn } = useAuth();
+
   const router = useRouter();
-
-  // useEffect(() => {
-  //   if (isLoaded && !isSignedIn) {
-  //     router.push('/signup');
-  //     console.log('signed in or not', isSignedIn, isLoaded)
-  //   }
-  // }, [isLoaded, isSignedIn]);
-
-  // useEffect(() => {
-  //   console.log("Auth Status: ", { isLoaded, isSignedIn });
-  //   if (isLoaded && !isSignedIn) {
-  //     router.push('/signup');
-  //   } else if (isLoaded && isSignedIn) {
-  //     console.log("User is signed in");
-  //     console.log("Auth Status: ", { isLoaded, isSignedIn });
-  //   }
-  // }, [isLoaded, isSignedIn, router]);
-  
-  
-  useEffect(() => {
-    console.log("Auth Status: ", { isLoaded, isSignedIn });
-  
-    if (isLoaded) {
-      if (!isSignedIn) {
-        router.push('/signup');
-      } else {
-        console.log("User is signed in");
-        console.log("Auth Status: ", { isLoaded, isSignedIn });
-      }
-    }
-  }, [isLoaded, isSignedIn, router]);
-
   
   const handleNextClick = () => {
     router.push("/dashboard");
@@ -50,6 +18,10 @@ export default function OnboardingLayout({ children }) {
 
   const handleProfileClick = () => {
     router.push("/profile");
+  }
+
+  const handleSettingClick = () => {
+    router.push("/settings");
   }
   return (
     <FormProvider>
@@ -102,7 +74,7 @@ export default function OnboardingLayout({ children }) {
             Dashboard
           </button>
 
-          <button onClick={handleNextClick} className="w-[80px] h-[50px] bg-gray-100 text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
+          <button onClick={handleSettingClick} className="w-[80px] h-[50px] bg-gray-100 text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
            Settings
           </button>
 

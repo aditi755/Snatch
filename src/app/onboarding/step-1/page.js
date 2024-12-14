@@ -14,7 +14,6 @@ import DateInput from "@/components/DateInput";
 export default function Step1() {
   const { formData, updateFormData } = useFormContext();
   const router = useRouter();
-  const { userId, isSignedIn, user, isLoaded } = useAuth(); // Fetch auth info from Clerk
   const [formState, setFormState] = useState({
     firstName: "",
     lastName: "",
@@ -27,15 +26,6 @@ export default function Step1() {
     dateOfBirth: "",
   });
 
-  console.log(userId, isSignedIn, user);
-
-  useEffect(() => {
-    if (!isLoaded) return; 
-    
-    if (!isSignedIn) {
-      router.push("/signup");
-    }
-  }, [isLoaded, isSignedIn, router]);
   
 
   useEffect(() => {
@@ -72,15 +62,6 @@ export default function Step1() {
     e.preventDefault();
     updateFormData(formState);
   };
-
-    // Example usage
-    if (!isLoaded) {
-      return <div>Loading...</div>; // Wait until Clerk has fully loaded the auth state
-    }
-
-  if (!isSignedIn) {
-    return <div>Redirecting to sign-in...</div>;
-  }
 
   return (
     <form

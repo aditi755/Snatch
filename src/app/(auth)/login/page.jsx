@@ -12,28 +12,31 @@ export default function Home() {
   const router = useRouter();
 
   const handleVerifyEmail = async () => {
+    console.log("email is clicked");
     if (!isLoaded) return;
-
+    console.log("session for login", sessions);
     try {
-
       if (sessions.length > 0) {
         throw new Error("Session already exists");
       }
-      // Ensure the email_address is passed correctly in the sign-up process
+  
       const { session, user } = await signIn.create({
-        identifier: email, 
+        identifier: email,
       });
-
+  
+      console.log("email is created", session, user);
+  
       // Prepare the email address for OTP verification
       await signIn.prepareEmailAddressVerification();
-
+      console.log("moving to enter otp from LOGIN", session, user);
+  
       // Navigate to OTP entry page
       router.push(`/login/enter-otp?email=${email}`);
     } catch (err) {
-      // setError(err.errors[0]?.message || "Something went wrong.");
       setError(err.message || "Something went wrong.");
     }
   };
+  
 
 
   return (

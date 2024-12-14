@@ -3,21 +3,21 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useSignUp, useAuth } from "@clerk/nextjs";
+import { useSignUp } from "@clerk/nextjs";
 
 export default function SignUp() {
   const router = useRouter();
   const { isLoaded, signUp } = useSignUp();
-  const { isSignedIn } = useAuth();
+  //const { isSignedIn } = useAuth();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
 
    // Check if user is already signed in and redirect to /dashboard
-   useEffect(() => {
-    if (isSignedIn) {
-      router.push("/dashboard");
-    }
-  }, [isSignedIn, router]);
+  //  useEffect(() => {
+  //   if (isSignedIn) {
+  //     router.push("/dashboard");
+  //   }
+  // }, [isSignedIn, router]);
 
 
   const handleVerifyEmail = async () => {
