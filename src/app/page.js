@@ -1,21 +1,3 @@
-  // import Image from "next/image";
-  // import Link from 'next/link';
-
-  // export default function Home() {
-  //   return (
-  //     <div className="h-screen bg-smoke flex gap-4 justify-center items-center sm:flex-col overflow-hidden">
-       
-  //        <p className="text-5xl mx-auto text-electric-blue">Welcome to Snatch</p>  
-
-  //         <p>
-  //         <Link className=" text-2xl" href="/signup">Click here: Signup page</Link>
-  //         </p>
-      
-  //     </div>
-  //   );
-  // }
-
-
 // "use client";
 
 // import { useUser } from "@clerk/nextjs";
@@ -40,17 +22,22 @@
 // }
 
 
+
 "use client";
 
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
 export default function Home() {
-  const { isLoaded, isSignedIn } = useUser(); // Destructure isLoaded and isSignedIn
+  const { isSignedIn, isLoaded } = useUser(); // Check if user data is loaded
 
-  // Show a loading state while the user data is being hydrated
+  // Handle loading state
   if (!isLoaded) {
-    return <div className=" flex justify-center items-center text-3xl h-screen">Loading...</div>;
+    return (
+      <div className="h-screen bg-smoke flex justify-center items-center">
+        <p className="text-2xl text-electric-blue">Loading...</p>
+      </div>
+    );
   }
 
   return (

@@ -32,7 +32,7 @@ export default function EnterOtp() {
         code: otp.join(""), // Combine the OTP digits into a single string
       });
 
-      // On successful verification and session sync, redirect
+      // On successful verification and session sync, redirect to home page
       router.push("/");
     } catch (err) {
       setError(err.message || "Invalid OTP. Please try again.");

@@ -20,16 +20,16 @@ export default clerkMiddleware(async (authFn, request) => {
   const url = new URL(request.url); // Initialize URL from the request object
   console.log("USER FROM MIDDLEWARE", { sessionId, userId });
 
-  const isOnboardingRoute = url.pathname === "/onboarding";
+  const isDashboardRoute = url.pathname === "/dashboard";
 
   if (sessionId && (url.pathname === "/" )) {
-    const redirectUrl = new URL("/onboarding/step-1", request.url); // Use URL constructor for redirection
+    const redirectUrl = new URL("dashboard", request.url); // Use URL constructor for redirection
     return NextResponse.redirect(redirectUrl);
   }
   
 
   // Allow authenticated users to access the onboarding route
-  if (isOnboardingRoute && sessionId) {
+  if (isDashboardRoute && sessionId) {
     return NextResponse.next();
   }
 
