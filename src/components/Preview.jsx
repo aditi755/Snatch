@@ -9,7 +9,6 @@ export default function Preview() {
  if (formData.profilePicture) {
   profileImageSrc = formData.profilePicture;
 }   
-    //console.log("formdara from preview layout",formData)
     
     return (
       <div>
@@ -56,7 +55,7 @@ export default function Preview() {
         src="/assets/icons/onboarding/Language.svg"
         alt="languages"/>
           <h5 className="text-electric-blue -ml-1">Languages</h5>
-          <div className="flex flex-wrap items-center gap-0">
+          <div className="flex flex-wrap items-center gap-0 w-56 max-w-60">
       {formData.languages && formData.languages.length > 0 ? (
         formData.languages.map((item, index) => (
         <div key={index} className="flex items-center gap-0 text-graphite">
@@ -109,7 +108,7 @@ export default function Preview() {
       </div>
   
       <div className="text-dark-grey px-10 flex flex-col justify-center items-center mt-10">
-       <h3 className="text-3xl">$ {formData.post} - {formData.reels}</h3>
+       <h3 className="text-3xl">₹ {formData.post} - ₹ {formData.reels}</h3>
        <div>Charge per content piece</div>
       </div>
 

@@ -40,7 +40,7 @@ const Profile = () => {
   </p>
 
   <button className="w-[230px] h-[47px] mt-5 bg-electric-blue text-white border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
-           Login to Instagarm
+           Login to Instagram
           </button>
 </div>
 

@@ -14,7 +14,7 @@ export default function MoneyInput({ title, placeholder, value, onChange }) {
             className="outline-none text-graphite text-right w-full text-sm  placeholder-gray-400"
             onChange={(e) => onChange(e.target.value)} // Pass updated value to the parent
           />
-          <span className="text-graphite text-sm ml-1">$</span>
+          <span className="text-graphite text-sm ml-1">₹</span>
         </div>
       </div>
     );

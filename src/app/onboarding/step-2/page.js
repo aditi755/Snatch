@@ -25,7 +25,7 @@ export default function Step2() {
       <h2 className="text-2xl mt-10">And we&apos;re almost there!</h2>
    
         <MultiSelectInput
-          label="Choose Industry"
+          label="Choose Industry (Max 5)"
           selectedValues={formData.industry || []}
           onAddValue={(value) => handleAddValue("industry", value)}
           onRemoveValue={(value) => handleRemoveValue("industry", value)}
@@ -39,7 +39,7 @@ export default function Step2() {
       />
       
       <MultiSelectInput
-        label="Choose Languages"
+        label="Choose Languages (Max 5)"
         selectedValues={formData.languages || []}
         onAddValue={(value) => handleAddValue("languages", value)}
         onRemoveValue={(value) => handleRemoveValue("languages", value)}
