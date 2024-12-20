@@ -39,7 +39,7 @@ export default function OnboardingLayout({ children }) {
             
           </div>
 
-          <div className="w-64 h-20 z-50 absolute top-[80%] mx-auto ">
+          <div className="w-64 h-20 z-50 absolute top-[84%] mx-auto ">
             <div className="flex justify-center items-center gap-20 text-smoke">
               <div className="flex flex-col">
                 <h2 className="text-3xl">100K</h2>

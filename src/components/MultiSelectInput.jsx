@@ -117,18 +117,34 @@
 
 // export default MultiSelectInput;
 
-
-'use client';
+"use client";
 
 import { useState } from "react";
 
-const MultiSelectInput = ({ label, selectedValues, onAddValue, onRemoveValue }) => {
+const MultiSelectInput = ({ label, data, selectedValues, onAddValue, onRemoveValue }) => {
   const [inputValue, setInputValue] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
 
-  const handleAddChip = () => {
-    if (inputValue.trim() && !selectedValues.includes(inputValue.trim())) {
-      onAddValue(inputValue.trim());
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setInputValue(value);
+
+    if (value) {
+      const filteredSuggestions = data.filter((item) =>
+        item.toLowerCase().startsWith(value.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions.slice(0, 5)); // Limit to 5 suggestions
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const handleAddChip = (value) => {
+    const newValue = value || inputValue.trim();
+    if (newValue && !selectedValues.includes(newValue)) {
+      onAddValue(newValue);
       setInputValue("");
+      setSuggestions([]);
     }
   };
 
@@ -167,10 +183,24 @@ const MultiSelectInput = ({ label, selectedValues, onAddValue, onRemoveValue }) 
           value={inputValue}
           className="flex-1 p-1 focus:outline-none bg-transparent text-graphite"
           placeholder="Type and press Enter"
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={handleInputChange}
           onKeyDown={handleKeyDown}
         />
       </div>
+      {/* Dropdown suggestions */}
+      {suggestions.length > 0 && (
+        <ul className="border border-gray-300 rounded mt-2 max-h-40 overflow-y-auto">
+          {suggestions.map((suggestion, index) => (
+            <li
+              key={index}
+              className="p-2 cursor-pointer hover:bg-gray-200"
+              onClick={() => handleAddChip(suggestion)}
+            >
+              {suggestion}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

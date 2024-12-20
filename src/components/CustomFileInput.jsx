@@ -61,7 +61,6 @@ import Cropper from "react-easy-crop";
 const CustomFileInput = ({ onFileChange, placeholder, iconSrc, label, fileNameKey }) => {
   const [fileName, setFileName] = useState("");
   const [imageSrc, setImageSrc] = useState(null); // For cropping
-  //const [previewImage, setPreviewImage] = useState(null); // For preview
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
@@ -73,9 +72,6 @@ const CustomFileInput = ({ onFileChange, placeholder, iconSrc, label, fileNameKe
   useEffect(() => {
     // Load the file name and preview image from localStorage
     const savedImage = localStorage.getItem(fileNameKey);
-    // if (savedImage) {
-    //   setPreviewImage(savedImage);
-    // }
     if (formData && formData[fileNameKey]) {
       setFileName(formData[fileNameKey]);
     }
@@ -109,9 +105,6 @@ const CustomFileInput = ({ onFileChange, placeholder, iconSrc, label, fileNameKe
 
   const cropImage = async () => {
     const croppedImage = await getCroppedImage(imageSrc, croppedAreaPixels, fileName);
-    // const previewUrl = URL.createObjectURL(croppedImage);
-    // setPreviewImage(previewUrl);
-    // localStorage.setItem(fileNameKey, previewUrl); // Save to localStorage
     onFileChange(croppedImage); // Pass cropped file to parent
     setIsCropping(false); // Close modal
     setImageSrc(null);

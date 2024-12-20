@@ -11,9 +11,9 @@ export default function Preview() {
 }   
     
     return (
-      <div>
+      <div className="h-auto max-h-auto ">
 
-          <div className="flex gap-3 justify-center items-center flex-wrap max-w-[380px]  mx-auto">
+          <div className="flex gap-2 justify-center items-center flex-wrap max-w-[380px]  mx-auto">
                 {(formData.industry && formData.industry.length > 0
                     ? formData.industry
                     : ["Industry"] 
@@ -48,7 +48,7 @@ export default function Preview() {
           <h6>{formData.location || "Location"}</h6>
       </div>
   
-      <div className="flex flex-wrap mx-auto  gap-5 px-10 text-dark-grey mt-[30px] max-w-[500px] font-apfel-grotezk-regular">
+      <div className="flex flex-wrap mx-auto gap-5 px-10 text-dark-grey mt-[30px] max-w-[500px] font-apfel-grotezk-regular">
         <Image 
         width={24}
         height={20}

@@ -1,25 +1,28 @@
-// app/onboarding/layout.js
 "use client";
-
 
 import { FormProvider } from "./context";
 import Image from "next/image";
 import Preview from "@/components/Preview";
-import { useRouter } from "next/navigation";
-
+import { useRouter, usePathname } from "next/navigation";
 
 export default function OnboardingLayout({ children }) {
-
-
   const router = useRouter();
-  const handleNextClick = () => {
-    router.push("/onboarding/step-2");
-  }
+  const pathname = usePathname();
 
+  const handleNextClick = () => {
+    if (pathname === "/onboarding/step-2") {
+      router.push("/dashboard");
+    } else if (pathname === "/onboarding/step-1") {
+      router.push("/onboarding/step-2");
+    }
+  };
 
   const handlePrevClick = () => {
-    router.push("/onboarding/step-1");
- }
+    if (pathname === "/onboarding/step-2") {
+      router.push("/onboarding/step-1");
+    }
+  };
+
   return (
     <FormProvider>
       <div className="flex h-screen bg-gray-100">
@@ -36,17 +39,21 @@ export default function OnboardingLayout({ children }) {
           </div>
         </div>
 
-
+        {/* Navigation Buttons */}
         <div className="absolute sm:top-[87%] sm:left-[43%] w-[200px] h-[74px] flex justify-center items-center gap-5 border-2 bg-smoke border-light-grey rounded-md">
-          <button onClick={handlePrevClick} className="w-[72px] h-[37px] bg-white text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
+          <button
+            onClick={handlePrevClick}
+            className="w-[72px] h-[37px] bg-white text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white"
+          >
             Prev
           </button>
- 
-          <button  onClick={handleNextClick} className="w-[72px] h-[37px] bg-white text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
-          Next
+          <button
+            onClick={handleNextClick}
+            className="w-[72px] h-[37px] bg-white text-electric-blue border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white"
+          >
+            Next
           </button>
         </div>
-
 
         {/* Right side: Form */}
         <div className="w-1/2 flex flex-col justify-center items-center bg-white">
