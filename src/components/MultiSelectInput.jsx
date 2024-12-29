@@ -161,12 +161,12 @@ const MultiSelectInput = ({ label, data, selectedValues, onAddValue, onRemoveVal
 
   return (
     <div className="multi-select-input">
-      <label className="block mb-2 text-gray-700">{label}</label>
+      <label className="block mb-2 font-apfel-grotezk-regular">{label}</label>
       <div className="flex flex-wrap gap-2 p-2 border border-gray-300 rounded">
         {selectedValues.map((value, index) => (
           <div
             key={index}
-            className="flex items-center px-3 py-1 text-sm text-gray-800 bg-gray-300 rounded-full"
+            className="flex items-center px-3 py-1 text-sm text-gray-800 bg-[#E9E9E9] rounded-full"
           >
             <span>{value}</span>
             <button
@@ -189,11 +189,11 @@ const MultiSelectInput = ({ label, data, selectedValues, onAddValue, onRemoveVal
       </div>
       {/* Dropdown suggestions */}
       {suggestions.length > 0 && (
-        <ul className="border border-gray-300 rounded mt-2 max-h-40 overflow-y-auto">
+        <ul className="border border-gray-300 bg-[#E9E9E9] rounded mt-2 max-h-40 overflow-y-auto">
           {suggestions.map((suggestion, index) => (
             <li
               key={index}
-              className="p-2 cursor-pointer hover:bg-gray-200"
+              className="p-2 cursor-pointer hover:text-electric-blue"
               onClick={() => handleAddChip(suggestion)}
             >
               {suggestion}

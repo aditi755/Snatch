@@ -11,16 +11,16 @@ export default function Preview() {
 }   
     
     return (
-      <div className="h-auto max-h-auto ">
+      <div className="h-auto max-h-[530px] py-2 ">
 
-          <div className="flex gap-2 justify-center items-center flex-wrap max-w-[380px]  mx-auto">
+          <div className="flex gap-0 justify-center items-center flex-wrap max-w-[380px]  mx-auto">
                 {(formData.industry && formData.industry.length > 0
                     ? formData.industry
                     : ["Industry"] 
                 ).map((industry, index) => (
                     <span
                         key={index}
-                        className="bg-dark/10 text-dark-grey m-2 inline-block rounded border border-transparent py-1 px-2.5 text-xs font-medium"
+                        className="bg-dark/10 text-dark-grey m-[3px] inline-block rounded border border-transparent py-1 px-2.5 text-xs font-medium"
                     >
                         {industry}
                     </span>
@@ -29,7 +29,7 @@ export default function Preview() {
 
 
       {/* Displaying the Profile Picture  default*/}
-      <div className="w-20 h-20 mx-auto mt-8 object-contain rounded-full overflow-hidden">
+      <div className="w-20 h-20 mx-auto mt-3 object-contain rounded-full overflow-hidden">
         <Image
           className="object-cover w-full h-full"
           width={80}
@@ -39,9 +39,9 @@ export default function Preview() {
         />
       </div>
   
-      <h2 className="text-graphite text-3xl text-center mt-4">{(formData.firstName + " " + formData.lastName).trim() || "Your Name"}</h2>
+      <h2 className="text-graphite text-[28px] text-center mt-4 font-qimano ">{(formData.firstName + " " + formData.lastName).trim() || "Your Name"}</h2>
   
-      <div className="flex justify-center items-center gap-3 text-dark-grey ">
+      <div className="flex justify-center items-center gap-2 text-dark-grey ">
       <h6>{(`@${formData.firstName || ""}`).trim().toLowerCase() || "@username"}</h6>
 
           <h6>{formData.gender || "Gender"}</h6>
@@ -107,8 +107,8 @@ export default function Preview() {
         
       </div>
   
-      <div className="text-dark-grey px-10 flex flex-col justify-center items-center mt-10">
-       <h3 className="text-3xl">₹ {formData.post} - ₹ {formData.reels}</h3>
+      <div className="text-dark-grey px-10 flex flex-col justify-center items-center mt-7">
+       <h3 className="text-3xl font-qimano">₹ {formData.post} - ₹ {formData.reels}</h3>
        <div>Charge per content piece</div>
       </div>
 

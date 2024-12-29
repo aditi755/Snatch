@@ -24,6 +24,7 @@ export default function OnboardingLayout({ children }) {
     setIsMenuVisible((prev) => !prev); // Toggle menu visibility
   };
 
+
   const handleProfileClick = () => {
     router.push("/onboarding/step-1");
   };
@@ -37,9 +38,9 @@ export default function OnboardingLayout({ children }) {
   }
   return (
     <FormProvider>
-      <div className="flex h-screen bg-smoke justify-center">
+      <div className="flex h-screen bg-white justify-center">
         {/* Left side: Image with Preview */}
-        <div className="w-[660px] overflow-hidden relative flex items-center justify-center bg-white shadow-md">
+        <div className="w-[660px] overflow-hidden relative flex items-center justify-center bg-white">
           <Image
             src="/assets/images/signup_background.png"
             alt="Background Image"
@@ -56,7 +57,7 @@ export default function OnboardingLayout({ children }) {
           {/* Hamburger Button */}
           <button
             onClick={handleHamburgerClick}
-            className="w-[50px] h-[37px] bg-gray-100 text-electric-blue border border-light-grey rounded-md mx-auto font-medium hover:bg-transparent relative"
+            className="w-[50px] h-[37px] bg-gray-100 text-electric-blue border  rounded-md mx-auto font-medium hover:bg-transparent relative"
           >
             <Image
               className="mx-auto w-8"
@@ -118,14 +119,14 @@ export default function OnboardingLayout({ children }) {
 
           <button
             onClick={handleNextClick}
-            className="w-[90px] h-[50px] bg-gray-100 text-electric-blue text-2xl font-semibold border border-light-grey text-center"
+            className="w-[90px] h-[50px] bg-gray-100 text-electric-blue text-2xl font-semibold border  text-center"
           >
             Snatch
           </button>
         </div>
 
         {/* Right side: Form */}
-        <div className="w-[900px] flex flex-col justify-center items-center bg-smoke">
+        <div className="w-[900px] flex flex-col justify-center items-center bg-whitee">
           <div className="w-[100vw] max-w-3xl">{children}</div>
         </div>
       </div>

@@ -17,7 +17,10 @@ module.exports = {
         blue: 'var(--blue)',
       },
       screens: {     
-        '2xl': '1700px', // Adjust this to a larger width
+        // '2xl': '1700px', // Adjust this to a larger width
+        '3xl': '1400px',
+        "4xl": '1520px',
+        "5xl": "1620px",
       },
     },
   },

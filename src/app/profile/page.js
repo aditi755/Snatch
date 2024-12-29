@@ -4,11 +4,30 @@ import { useState } from "react";
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState("portfolio");
-
+    const [loading, setLoading] = useState(false);
     const menuItems = ["portfolio", "about", "audience"];
 
+    const handleLogin = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('/api/auth/instagram');
+        const data = await response.json();
+  
+        if (data.url) {
+          window.location.href = data.url; // Redirect to Instagram OAuth
+        } else {
+          alert('Failed to get Instagram login URL');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while trying to log in.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
   return (
-<div className="flex justify-center items-center h-screen bg-white relative ">
+<div className="flex justify-center items-center h-screen bg-white relative font-qimano ">
 
 <div className="flex absolute top-10 space-x-6 ">
       {menuItems.map((item) => (
@@ -39,9 +58,9 @@ const Profile = () => {
     </span> 
   </p>
 
-  <button className="w-[230px] h-[47px] mt-5 bg-electric-blue text-white border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
-           Login to Instagram
-          </button>
+  <button onClick={handleLogin} disabled={loading} className="w-[230px] h-[47px] mt-5 bg-electric-blue text-white border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
+   {loading ? 'Redirecting...' : 'Login to Instagram'}
+    </button>
 </div>
 
 

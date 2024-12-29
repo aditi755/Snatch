@@ -23,7 +23,7 @@ export default function DatePicker4({ value, onChange, placeholder }) {
       const day = new Date(year, month, i);
       const dayString = day.toLocaleDateString("en-US");
       let className =
-        "flex items-center justify-center cursor-pointer w-[46px] h-[46px] rounded-full text-dark-3 hover:bg-primary hover:text-white";
+        "flex items-center justify-center cursor-pointer w-[40px] 2xl:w-[35px] h-[46px] rounded-full text-dark-3 hover:bg-primary hover:text-white";
 
       if (selectedDate && dayString === selectedDate) {
         className += " bg-primary text-white";
@@ -114,7 +114,7 @@ export default function DatePicker4({ value, onChange, placeholder }) {
                 </div>
 
                 {isOpen && (
-                  <div className="absolute top-[100%] mt-2 p-4 bg-white border rounded shadow-md z-20">
+                  <div className="absolute top-[100%] mt-2 p-2  bg-white border rounded shadow-md z-20">
                     <div className="flex items-center justify-between mb-4">
                       <select
                         value={currentDate.getFullYear()}

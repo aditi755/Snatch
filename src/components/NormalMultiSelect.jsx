@@ -49,7 +49,7 @@ const NormalMultiSelect = ({ label, options, selectedValues, onAddValue, onRemov
             selectedValues.map((value, index) => (
               <span
                 key={`${label}-${index}`}
-                className="m-[5px] flex items-center justify-center rounded-full border-[.5px] border-stroke bg-gray-300  py-[7px] px-[20px] text-sm font-medium text-graphite relative z-20"
+                className="m-[5px] flex items-center justify-center rounded-full border-[.5px] border-stroke bg-[#E9E9E9]  py-[7px] px-[20px] text-sm font-medium text-graphite relative z-20"
               >
                 {value}
                 <span
@@ -100,7 +100,7 @@ const NormalMultiSelect = ({ label, options, selectedValues, onAddValue, onRemov
 
       {/* Dropdown List */}
       {isDropdownOpen && (
-        <ul className="absolute mt-2 w-full rounded-lg border border-stroke bg-light-grey py-2 z-50">
+        <ul className="absolute mt-2 w-full rounded-lg border border-stroke bg-[#E9E9E9] py-2 z-50">
           {options.map((option, idx) => (
             <li
               key={idx}

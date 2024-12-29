@@ -51,8 +51,9 @@ export default function Step2() {
   };
 
   return (
-    <form className="w-full h-[100vh] overflow-hidden mx-auto space-y-6 font-apfel-grotezk-regular">
-      <h2 className="text-2xl mt-10">And we&apos;re almost there!</h2>
+    <div>
+    <h2 className="text-3xl mt-10 font-qimano">And we&apos;re almost there!</h2>
+    <form className="w-full xl:w-[726px] 5xl:w-[800px] h-[80vh] overflow-y-scroll mx-auto space-y-6 font-apfel-grotezk-regular mt-6"    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
 
         <MultiSelectInput
           label="Choose Industry (Max 5)"
@@ -109,6 +110,9 @@ export default function Step2() {
 
         </div>
         </div>
+
+        <div className="bg-transparent w-full h-24"></div>
     </form>
+    </div>
   );
 }
