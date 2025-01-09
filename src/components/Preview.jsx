@@ -42,7 +42,7 @@ export default function Preview() {
       <h2 className="text-graphite text-[28px] text-center mt-4 font-qimano ">{(formData.firstName + " " + formData.lastName).trim() || "Your Name"}</h2>
   
       <div className="flex justify-center items-center gap-2 text-dark-grey ">
-      <h6>{(`@${formData.firstName || ""}`).trim().toLowerCase() || "@username"}</h6>
+      <h6>{(`@${formData.username || ""}`).trim().toLowerCase() || "@username"}</h6>
 
           <h6>{formData.gender || "Gender"}</h6>
           <h6>{formData.location || "Location"}</h6>

@@ -172,6 +172,7 @@ export default function Step1() {
   const { formData, updateFormData } = useFormContext();
   const router = useRouter();
   const [formState, setFormState] = useState({
+    username: "",
     firstName: "",
     lastName: "",
     gender: "",
@@ -188,6 +189,7 @@ export default function Step1() {
   useEffect(() => {
     // Synchronize formState with formData when formData updates
     setFormState({
+      username: formData.username || "",
       firstName: formData.firstName || "",
       lastName: formData.lastName || "",
       gender: formData.gender || "",
@@ -294,14 +296,15 @@ export default function Step1() {
       {/* Upload Picture & Background */}
       <div className="space-y-4">
         <CustomFileInput
-          onFileChange={(file) => updateFormData({ profilePicture: file })}
+          //onFileChange={(file) => updateFormData({ profilePicture: file })}
+          onFileChange={(uploadedUrl) => updateFormData({ profilePicture: uploadedUrl})}
           placeholder="Upload a profile picture from your device"
           iconSrc="/assets/icons/onboarding/Upload.svg"
           label="Upload picture"
           fileNameKey="profilePictureName"
         />
         <CustomFileInput
-          onFileChange={(file) => updateFormData({ backgroundPicture: file })}
+          onFileChange={(uploadedUrl) => updateFormData({ backgroundPicture: uploadedUrl })}
           placeholder="Choose or upload a background picture"
           iconSrc="/assets/icons/onboarding/Upload.svg"
           label="Upload background"

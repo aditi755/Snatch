@@ -17,7 +17,7 @@ export default function OnboardingLayout({ children }) {
   }
 
   const handleProfileClick = () => {
-    router.push("/profile");
+    router.push("/profile/snatchsocial");
   }
 
   const handleSettingClick = () => {

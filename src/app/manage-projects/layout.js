@@ -10,13 +10,12 @@ export default function OnboardingLayout({ children }) {
 
   return (
    <SelectedProjectsProvider>
-    <div className="min-h-screen bg-gray-200 text-white">
+    <div className="min-h-screen bg-smoke text-white">
       <Header />
       <main className="p-8">{children}</main>
     </div>
    </SelectedProjectsProvider>
-     
-    
+
   );
 }
 

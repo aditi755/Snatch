@@ -55,6 +55,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { useFormContext } from "@/app/onboarding/context";
+import cloudinaryUpload from "@/utils/cloudinaryUpload";
 import Cropper from "react-easy-crop";
 
 
@@ -93,7 +94,7 @@ const CustomFileInput = ({ onFileChange, placeholder, iconSrc, label, fileNameKe
         setImageSrc(reader.result); // Load image for cropping
         setIsCropping(true); // Open cropping modal
       };
-      onFileChange(selectedFile); // Pass raw file to parent
+      //onFileChange(selectedFile); // Pass raw file to parent
     }
   };
 
@@ -105,7 +106,10 @@ const CustomFileInput = ({ onFileChange, placeholder, iconSrc, label, fileNameKe
 
   const cropImage = async () => {
     const croppedImage = await getCroppedImage(imageSrc, croppedAreaPixels, fileName);
-    onFileChange(croppedImage); // Pass cropped file to parent
+    const uploadedUrl = await cloudinaryUpload(croppedImage);
+   // onFileChange(croppedImage); // Pass cropped file to parent
+   console.log("uploaded url", uploadedUrl)
+    onFileChange(uploadedUrl);
     setIsCropping(false); // Close modal
     setImageSrc(null);
   };

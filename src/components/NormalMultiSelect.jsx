@@ -34,7 +34,7 @@ const NormalMultiSelect = ({ label, options, selectedValues, onAddValue, onRemov
   return (
     <div ref={wrapperRef} className="relative w-full">
       {/* Label */}
-      <label htmlFor={label} className="block text-md font-medium text-graphite mb-2">
+      <label htmlFor={label} className="block text-md font-medium text-graphite mb-2 ">
         {label}
       </label>
 
@@ -45,11 +45,11 @@ const NormalMultiSelect = ({ label, options, selectedValues, onAddValue, onRemov
       >
         <div className="flex flex-wrap items-center gap-2 min-h-[40px]" style={{ padding: "0px" }}>
           {/* Display selected values here it was -z-50  made it to z-20 to make cross clickable and remove work*/}
-          {Array.isArray(selectedValues) &&
+          { Array.isArray(selectedValues) &&
             selectedValues.map((value, index) => (
               <span
                 key={`${label}-${index}`}
-                className="m-[5px] flex items-center justify-center rounded-full border-[.5px] border-stroke bg-[#E9E9E9]  py-[7px] px-[20px] text-sm font-medium text-graphite relative z-20"
+                className="m-[5px] flex items-center justify-center border-[.5px] border-stroke bg-[#0037EB] bg-opacity-10 py-[7px] px-[20px] text-sm font-medium text-graphite relative z-20"
               >
                 {value}
                 <span

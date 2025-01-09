@@ -1,7 +1,8 @@
 "use client";
-
+import { useState, useEffect } from "react";
 import { UserButton } from "@clerk/nextjs";
-
+import { Carousel } from "react-responsive-carousel";
+import Image from "next/image";
 export default function Page() {
   return (
     <div>
@@ -11,44 +12,66 @@ export default function Page() {
       <UserButton afterSignedOutUrl="/" />
       
     </div>
+
+
+        <div>
+            <h2>
+                NextJs Carousel - GeeksforGeeks
+            </h2>
+            {/* <Carousel>
+                <div>
+                    <Image
+                        src=
+"https://media.geeksforgeeks.org/wp-content/uploads/20211213172224/1.png"
+                        alt="image1"
+                    />
+                    <p className="legend">
+                        Image 1
+                    </p>
+                </div>
+                <div>
+                    <Image
+                        src=
+"https://media.geeksforgeeks.org/wp-content/uploads/20211213172225/2.png"
+                        alt="image2"
+                    />
+                    <p className="legend">
+                        Image 2
+                    </p>
+                </div>
+                <div>
+                    <Image
+                        src=
+"https://media.geeksforgeeks.org/wp-content/uploads/20211213172226/3.png"
+                        alt="image3"
+                    />
+                    <p className="legend">
+                        Image 3
+                    </p>
+                </div>
+                <div>
+                    <Image
+                        src=
+"https://media.geeksforgeeks.org/wp-content/uploads/20211213172227/4.png"
+                        alt="image4"
+                    />
+                    <p className="legend">
+                        Image 4
+                    </p>
+                </div>
+                <div>
+                    <Image
+                        src=
+"https://media.geeksforgeeks.org/wp-content/uploads/20211213172229/5.png"
+                        alt="image5"
+                    />
+                    <p className="legend">
+                        Image 5
+                    </p>
+                </div>
+            </Carousel> */}
+        </div>
+
     </div>
   );
 }
-
-// //----2------
-// 'use client';
-
-// import { useState } from 'react';
-
-// export default function InstagramLoginButton() {
-//   const [loading, setLoading] = useState(false);
-
-//   const handleLogin = async () => {
-//     setLoading(true);
-//     try {
-//       const response = await fetch('/api/auth/instagram');
-//       const data = await response.json();
-
-//       if (data.url) {
-//         window.location.href = data.url; // Redirect to Instagram OAuth
-//       } else {
-//         alert('Failed to get Instagram login URL');
-//       }
-//     } catch (error) {
-//       console.error('Error:', error);
-//       alert('An error occurred while trying to log in.');
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <button
-//       onClick={handleLogin}
-//       disabled={loading}
-//       className="px-4 py-2 bg-blue-600 text-black rounded"
-//     >
-//       {loading ? 'Redirecting...' : 'Login with Instagram'}
-//     </button>
-//   );
-// }

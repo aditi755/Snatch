@@ -83,18 +83,12 @@ import Image from "next/image";
 import Preview from "@/components/Preview";
 import { useRouter, usePathname } from "next/navigation";
 
+
+import NextButton from "@/components/NextButton";
 export default function OnboardingLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
-
-  const handleNextClick = () => {
-    if (pathname === "/onboarding/step-2") {
-      router.push("/dashboard");
-    } else if (pathname === "/onboarding/step-1") {
-      router.push("/onboarding/step-2");
-    }
-  };
-
+  
   const handlePrevClick = () => {
     if (pathname === "/onboarding/step-2") {
       router.push("/onboarding/step-1");
@@ -126,12 +120,7 @@ export default function OnboardingLayout({ children }) {
           >
             Back
           </button>
-          <button
-            onClick={handleNextClick}
-            className="w-[72px] h-[37px] bg-white text-electric-blue border border-electric-blue rounded-md text-center font-medium hover:bg-electric-blue hover:text-white"
-          >
-            Next
-          </button>
+          <NextButton />
 
         </div>
 
@@ -147,3 +136,8 @@ export default function OnboardingLayout({ children }) {
     </FormProvider>
   );
 }
+
+
+
+
+
