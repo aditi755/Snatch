@@ -1,6 +1,7 @@
 export async function fetchInstagramMedia(code) {
     try {
       const response = await fetch(`/api/auth/instagram/callback?code=${code}`);
+      console.log("response", response);
       const data = await response.json();
       console.log("Instagram media data:", data);
       if (data?.mediaData) {

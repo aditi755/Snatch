@@ -7,18 +7,16 @@ const isPublicRoute = createRouteMatcher([
   "/",
   "/login(.*)",
   "/signup(.*)",
+  "/api/test-1/:userId" //for postman testing only remove later
 ]);
 
 export default clerkMiddleware(async (authFn, request) => {
   const auth = await authFn(); // Await the resolved auth object
   const { sessionId, userId } = auth;
-
-  console.log("Resolved AUTH:", auth);
-  console.log("Session ID:", sessionId);
-  console.log("User ID:", userId);
+  // console.log("Session ID:", sessionId);
+  // console.log("User ID:", userId);
 
   const url = new URL(request.url); // Initialize URL from the request object
-  console.log("USER FROM MIDDLEWARE", { sessionId, userId });
 
   const isDashboardRoute = url.pathname === "/settings";
 

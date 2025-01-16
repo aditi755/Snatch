@@ -7,17 +7,17 @@ const steps = [
   {
     id: "/manage-projects/pick-projects",
     label: "Pick Projects",
-    icon: "/assets/icons/onboarding/Instagram.svg", 
+    icon: "/assets/images/Instagram.svg", 
   },
   {
     id: "/manage-projects/add-details",
     label: "Add Details",
-    icon: "/assets/icons/onboarding/Instagram.svg", 
+    icon: "/assets/images/write.svg", 
   },
   {
     id: "/manage-projects/preview",
     label: "Preview",
-    icon: "/assets/icons/onboarding/Instagram.svg", 
+    icon: "/assets/images/view.svg", 
   },
 ];
 
@@ -46,7 +46,7 @@ const Header = () => {
                 alt={`${step.label} Icon`}
                 width={32}
                 height={32}
-                className={`transition-all w-10 duration-300 ${
+                className={`w-5 h-5 transition-all duration-300 ${
                   activeStep === step.id ? "text-yellow-500" : "text-white"
                 }`}
                 style={{
@@ -59,7 +59,7 @@ const Header = () => {
 
               {/* Step Label */}
               <span
-                className={`mt-2 transition-all duration-300 ${
+                className={`mt-2 transition-all duration-300 font-apfel-grotezk-regular ${
                   activeStep === step.id
                     ? "text-yellow-500 font-bold"
                     : "text-gray-300"

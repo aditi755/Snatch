@@ -43,7 +43,7 @@ const NormalMultiSelect = ({ label, options, selectedValues, onAddValue, onRemov
         className="relative z-20 w-full bg-transparent rounded-md border border-gray-300 p-[2px] pr-8 text-graphite outline-none transition focus:border-primary active:border-primary cursor-pointer"
         onClick={toggleDropdown}
       >
-        <div className="flex flex-wrap items-center gap-2 min-h-[40px]" style={{ padding: "0px" }}>
+        <div className="flex flex-wrap items-center gap-2 min-h-[40px] " style={{ padding: "0px" }}>
           {/* Display selected values here it was -z-50  made it to z-20 to make cross clickable and remove work*/}
           { Array.isArray(selectedValues) &&
             selectedValues.map((value, index) => (
@@ -53,7 +53,7 @@ const NormalMultiSelect = ({ label, options, selectedValues, onAddValue, onRemov
               >
                 {value}
                 <span
-                  className="cursor-pointer z-20 pl-2 text-graphite hover:text-red absolute right-[5px] top-1/2 transform -translate-y-1/2"
+                  className="cursor-pointer z-20 pl-2 text-gray-500 hover:text-red absolute right-[5px] top-1/2 transform -translate-y-1/2"
                   onClick={(e) => {
                     e.stopPropagation(); // Prevent the click from toggling the dropdown
                     onRemoveValue(value); // Call the remove handler
@@ -91,7 +91,7 @@ const NormalMultiSelect = ({ label, options, selectedValues, onAddValue, onRemov
                 fillRule="evenodd"
                 clipRule="evenodd"
                 d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
-                fill="#9CA3AF"
+                fill="#6B7280"
               />
             </g>
           </svg>

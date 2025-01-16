@@ -14,6 +14,8 @@ export default function EnterOtp() {
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
 
+  console.log("signUp", signUp);
+
   useEffect(() => {
     // Get the email from the query string on page load
     const urlParams = new URLSearchParams(window.location.search);
@@ -30,18 +32,12 @@ export default function EnterOtp() {
     try {
       console.log("Attempting OTP verification with code:", otp.join(""));
       const signInAttempt = await signUp.attemptEmailAddressVerification({ code: otp.join("") });
-      console.log("OTP verification successful. Checking status...");
     
       console.log("sign attempt status", signInAttempt.status); //done
       if (signInAttempt.status === 'complete') {
         await setActive({ session: signInAttempt.createdSessionId });
-        console.log("session created");
         router.push("/onboarding/step-1");
-      } else {
-        // If the status is not complete, check why.
-        console.error(signInAttempt);
-        setError("Verification failed, please try again.");
-      }
+      } 
     } catch (err) {
       console.error("Error during OTP verification:", err);
       setError(err.errors && err.errors[0]?.message || "Invalid OTP. Please try again.");
@@ -49,6 +45,8 @@ export default function EnterOtp() {
     
   };
 
+
+  
   return (
     <div className="h-screen  flex flex-col justify-center lg:flex-row overflow-hidden ">
     {/* Left Section for Image */}

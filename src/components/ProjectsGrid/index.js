@@ -37,7 +37,7 @@ const ProjectsGrid = ({
               <video
                 src={project.mediaLink || project.fileUrl}
                 controls
-                className="object-contain w-full h-full"
+                className="object-cover w-full h-full rounded-md"
               />
             ) : project.name === "CAROUSEL_ALBUM" && project.children ? (
               <div className="relative w-full h-full">
@@ -55,12 +55,12 @@ const ProjectsGrid = ({
                         src={child.media_url}
                         alt={`Media ${child.id}`}
                         fill
-                        className="object-cover"
+                        className="object-cover rounded-md"
                       />
                     ) : (
                       <video
                         controls
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover rounded-md"
                         src={child.media_url}
                       />
                     )}
@@ -89,7 +89,7 @@ const ProjectsGrid = ({
                 alt={project.name || project.fileName}
                 width={200}
                 height={150}
-                className="object-contain"
+                className="object-cover rounded-md h-[150px]"
               />
             )}
 

@@ -25,13 +25,15 @@
 
 "use client";
 
-import { useUser } from "@clerk/nextjs";
+import { useUser, useAuth } from "@clerk/nextjs";
 import Link from "next/link";
+import { useFormContext } from "./onboarding/context";
 
 export default function Home() {
   const { isSignedIn, isLoaded } = useUser(); // Check if user data is loaded
-
-  // Handle loading state
+  const { formData } = useFormContext();
+  const { userId } = useAuth(); // Get userId from Clerk in client comp to send to api
+  
   if (!isLoaded) {
     return (
       <div className="h-screen bg-smoke flex justify-center items-center">
@@ -46,7 +48,7 @@ export default function Home() {
       <p>
         <Link
           className="text-2xl"
-          href={isSignedIn ? "/dashboard" : "/signup"} // Redirect based on login status
+          href={isSignedIn ? `/dashboard/${formData.username}` : "/signup"} // Redirect based on login status
         >
           Click here: {isSignedIn ? "Dashboard" : "Signup"} page
         </Link>
