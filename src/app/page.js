@@ -25,15 +25,13 @@
 
 "use client";
 
-import { useUser, useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { useFormContext } from "./onboarding/context";
+
 
 export default function Home() {
-  const { isSignedIn, isLoaded } = useUser(); // Check if user data is loaded
-  const { formData } = useFormContext();
-  const { userId } = useAuth(); // Get userId from Clerk in client comp to send to api
-  
+  const { isSignedIn, isLoaded } = useUser();
+
   if (!isLoaded) {
     return (
       <div className="h-screen bg-smoke flex justify-center items-center">
@@ -42,13 +40,15 @@ export default function Home() {
     );
   }
 
+
+  //in deployment error is coming that formData is not defined here, because this page is rendering first at that time the form data is not available. to fix this maybe take formData on next page as like Next Button compoenent or first go to dashboard then form dashboard go to /dashboard/{formData.username} page as formData would already be there
   return (
     <div className="h-screen bg-smoke flex gap-4 justify-center items-center sm:flex-col overflow-hidden">
       <p className="text-5xl mx-auto text-electric-blue">Welcome to Snatch</p>
       <p>
         <Link
           className="text-2xl"
-          href={isSignedIn ? `/dashboard/${formData.username}` : "/signup"} // Redirect based on login status
+          href={isSignedIn ? "/dashboard" : "/signup"} // Redirect based on login status
         >
           Click here: {isSignedIn ? "Dashboard" : "Signup"} page
         </Link>
