@@ -3,6 +3,8 @@ import User from "@/models/user.model";
 import { getAuth } from "@clerk/nextjs/server";
 import connectDb from "@/db/mongoose";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req) {
   try {
     console.log("checking ig connection")
