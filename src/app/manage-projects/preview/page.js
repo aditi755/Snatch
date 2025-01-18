@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import { useSelectedProjects } from "../context";
 import ProjectsGrid from "@/components/ProjectsGrid";
