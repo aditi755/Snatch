@@ -6,7 +6,7 @@ import ProjectsGrid from "@/components/ProjectsGrid";
 import { useRouter, useSearchParams } from "next/navigation";
 import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
 
-export default function Preview() {
+ function PreviewContent() {
   const [activeTab, setActiveTab] = useState("instagram");
   const {
     selectionState,
@@ -145,9 +145,6 @@ export default function Preview() {
         {/* preview card */}
         <div className="w-[864px] bg-white ml-28 mt-5 rounded-lg">
           <div className="flex gap-5 ">
-            {/* <Image src="/assets/images/influencer.svg" alt="Logo" width={250} height={90} className="p-2 h-[435px]"/> */}
-
-
            <div className="w-[300px] h-full  ">
            {activeImageId !== null && (
                 (() => {
@@ -184,64 +181,7 @@ export default function Preview() {
                       </div>
                     );
                   } else if (activeProject.name === "CAROUSEL_ALBUM") {
-                    return (
-                      // <div className="relative h-[400px] p-5 w-[300px] rounded-lg">
-                      //   {activeProject.children.map((child, index) => (
-                      //     <div
-                      //       key={child.id}
-                      //       className={`absolute inset-0 transition-transform duration-500 h-[400px] rounded-lg ${
-                      //         (carouselIndexes[activeProject.mediaId] || 0) === index
-                      //           ? "translate-x-0 opacity-100"
-                      //           : "translate-x-50 opacity-0"
-                      //       }`}
-                      //     >
-                      //       {child.media_type === "IMAGE" ? (
-                      //         <Image
-                      //           src={child.media_url}
-                      //           alt={`Media ${child.id}`}
-                      //           fill
-                      //           className="object-cover h-[400px] p-5 rounded-lg"
-                      //         />
-                      //       ) : (
-                      //         <video
-                      //           controls
-                      //           className=" object-cover h-[400px] p-5 rounded-lg"
-                      //           src={child.media_url}
-                      //         >
-                      //           Your browser does not support the video tag.
-                      //         </video>
-                      //       )}
-                      //     </div>
-                      //   ))}
-            
-                      //   {/* Carousel Navigation */}
-                      //   <button
-                      //     className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-6 h-6 flex justify-center items-center"
-                      //     onClick={() =>
-                      //       handleSlide(
-                      //         activeProject.mediaId,
-                      //         "prev",
-                      //         activeProject.children.length
-                      //       )
-                      //     }
-                      //   >
-                      //     ❮
-                      //   </button>
-                      //   <button
-                      //     className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-6 h-6 flex justify-center items-center"
-                      //     onClick={() =>
-                      //       handleSlide(
-                      //         activeProject.mediaId,
-                      //         "next",
-                      //         activeProject.children.length
-                      //       )
-                      //     }
-                      //   >
-                      //     ❯
-                      //   </button>
-                      // </div>
-                      
-
+                    return (                    
                       <div className="relative h-[400px] p-5 w-[300px] rounded-lg overflow-hidden">
   {activeProject.children.map((child, index) => (
     <div
@@ -403,3 +343,71 @@ export default function Preview() {
     </div>
   );
 }
+
+
+
+export default function Preview() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PreviewContent />
+    </Suspense>
+  );
+}
+
+
+
+// <div className="relative h-[400px] p-5 w-[300px] rounded-lg">
+                      //   {activeProject.children.map((child, index) => (
+                      //     <div
+                      //       key={child.id}
+                      //       className={`absolute inset-0 transition-transform duration-500 h-[400px] rounded-lg ${
+                      //         (carouselIndexes[activeProject.mediaId] || 0) === index
+                      //           ? "translate-x-0 opacity-100"
+                      //           : "translate-x-50 opacity-0"
+                      //       }`}
+                      //     >
+                      //       {child.media_type === "IMAGE" ? (
+                      //         <Image
+                      //           src={child.media_url}
+                      //           alt={`Media ${child.id}`}
+                      //           fill
+                      //           className="object-cover h-[400px] p-5 rounded-lg"
+                      //         />
+                      //       ) : (
+                      //         <video
+                      //           controls
+                      //           className=" object-cover h-[400px] p-5 rounded-lg"
+                      //           src={child.media_url}
+                      //         >
+                      //           Your browser does not support the video tag.
+                      //         </video>
+                      //       )}
+                      //     </div>
+                      //   ))}
+            
+                      //   {/* Carousel Navigation */}
+                      //   <button
+                      //     className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-6 h-6 flex justify-center items-center"
+                      //     onClick={() =>
+                      //       handleSlide(
+                      //         activeProject.mediaId,
+                      //         "prev",
+                      //         activeProject.children.length
+                      //       )
+                      //     }
+                      //   >
+                      //     ❮
+                      //   </button>
+                      //   <button
+                      //     className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-6 h-6 flex justify-center items-center"
+                      //     onClick={() =>
+                      //       handleSlide(
+                      //         activeProject.mediaId,
+                      //         "next",
+                      //         activeProject.children.length
+                      //       )
+                      //     }
+                      //   >
+                      //     ❯
+                      //   </button>
+                      // </div>
