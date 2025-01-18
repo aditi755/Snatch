@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useFormContext } from "../onboarding/context";
 import Preview from "@/components/Preview";
 import { useRouter } from "next/navigation";
-
+import DashboardPreview from "@/components/DashboardPreview";
 
 export default function OnboardingLayout({ children }) {
 
@@ -17,7 +17,7 @@ export default function OnboardingLayout({ children }) {
   }
 
   const handleProfileClick = () => {
-    router.push("/profile/snatchsocial");
+    router.push("/profile");
   }
 
   const handleSettingClick = () => {
@@ -36,7 +36,7 @@ export default function OnboardingLayout({ children }) {
           />
 
           <div className="relative mb-20 z-10 p-4 bg-white bg-opacity-90 rounded-lg shadow-lg">
-            <Preview />
+            <DashboardPreview />
             
           </div>
 

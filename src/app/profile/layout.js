@@ -5,8 +5,9 @@ import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormProvider } from "../onboarding/context";
-import Preview from "@/components/Preview";
+import DashboardPreview from "@/components/DashboardPreview";
 import {useAuth} from "@clerk/nextjs";
+
 export default function OnboardingLayout({ children }) {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const router = useRouter();
@@ -36,6 +37,11 @@ export default function OnboardingLayout({ children }) {
   const handleDashboardClick = () => {
     router.push("/dashboard");
   }
+
+  const handleSettingClick = () => {
+   router.push("/settings")
+  }
+  
   return (
     <FormProvider>
       <div className="flex h-screen bg-white justify-center">
@@ -48,8 +54,30 @@ export default function OnboardingLayout({ children }) {
             className="absolute p-10 rounded-md top-0 left-0 w-full h-full object-left-bottom"
           />
           <div className="relative mb-20 z-10 p-4 bg-white bg-opacity-90 rounded-lg shadow-lg">
-            <Preview />
+            <DashboardPreview />
           </div>
+
+          <div className="w-64 h-20 z-50 absolute top-[75%] sm:top-[76%] xl:top-[87%]   4xl:top-[80%] 5xl:top-[74%]  mx-auto 2xl:top-1/5 font-qimano">
+            <div className="flex justify-center items-center gap-20 text-smoke">
+              <div className="flex flex-col">
+                <h2 className="text-3xl">100K</h2>
+                <p className="text-1xl">Views</p>
+              </div>
+          
+
+              <div className="flex flex-col">
+                <h2 className="text-3xl">56K</h2>
+                <p className="text-1xl">Followers</p>
+              </div>
+          
+              <div className="flex flex-col">
+                <h2 className="text-3xl">35K</h2>
+                <p className="text-1xl">Likes</p>
+              </div>
+              </div>
+            </div>
+
+
         </div>
 
         {/* Toolbar */}
@@ -79,7 +107,7 @@ export default function OnboardingLayout({ children }) {
                   Dashboard
                 </li>
                 <li
-                  onClick={handleDashboardClick}
+                  onClick={handleSettingClick}
                   className="cursor-pointer text-electric-blue hover:bg-gray-100 rounded-md p-2"
                 >
                   Settings

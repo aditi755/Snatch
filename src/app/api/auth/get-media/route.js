@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export async function GET(req) {
   try {
     console.log("Checking token and user ID from the database...");
-    await connectDb(); // Ensure the database connection
+    await connectDb();
 
     // Authenticate the user using Clerk
     const { userId } = getAuth(req);

@@ -81,9 +81,9 @@ export default function DatePicker4({ value, onChange, placeholder }) {
   }, []);
 
   return (
-    <section className="bg-white w-1/2">
+    <section className="bg-white w-1/2 -ml-2">
       <div className="container">
-        <div className="flex w-[285px]">
+        <div className="flex w-[385px]">
           <div className="w-full px-4">
             <div className="mb-0">
               <div className="relative" ref={datepickerRef}>
@@ -116,7 +116,7 @@ export default function DatePicker4({ value, onChange, placeholder }) {
                 {isOpen && (
                   <div className="absolute top-[100%] mt-2 p-2  bg-white border rounded shadow-md z-20">
                     <div className="flex items-center justify-between mb-4">
-                      <select
+                      {/* <select
                         value={currentDate.getFullYear()}
                         onChange={(e) =>
                           setCurrentDate(
@@ -132,7 +132,27 @@ export default function DatePicker4({ value, onChange, placeholder }) {
                             {year}
                           </option>
                         ))}
-                      </select>
+                      </select> */}
+
+                     <select
+                      value={currentDate.getFullYear()}
+                      onChange={(e) =>
+                        setCurrentDate(
+                          new Date(e.target.value, currentDate.getMonth())
+                        )
+                      }
+                      className="px-4 py-2 border rounded"
+                    >
+                      {Array.from(
+                        { length: 2012 - 1926 + 1 }, // Calculate the number of years from 1926 to 2012
+                        (_, i) => 2012 - i // Generate years in descending order from 2012 to 1926
+                      ).map((year) => (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      ))}
+                    </select> 
+                      
                       <select
                         value={currentDate.getMonth()}
                         onChange={(e) =>

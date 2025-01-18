@@ -190,7 +190,7 @@ const MediaDisplay = ({ media }) => {
 
   // Check if a media item is selected
   const isMediaSelected = (mediaId) => {
-    return selectionState.instagramSelected.some((item) => item.mediaId === mediaId);
+    return selectionState?.instagramSelected?.some((item) => item.mediaId === mediaId);
   };
 
 
@@ -201,7 +201,7 @@ const MediaDisplay = ({ media }) => {
         media.map((mediaItem) => (
           <div
             key={mediaItem.id}
-            className="relative w-[200px] h-[200px] border border-gray-300 rounded-md overflow-hidden cursor-pointer"
+            className="relative w-[200px] h-[200px] border border-gray-300 rounded-md overflow-x-hidden overflow-y-auto cursor-pointer"
             onClick={() => handleSelect(mediaItem)}
           >
             {/* Circle on Top Left */}

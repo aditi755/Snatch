@@ -7,6 +7,7 @@ import MultiSelectInput from "@/components/MultiSelectInput";
 import MoneyInput from "@/components/MoneyInput";
 import NormalMultiSelect from "@/components/NormalMultiSelect";
 import { industryList } from "@/data/portfolio/industry";
+import InfoNormalMultiSelect from "@/components/InfoNormalMultiSelect";
 
 // export const dynamic = 'force-dynamic';
 
@@ -14,7 +15,7 @@ export default function Step2() {
   const { formData, updateFormData } = useFormContext();
 
   const contentOptions = ["Story", "Reels", "Posts"];
-  const compensationOptions = ["Gifting", "Sponsorships", "Affiliate"];
+  const compensationOptions = ["Gifting", "Sponsorships", "Affiliate", "Hosted", "Collaboration"];
   const languageList = [
     "English", "Spanish", "French", "German", "Mandarin", "Hindi", "Japanese", "Marathi", "Gujrati", "Tamil", "Telugu", "Bengali", "Portuguese", "Italian", "Russian", "Arabic", "Korean", "Vietnamese", "Indonesian", "Turkish", "Urdu"
   ];
@@ -60,7 +61,7 @@ export default function Step2() {
       />
 
 
-      <NormalMultiSelect 
+      <InfoNormalMultiSelect
         label="Choose Compensation"
         options={compensationOptions}
         selectedValues={formData.compensation || []}
@@ -70,17 +71,17 @@ export default function Step2() {
        <div className="space-x-0 flex flex-col">
         <h4 className="mb-5">Add pricing for your services</h4>
         <div className="flex flex-row gap-3">
-          <MoneyInput
-          title="Post"
-          placeholder="Enter amount"
-          value={formData.post}
-          onChange={(value) => updateFormData({ post: value })}
-        />
         <MoneyInput
           title="Story"
           placeholder="Enter amount"
           value={formData.story}
           onChange={(value) => updateFormData({ story: value })}
+        />
+          <MoneyInput
+          title="Post"
+          placeholder="Enter amount"
+          value={formData.post}
+          onChange={(value) => updateFormData({ post: value })}
         />
         <MoneyInput
           title="Reel"

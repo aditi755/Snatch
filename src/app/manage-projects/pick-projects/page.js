@@ -7,12 +7,13 @@ import { getMediaFromDatabase } from "@/utils/getMediaFromDatabase";
 import Slider from "react-slick"; 
 import MediaDisplay from "@/components/MediaDisplay";
 import { useSelectedProjects } from "../context";
+import { useRouter } from "next/navigation";
 
 export default function PickProjects() {
   const [isHydrated, setIsHydrated] = useState(false);
   const [selectedTab, setSelectedTab] = useState("instagram");
   const [carouselIndexes, setCarouselIndexes] = useState({});
-  
+  const router = useRouter();
   const [media, setMedia] = useState([]);
   const { 
     selectionState, 
@@ -40,7 +41,6 @@ export default function PickProjects() {
     //   const mediaData = await getMediaFromDatabase();
     //   setMedia(mediaData);
     // }
-
 
     const fetchMedia = async () => {
       const queryParams = new URLSearchParams(window.location.search);
@@ -95,17 +95,25 @@ export default function PickProjects() {
       });
     };
 
+    const handleProjectClick = () => {
+      router.push("/manage-projects/add-details");
+    }
+   
+    const handleBackClick = () => {
+     router.push("/profile")  
+    }
+
 const renderInstagramTab = () => (
   <div className="flex justify-center gap-10 mt-5">
-    <div className="w-[278px] h-full bg-white text-black p-3 overflow-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+    <div className="w-[278px] h-full bg-white text-black p-3" >
       <p className="text-md">Selected projects from Instagram</p>
-      <p className="text-light-grey">{selectionState.instagramSelected.length}</p>
+      <p className="text-light-grey">{selectionState?.instagramSelected?.length || "0"}</p>
 
-      <div className="mt-[18px] w-auto border-b border-1 border-gray-200"> 
+      <div className="mt-[18px] w-auto border-b border-1 border-gray-200 overflow-y-scroll"> 
       </div>
       
-      <div className="grid grid-cols-2 gap-4 mt-7">
-        {selectionState.instagramSelected.map((project) => (
+      <div className="grid grid-cols-2 gap-4 mt-7 max-h-[330px] overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        {selectionState?.instagramSelected?.map((project) => (
           <div key={project.mediaId} className="flex flex-col items-center">
             {/* Project Container */}
             <div className="relative w-[120px] h-[120px] rounded-md overflow-hidden">
@@ -189,22 +197,11 @@ const renderInstagramTab = () => (
       </div>
     </div>
 
-    <div className="w-[70vw] h-[70vh] text-black rounded-md p-5 overflow-y-scroll" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+    <div className="w-[70vw] h-[70vh] text-black rounded-md p-5 overflow-y-scroll"  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
     <MediaDisplay media={media} />
-
-    {/* <div className="flex gap-2 p-2 h-[60px] bg-white w-[290px] border-b border-gray-300 justify-center mt-8 mx-auto">
-      <div className="flex gap-2 w-[260px] h-[40px] justify-center bg-gray-100 rounded-sm ">
-      <button className="w-[72px] px-2 py-1 border-electric-blue border-2 text-electric-blue rounded hover:bg-blue-700 transition-colors">
-        Back
-      </button>
-      <button className="px-4 py-1 bg-electric-blue text-white rounded hover:bg-blue-700 transition-colors">
-        Add Project details
-      </button>
-      </div>
-      </div> */}
-
-
     </div>
+
+
   </div>
 );
 
@@ -212,7 +209,7 @@ const renderInstagramTab = () => (
     <div className="flex gap-10 mt-5">
       <div className="w-[278px] h-[60vh] bg-white text-black p-3 overflow-auto">
         <p className="text-md">Selected Files for Upload</p>
-        <p className="text-light-grey">{selectionState.uploadedFiles.length} selected</p>
+        <p className="text-light-grey">{selectionState?.uploadedFiles?.length || "0" } selected</p>
 
         
         <div className="mt-[18px] w-auto border-b border-1 border-gray-200"> 
@@ -279,7 +276,7 @@ const renderInstagramTab = () => (
   );
 
   return (
-    <div className="flex flex-col h-[77vh] bg-smoke w-full space-x-8 overflow-x-hidden " style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+    <div className="flex flex-col h-[77vh] bg-smoke w-full space-x-8 overflow-hidden" >
       
       <div className="flex mx-auto items-start">
         <p className="text-2xl text-black font-qimano">
@@ -287,7 +284,7 @@ const renderInstagramTab = () => (
         </p>
       </div>
 
-      <div className="flex w-full border-b border-gray-300 mt-5 items-center">
+      <div className="flex w-full border-b border-gray-300 mt-5 items-center ">
       <button
           onClick={() => handleTabClick("instagram")}
           className={`flex-1 py-2 text-lg font-semibold text-center flex items-center justify-center gap-2 ${
@@ -324,6 +321,19 @@ const renderInstagramTab = () => (
 
       {/* {renderInstagramTab()} */}
       {selectedTab === "instagram" ? renderInstagramTab() : renderUploadTab()}
+
+      <div className="fixed bottom-1 left-1/2 transform -translate-x-1/2 h-[67px] bg-white rounded-lg w-[300px] border-t border-gray-300 py-2">
+  <div className="flex gap-2 justify-center items-center mx-auto">
+    <div className="flex gap-2 w-[260px] h-[40px] justify-center bg-gray-100 rounded-sm">
+      <button className="w-[72px] px-2 py-1 border-electric-blue border-2 text-electric-blue rounded hover:bg-blue-700 transition-colors" onClick={handleBackClick}>
+        Back
+      </button>
+      <button className="px-4 py-1 bg-electric-blue text-white rounded hover:bg-electric-blue  transition-colors" onClick={handleProjectClick}>
+        Add Project details
+      </button>
+    </div>
+  </div>
+</div>
 
 
     </div>

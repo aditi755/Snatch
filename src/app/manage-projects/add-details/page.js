@@ -41,6 +41,16 @@ export default function AddDetails() {
   });
   const [isBrandCollaboration, setIsBrandCollaboration] = useState(false);
 
+  const requiredFields = [
+    "titleName",
+    "description",
+    "industries",
+  ];
+  
+  if (isBrandCollaboration) {
+    requiredFields.push("companyName", "companyLocation");
+  }
+
   const handleToggle = () => {
     setIsBrandCollaboration(!isBrandCollaboration);
   };
@@ -164,8 +174,32 @@ export default function AddDetails() {
     });
   };
 
+  const handlePreviewClick = () => {
+    const previewUrl = `/manage-projects/preview/?activeImageId=${activeImageId}`;
+    // Navigate to the preview page
+    router.push(previewUrl);
+  };
+
+  const isFormComplete = () => {
+    if (!activeImageId) return false; // No project selected
+  
+    const formData = selectionState.formData[activeImageId] || {};
+  
+    // Check if all required fields are filled
+    return requiredFields.every((field) => {
+      const value = formData[field];
+      if (Array.isArray(value)) {
+        return value.length > 0; // For arrays (e.g., industries, eventTypes)
+      }
+      return !!value; // For strings and other fields check that they have a value 
+    });
+  };
+
+  const handleBackClick = () => {
+   router.push("/manage-projects/pick-projects");
+  }
   return (
-    <div className="flex flex-col items-start space-x-8 h-[77vh] w-full overflow-x-hidden overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+    <div className="flex flex-col items-start space-x-8 h-[77vh] w-full overflow-x-hidden overflow-y-hidden">
       <div className="flex flex-col mx-auto items-start">
         <p className="text-2xl text-black font-qimano">
           Pick content that you wish to highlight in your profile kit
@@ -209,7 +243,7 @@ export default function AddDetails() {
             </button>
           </div>
 
-          <div className="mt-4">
+          <div className="mt-4 overflow-y-scroll overflow-x-hidden h-[400px]" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }} >
             <p className="text-md font-semibold">Selected Projects</p>
             <p className="text-light-grey text-sm">
               {activeTab === "instagram"
@@ -267,7 +301,7 @@ export default function AddDetails() {
               {activeProject.children.map((child, index) => (
                 <div
                   key={child.id}
-                  className={`absolute inset-0 transition-transform duration-500 h-full ${
+                  className={`absolute inset-0 transition-transform duration-500 h-full  ${
                     (carouselIndexes[activeProject.mediaId] || 0) === index
                       ? "translate-x-0 opacity-100"
                       : "translate-x-50 opacity-0"
@@ -283,7 +317,7 @@ export default function AddDetails() {
                   ) : (
                     <video
                       controls
-                      className="w-full h-full object-cover" // Object-cover for carousel videos
+                      className="w-full -mt-1 object-contain rounded-lg" // Object-cover for carousel videos
                       src={child.media_url}
                     >
                       Your browser does not support the video tag.
@@ -355,8 +389,8 @@ export default function AddDetails() {
   </div>
 
 
-        <div className="ml-20 mt-5 flex flex-col gap-8">
-        <div className="flex items-center justify-between">
+        <div className="ml-20 mt-5 flex flex-col gap-8 overflow-y-scroll overflow-x-hidden h-[500px]" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div className="flex items-center justify-between ">
   <span className="text-graphite">Was it a brand collaboration?</span>
   <div
     className={`flex items-center rounded-full p-1 cursor-pointer w-[60px] ${
@@ -462,17 +496,26 @@ export default function AddDetails() {
             </>
           )}
 
-          <div className="flex gap-2 p-2 h-[60px] bg-white w-[250px] border-b border-gray-300 -ml-24 justify-center mt-2">
-            <div className="flex gap-2 w-[230px] h-[40px] justify-center bg-gray-100 rounded-sm ">
-            <button className="w-[72px] px-2 py-1 border-electric-blue border-2 text-electric-blue rounded hover:bg-blue-700 transition-colors">
-              Back
-            </button>
-            <button className="px-4 py-1 bg-electric-blue text-white rounded hover:bg-blue-700 transition-colors">
-              See preview
-            </button>
-            </div>
-            
-          </div>
+<div className="fixed bottom-2 left-1/2 transform -translate-x-1/2 h-[55px] bg-white rounded-lg w-[250px] border-t border-gray-300 py-2">
+  <div className="flex gap-2 justify-center mx-auto">
+    <div className="flex gap-2 w-[210px] h-[40px] justify-center bg-gray-100 rounded-sm">
+      <button className="w-[72px] px-4 py-1 border-electric-blue border-2 text-electric-blue rounded hover:bg-electric-blue hover:text-white transition-colors" onClick={handleBackClick}>
+        Back
+      </button>
+      <button
+        className={`px-4 py-1 ${
+          isFormComplete()
+            ? "bg-electric-blue text-white hover:bg-blue-700"
+            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+        } rounded transition-colors`}
+        onClick={handlePreviewClick}
+        disabled={!isFormComplete()} // Disable if form is incomplete
+      >
+        See preview
+      </button>
+    </div>
+  </div>
+</div>
         </div>
       </div>
     </div>

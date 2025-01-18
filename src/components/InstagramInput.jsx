@@ -87,7 +87,7 @@ import { useFormContext } from "@/app/onboarding/context";// Adjust the path to 
 // Instagram URL Validation Schema
 const instagramUrlSchema = z.string().url().regex(
   /^(https?:\/\/)?(www\.)?instagram\.com\/([a-zA-Z0-9._-]+)\/?$/,
-  "Enter a valid Instagram URL"
+  "Please enter a valid Instagram profile URL"
 );
 
 export default function InstagramInput({ placeholder = "Enter Instagram URL", value, onChange }) {

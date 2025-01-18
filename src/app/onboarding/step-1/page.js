@@ -65,6 +65,12 @@ export default function Step1() {
     updateFormData(formState);
   };
 
+  
+  const handleDeleteLink = (index) => {
+    const updatedLinks = formState.links.filter((_, i) => i !== index); // Remove the link at the specified index
+    updateField("links", updatedLinks); // Update the form state and localStorage
+  };
+
   return (
 
     <div>
@@ -122,6 +128,7 @@ export default function Step1() {
             key={index}
             initialData={link}
             onChange={(data) => handleLinkChange(index, data)}
+            onDelete={() => handleDeleteLink(index)} 
           />
         ))}
           <button
@@ -146,13 +153,15 @@ export default function Step1() {
           label="Upload picture"
           fileNameKey="profilePictureName"
         />
-        <CustomFileInput
+
+        
+        {/* <CustomFileInput
           onFileChange={(uploadedUrl) => updateFormData({ backgroundPicture: uploadedUrl })}
           placeholder="Choose or upload a background picture"
           iconSrc="/assets/icons/onboarding/Upload.svg"
           label="Upload background"
           fileNameKey="backgroundPictureName"
-        />
+        /> */}
 
         <div className="bg-transparent w-full h-24"></div>
       </div>

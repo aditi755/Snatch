@@ -116,6 +116,8 @@
 //   }
 // }
 
+
+
 import { NextResponse } from "next/server";
 import User from "@/models/user.model"; 
 import { getAuth } from "@clerk/nextjs/server"; 
@@ -123,7 +125,8 @@ import connectDb from "@/db/mongoose";
 
  const CLIENT_ID = '1068594868074995';
  const CLIENT_SECRET = '7aa94560586507e6c840da8105090984';
-const REDIRECT_URI = 'https://wf7s4f88-3000.inc1.devtunnels.ms/profile';
+ const REDIRECT_URI = 'https://snatch-pi.vercel.app/manage-projects/pick-projects'
+//const REDIRECT_URI = 'https://wf7s4f88-3000.inc1.devtunnels.ms/profile/pick-projects';
  export const dynamic = 'force-dynamic';
 
 export async function GET(req) {
@@ -135,7 +138,7 @@ export async function GET(req) {
   }
 
   try {
-    await connectDb(); // Ensure the database connection
+    await connectDb(); 
 
     // Exchange authorization code for a short-lived access token
     const tokenResponse = await fetch(
@@ -203,17 +206,6 @@ export async function GET(req) {
 
     const instagramAccountId = igAccountIdData.instagram_business_account.id;
 
-    // Fetch Instagram Media
-    // const mediaResponse = await fetch(
-    //   `https://graph.facebook.com/v17.0/${instagramAccountId}/media?fields=id,media_type,media_url,permalink,caption&access_token=${longLivedAccessToken}`
-    // );
-
-    // const mediaData = await mediaResponse.json();
-
-    // if (!mediaResponse.ok) {
-    //   return NextResponse.json({ error: "Failed to fetch Instagram user media" }, { status: 500 });
-    // }
-
     // Check if the user exists in the database
     let user = await User.findOne({ userId });
 
@@ -231,12 +223,41 @@ export async function GET(req) {
 
     console.log("user is saved in db", user);
 
+   // Fetch Instagram Media
+    const mediaResponse = await fetch(
+      `https://graph.facebook.com/v17.0/${instagramAccountId}/media?fields=id,media_type,media_url,permalink,caption&access_token=${longLivedAccessToken}`
+    );
+
+    const mediaData = await mediaResponse.json();
+
+    if (!mediaResponse.ok) {
+      return NextResponse.json({ error: "Failed to fetch Instagram user media" }, { status: 500 });
+    }
+
+     // Fetch children for CAROUSEL_ALBUM media types
+    const enrichedMediaData = await Promise.all(
+      mediaData.data.map(async (mediaItem) => {
+        if (mediaItem.media_type === "CAROUSEL_ALBUM") {
+          const carouselResponse = await fetch(
+            `https://graph.facebook.com/v17.0/${mediaItem.id}/children?fields=id,media_type,media_url&access_token=${longLivedAccessToken}`
+          );
+
+          const carouselData = await carouselResponse.json();
+
+          if (carouselResponse.ok && carouselData.data) {
+            return { ...mediaItem, children: carouselData.data };
+          }
+        }
+        return mediaItem;
+      })
+    );
+
 
     return NextResponse.json(
       {
         message: "Your instagram account has been successfully connected",
         user,
-        // mediaData: enrichedMediaData,
+        mediaData: enrichedMediaData,
       },
       { status: 200 }
     );
@@ -251,31 +272,31 @@ export async function GET(req) {
 
 
 
-  // Fetch Instagram Media
-    // const mediaResponse = await fetch(
-    //   `https://graph.facebook.com/v17.0/${instagramAccountId}/media?fields=id,media_type,media_url,permalink,caption&access_token=${longLivedAccessToken}`
-    // );
+//   // Fetch Instagram Media
+//     // const mediaResponse = await fetch(
+//     //   `https://graph.facebook.com/v17.0/${instagramAccountId}/media?fields=id,media_type,media_url,permalink,caption&access_token=${longLivedAccessToken}`
+//     // );
 
-    // const mediaData = await mediaResponse.json();
+//     // const mediaData = await mediaResponse.json();
 
-    // if (!mediaResponse.ok) {
-    //   return NextResponse.json({ error: "Failed to fetch Instagram user media" }, { status: 500 });
-    // }
+//     // if (!mediaResponse.ok) {
+//     //   return NextResponse.json({ error: "Failed to fetch Instagram user media" }, { status: 500 });
+//     // }
 
-    // Fetch children for CAROUSEL_ALBUM media types
-    // const enrichedMediaData = await Promise.all(
-    //   mediaData.data.map(async (mediaItem) => {
-    //     if (mediaItem.media_type === "CAROUSEL_ALBUM") {
-    //       const carouselResponse = await fetch(
-    //         `https://graph.facebook.com/v17.0/${mediaItem.id}/children?fields=id,media_type,media_url&access_token=${longLivedAccessToken}`
-    //       );
+//     // Fetch children for CAROUSEL_ALBUM media types
+//     // const enrichedMediaData = await Promise.all(
+//     //   mediaData.data.map(async (mediaItem) => {
+//     //     if (mediaItem.media_type === "CAROUSEL_ALBUM") {
+//     //       const carouselResponse = await fetch(
+//     //         `https://graph.facebook.com/v17.0/${mediaItem.id}/children?fields=id,media_type,media_url&access_token=${longLivedAccessToken}`
+//     //       );
 
-    //       const carouselData = await carouselResponse.json();
+//     //       const carouselData = await carouselResponse.json();
 
-    //       if (carouselResponse.ok && carouselData.data) {
-    //         return { ...mediaItem, children: carouselData.data };
-    //       }
-    //     }
-    //     return mediaItem;
-    //   })
-    // );
+//     //       if (carouselResponse.ok && carouselData.data) {
+//     //         return { ...mediaItem, children: carouselData.data };
+//     //       }
+//     //     }
+//     //     return mediaItem;
+//     //   })
+//     // );

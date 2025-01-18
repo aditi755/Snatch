@@ -29,7 +29,7 @@ const ProjectsGrid = ({
       {projects.map((project, index) => (
         <div
           key={index}
-          className="flex justify-center items-center cursor-pointer"
+          className="flex justify-center items-center cursor-pointer "
           onClick={() => onProjectClick?.(project.mediaId || index)}
         >
           <div className="w-[200px] h-[150px] border-2 border-light-grey rounded-md flex justify-center items-center relative">

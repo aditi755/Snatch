@@ -3,6 +3,7 @@ import DashboardCard from '@/components/DashboardCard'
 import LocationCard from '@/components/LocationCard'
 
 const page = () => {
+
   return (
     <div className="relative flex flex-col p-3  ">
 

@@ -285,7 +285,7 @@ const urlSchemas = SOCIAL_OPTIONS.reduce((schemas, option) => {
   return schemas;
 }, {});
 
-export default function SocialLinksDropdown({ initialData, onChange }) {
+export default function SocialLinksDropdown({ initialData, onChange, onDelete }) {
   const [selectedOption, setSelectedOption] = useState(
     initialData?.icon
       ? SOCIAL_OPTIONS.find((opt) => opt.icon === initialData.icon) || SOCIAL_OPTIONS[0]
@@ -326,6 +326,12 @@ export default function SocialLinksDropdown({ initialData, onChange }) {
     setIsDropdownOpen((prevState) => !prevState);
   };
 
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(); // Call the onDelete function passed from the parent
+    }
+  };
+
   return (
     <div className="relative w-full mt-4">
       {/* Input container */}
@@ -345,6 +351,19 @@ export default function SocialLinksDropdown({ initialData, onChange }) {
           value={url}
           onChange={handleUrlChange}
         />
+
+        {/* Delete Icon */}
+        <div
+          className="absolute right-10 top-0 bottom-0 flex items-center justify-center w-10 h-10 cursor-pointer"
+          onClick={handleDelete}
+        >
+          <Image
+            src="/assets/images/delete.svg" // Replace with your delete icon path
+            alt="Delete"
+            width={21}
+            height={16}
+          />
+        </div>
 
         {/* Dropdown Icon (Arrow) */}
         <div

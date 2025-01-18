@@ -48,7 +48,7 @@ export async function handler({ userId, formData }) {
       user = await User.create({
         userId,
         instagramUsername: onboardingData.username,
-        onboardingData: onboardingData._id,  //this linemight cause call stack size max rangeneerrpr
+        onboardingData: onboardingData._id,  //this linemight cause call stack size max rangeneerrpr on first time
       });
     } else {
       // Link OnboardingData to existing User
