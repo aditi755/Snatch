@@ -3,21 +3,18 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import { useFormContext } from "@/app/onboarding/context";
-import { useAuth } from "@clerk/nextjs"; // Import useAuth from Clerk
+import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import { handler } from "@/app/actions/onboarding";
 import { useState } from "react";
-
-// export const dynamic = 'force-dynamic';
-// export const runtime = 'edge';
 
 const NextButton = () => {
   const [response, setResponse] = useState({});
   const router = useRouter();
   const pathname = usePathname();
   const { formData } = useFormContext();
-  const { userId } = useAuth(); // Get userId from Clerk in client comp to send to api
-  
+  const { userId } = useAuth(); 
+
   const handleNextClick = async () => {
     if (!userId) {
       alert("User ID is missing. Please log in.");

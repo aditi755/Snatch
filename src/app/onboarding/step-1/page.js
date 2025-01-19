@@ -1,3 +1,4 @@
+//onboarding/step-1/page.js
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -154,15 +155,6 @@ export default function Step1() {
           fileNameKey="profilePictureName"
         />
 
-        
-        {/* <CustomFileInput
-          onFileChange={(uploadedUrl) => updateFormData({ backgroundPicture: uploadedUrl })}
-          placeholder="Choose or upload a background picture"
-          iconSrc="/assets/icons/onboarding/Upload.svg"
-          label="Upload background"
-          fileNameKey="backgroundPictureName"
-        /> */}
-
         <div className="bg-transparent w-full h-24"></div>
       </div>
     </form>
@@ -174,7 +166,13 @@ export default function Step1() {
 
 
 
-
+ {/* <CustomFileInput
+          onFileChange={(uploadedUrl) => updateFormData({ backgroundPicture: uploadedUrl })}
+          placeholder="Choose or upload a background picture"
+          iconSrc="/assets/icons/onboarding/Upload.svg"
+          label="Upload background"
+          fileNameKey="backgroundPictureName"
+        /> */}
 
 // "use client";
 

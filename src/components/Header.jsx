@@ -7,7 +7,7 @@ const steps = [
   {
     id: "/manage-projects/pick-projects",
     label: "Pick Projects",
-    icon: "/assets/images/Instagram.svg",
+    icon: "/assets/images/instagram.svg",
   },
   {
     id: "/manage-projects/add-details",

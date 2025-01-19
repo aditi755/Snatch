@@ -13,11 +13,10 @@ import InfoNormalMultiSelect from "@/components/InfoNormalMultiSelect";
 
 export default function Step2() {
   const { formData, updateFormData } = useFormContext();
-
   const contentOptions = ["Story", "Reels", "Posts"];
   const compensationOptions = ["Gifting", "Sponsorships", "Affiliate", "Hosted", "Collaboration"];
   const languageList = [
-    "English", "Spanish", "French", "German", "Mandarin", "Hindi", "Japanese", "Marathi", "Gujrati", "Tamil", "Telugu", "Bengali", "Portuguese", "Italian", "Russian", "Arabic", "Korean", "Vietnamese", "Indonesian", "Turkish", "Urdu"
+    "English", "Spanish", "French", "German", "Mandarin", "Hindi", "Japanese", "Marathi", "Gujarati", "Tamil", "Telugu", "Bengali", "Portuguese", "Italian", "Russian", "Arabic", "Korean", "Vietnamese", "Indonesian", "Turkish", "Urdu"
   ];
 
   // Handle changes for a specific field

@@ -10,7 +10,7 @@ import Otp from "@/components/Otp";
 export default function EnterOtp() {
   const { isLoaded, signUp, setActive } = useSignUp();
   const router = useRouter();
-  const [otp, setOtp] = useState(Array(6).fill("")); // Initialize OTP state as an array of 6 empty strings
+  const [otp, setOtp] = useState(Array(6).fill("")); 
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
 
@@ -45,8 +45,12 @@ export default function EnterOtp() {
     
   };
 
-
-  
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      verifyOtp();
+    }
+  };
+ 
   return (
     <div className="h-screen  flex flex-col justify-center lg:flex-row overflow-hidden ">
     {/* Left Section for Image */}
@@ -96,7 +100,7 @@ export default function EnterOtp() {
     <div className="flex h-[100%] lg:h-full w-full lg:w-1/2 justify-center items-center ">
       <div className="flex flex-col justify-center items-center text-center w-full px-6 sm:px-10">
       <h1 className="text-graphite text-2xl sm:text-5xl mb-8 font-qimano">Enter OTP</h1>
-      <Otp otp={otp} setOtp={setOtp} /> {/* Use Otp component here */}
+      <Otp otp={otp} setOtp={setOtp}  onKeyDown={handleKeyDown}/> {/* Use Otp component here */}
              <button
              onClick={verifyOtp}
              className="w-full sm:w-[356px] h-12 bg-[#0037EB] text-white rounded-lg mt-4"

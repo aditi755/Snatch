@@ -76,19 +76,19 @@
 // }
 
 
+//onboarding/layout.js
 "use client";
 
 import { FormProvider } from "./context";
 import Image from "next/image";
 import Preview from "@/components/Preview";
 import { useRouter, usePathname } from "next/navigation";
-
-
 import NextButton from "@/components/NextButton";
+
 export default function OnboardingLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
-  
+
   const handlePrevClick = () => {
     if (pathname === "/onboarding/step-2") {
       router.push("/onboarding/step-1");
@@ -120,7 +120,7 @@ export default function OnboardingLayout({ children }) {
           >
             Back
           </button>
-          <NextButton />
+          <NextButton  />
 
         </div>
 

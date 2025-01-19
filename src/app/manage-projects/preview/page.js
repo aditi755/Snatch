@@ -186,7 +186,7 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
   {activeProject.children.map((child, index) => (
     <div
       key={child.id}
-      className={`absolute inset-0 transition-transform duration-500 h-[580px] -mt-[90px] rounded-lg bg-red-500 ${
+      className={`absolute inset-0 transition-transform duration-500 h-[580px] -mt-[90px] rounded-lg ${
         (carouselIndexes[activeProject.mediaId] || 0) === index
           ? "translate-x-0 opacity-100"
           : "translate-x-50 opacity-0"

@@ -33,7 +33,6 @@ export const FormProvider = ({ children }) => {
   useEffect(() => {
     const savedData = localStorage.getItem("formData");
     if (savedData) {
-      // console.log("Loaded formData from localStorage:", JSON.parse(savedData));
       setFormData(JSON.parse(savedData));
     }
   }, []);

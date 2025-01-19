@@ -54,6 +54,12 @@ export default function SignUp() {
     }
   }
 
+  const handleKeyDown = (e) => {
+    // Check if the Enter key is pressed
+    if (e.key === "Enter") {
+      handleVerifyEmail();
+    }
+  };
 
   return (
     <div className="h-screen  flex flex-col justify-center lg:flex-row overflow-hidden ">
@@ -113,6 +119,7 @@ export default function SignUp() {
               }`}
               value={email}
               onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
             />
              {inputError && <p className="text-red-500 mt-2">{inputError}</p>}
           </div>
