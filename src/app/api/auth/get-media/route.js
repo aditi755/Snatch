@@ -72,6 +72,8 @@ export async function GET(req) {
       })
     );
 
+    console.log("enrichedMediaData:", enrichedMediaData);
+
     // Respond with the enriched media data
     return NextResponse.json({ mediaData: enrichedMediaData }, { status: 200 });
   } catch (error) {

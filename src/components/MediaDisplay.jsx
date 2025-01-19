@@ -154,6 +154,7 @@ const MediaDisplay = ({ media }) => {
   const [carouselIndexes, setCarouselIndexes] = useState({});
   const { selectionState, addInstagramSelection } = useSelectedProjects(); // Use selectionState from context
 
+  console.log("media in mediadisplay", media)
   const handleSlide = (mediaId, direction, totalSlides) => {
     setCarouselIndexes((prev) => {
       const currentIndex = prev[mediaId] || 0;
@@ -217,7 +218,7 @@ const MediaDisplay = ({ media }) => {
 
             {/* Media Content */}
             {mediaItem.media_type === "IMAGE" ? (
-              <Image
+              <img
                 src={mediaItem.media_url}
                 alt={mediaItem.id || "Media"}
                 width={200}
@@ -245,7 +246,7 @@ const MediaDisplay = ({ media }) => {
                     }`}
                   >
                     {child.media_type === "IMAGE" ? (
-                      <Image
+                      <img
                         src={child.media_url}
                         alt={`Media ${child.id}`}
                         fill

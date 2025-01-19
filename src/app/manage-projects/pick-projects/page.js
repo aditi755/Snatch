@@ -50,10 +50,12 @@ export default function PickProjects() {
         if (code) {
           // Call the server action to fetch media using the code
           const mediaData = await fetchInstagramMedia(code);
+          console.log("media data", mediaData)
           setMedia(mediaData);
         } else {
           // Call the server action to fetch media from the database
           const mediaData = await getMediaFromDatabase();
+          console.log("media from database", mediaData)
           setMedia(mediaData);
         }
       } catch (error) {
