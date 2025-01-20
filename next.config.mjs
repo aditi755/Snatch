@@ -8,3 +8,5 @@ const nextConfig = {
 };
 
 export default nextConfig;
+
+//chnage ive done here make the imag tag unoptimized true nextjs bad practice tho :)

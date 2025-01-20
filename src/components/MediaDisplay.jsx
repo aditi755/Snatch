@@ -197,7 +197,7 @@ const MediaDisplay = ({ media }) => {
 
   return (
     <div>
-    <div className="grid grid-cols-5 gap-4">
+    <div className="grid xl:grid-cols-4 xl:gap-8 4xl:grid-cols-5 4xl:gap-4">
       {media?.length > 0 ? (
         media.map((mediaItem) => (
           <div
@@ -250,7 +250,7 @@ const MediaDisplay = ({ media }) => {
                         src={child.media_url}
                         alt={`Media ${child.id}`}
                         fill
-                        className="object-cover"
+                        className="w-full h-full object-cover"
                       />
                     ) : (
                       <video
