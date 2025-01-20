@@ -30,7 +30,7 @@ const Header = () => {
         {steps.map((step, index) => (
           <React.Fragment key={index}>
             {/* Step Marker */}
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center px-10">
               {/* SVG Icon */}
               <Image
                 src={step.icon}
@@ -38,7 +38,7 @@ const Header = () => {
                 width={32}
                 height={32}
                 className={`w-5 h-5 transition-all duration-300 ${
-                  pathname === step.id ? "text-yellow-500" : "text-white"
+                  pathname === step.id ? "text-lime-yellow" : "text-white"
                 }`}
                 style={{
                   filter:
@@ -52,7 +52,7 @@ const Header = () => {
               <span
                 className={`mt-2 transition-all duration-300 font-apfel-grotezk-regular ${
                   pathname === step.id
-                    ? "text-yellow-500 font-bold"
+                    ? "text-lime-yellow "
                     : "text-gray-300"
                 }`}
               >
@@ -63,9 +63,9 @@ const Header = () => {
             {/* Connecting Line */}
             {index < steps.length - 1 && (
               <div
-                className={`flex-1 h-1 mx-2 transition-all duration-300 ${
+                className={`flex-1 h-[0.95px] mx-2 transition-all duration-300 ${
                   pathname === step.id || pathname === steps[index + 1].id
-                    ? "bg-white"
+                    ? "bg-[#CBCBCB] opacity-75"
                     : "bg-gray-400"
                 }`}
               ></div>

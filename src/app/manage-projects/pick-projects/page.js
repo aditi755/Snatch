@@ -106,7 +106,8 @@ export default function PickProjects() {
     }
 
 const renderInstagramTab = () => (
-  <div className="flex justify-center gap-10 mt-5">
+  <div className="flex justify-center gap-10 mt-5">  
+
     <div className="w-[278px] h-full bg-white text-black p-3" >
       <p className="text-md">Selected projects from Instagram</p>
       <p className="text-light-grey">{selectionState?.instagramSelected?.length || "0"}</p>
@@ -122,7 +123,7 @@ const renderInstagramTab = () => (
               {project.name === "VIDEO" ? (
                 // Video Content
                 <video
-                  controls
+                 
                   className="w-full h-full object-cover"
                   src={project.mediaLink}
                 >
@@ -149,7 +150,7 @@ const renderInstagramTab = () => (
                         />
                       ) : (
                         <video
-                          controls
+                        
                           className="w-full h-full object-cover"
                           src={child.media_url}
                         />
@@ -234,7 +235,7 @@ const renderInstagramTab = () => (
         /* Check if the file is a video */
         <video
           src={file.fileUrl}
-          controls
+         controls 
           width={200}
           height={150}
           className="object-contain"

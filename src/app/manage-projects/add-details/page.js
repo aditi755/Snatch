@@ -11,13 +11,14 @@ import NormalMultiSelect from "@/components/NormalMultiSelect";
 import ProjectsGrid from "@/components/ProjectsGrid";
 import { industryList, eventTypes } from "@/data/portfolio/industry";
 import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
-
+import ProjectCustomFileInput from "@/components/ProjectCustomFileInput";
 
 export default function AddDetails() {
   const {
     selectionState,
     handleFileUpload,
     updateFormDataForMedia,
+    handleCompanyLogoUpload,
   } = useSelectedProjects();
 
   const router = useRouter();
@@ -106,6 +107,7 @@ export default function AddDetails() {
   if (!isHydrated) {
     return null;
   }
+
 
   const handleProjectClick = async (mediaId) => {
     setActiveImageId(mediaId);
@@ -204,7 +206,7 @@ export default function AddDetails() {
         <p className="text-2xl text-black font-qimano">
           Pick content that you wish to highlight in your profile kit
         </p>
-        <p className="mx-auto text-black">
+        <p className="mx-auto text-graphite font-apfel-grotezk-regular">
           Fill in details for at least 4 projects
         </p>
       </div>
@@ -260,12 +262,14 @@ export default function AddDetails() {
         </div>
 
        
+        <div className="w-[258px] ml-20 mt-4 relative ">
+  {/* Media Container right side */}
   <div
-    className="bg-white w-[258px] ml-20 mt-4 flex items-center justify-center relative rounded-lg"
+    className="w-full h-full rounded-lg overflow-hidden "
     style={{
       height:
         activeProject?.name === "VIDEO"
-          ? "440px" // Adjust height for video
+          ? "373px" // Adjust height for video
           : "335px", // Auto height for image or carousel
     }}
   >
@@ -280,9 +284,9 @@ export default function AddDetails() {
             <Image
               src={activeProject.mediaLink}
               alt={activeProject.name}
-              width={500}
-              height={1200}
-              className="-mt-20 object-contain rounded-lg" // Object-contain for images
+              width={20}
+              height={20} // Use `fill` to make the image take full width and height bg-cover makes it perfect
+              className=" bg-cover rounded-lg w-full h-full" 
             />
           );
         } else if (activeProject.name === "VIDEO") {
@@ -290,9 +294,7 @@ export default function AddDetails() {
             <video
               src={activeProject.mediaLink}
               controls
-              width={500}
-              height={1200}
-              className="h-[350px] -mt-[87px] w-full object-cover" // Object-cover for videos
+              className="w-full h-full object-cover rounded-lg" // Object-cover for videos
             />
           );
         } else if (activeProject.name === "CAROUSEL_ALBUM") {
@@ -301,7 +303,7 @@ export default function AddDetails() {
               {activeProject.children.map((child, index) => (
                 <div
                   key={child.id}
-                  className={`absolute inset-0 transition-transform duration-500 h-full  ${
+                  className={`absolute inset-0 transition-transform duration-500 ${
                     (carouselIndexes[activeProject.mediaId] || 0) === index
                       ? "translate-x-0 opacity-100"
                       : "translate-x-50 opacity-0"
@@ -312,12 +314,12 @@ export default function AddDetails() {
                       src={child.media_url}
                       alt={`Media ${child.id}`}
                       fill
-                      className="-mt-10 object-contain rounded-lg" // Object-contain for carousel images
+                      className="object-cover rounded-lg" // Object-cover for carousel images
                     />
                   ) : (
                     <video
                       controls
-                      className="w-full -mt-1 object-contain rounded-lg" // Object-cover for carousel videos
+                      className="w-full h-full object-cover rounded-lg" // Object-cover for carousel videos
                       src={child.media_url}
                     >
                       Your browser does not support the video tag.
@@ -358,38 +360,34 @@ export default function AddDetails() {
             <Image
               src={activeProject.fileUrl}
               alt={activeProject.fileName}
-              width={500}
-              height={1200}
-              className="h-[400px] object-contain" // Object-contain for file images
+              fill
+              className="object-cover rounded-lg" // Object-cover for file images
             />
           );
         }
 
         return null;
       })()}
-
-    {/* Insights section */}
-    <div
-  className={`flex gap-4 text-black absolute ${
-    activeProject?.name === "VIDEO" ? "top-[90%]" : "top-[85%]"
-  } font-apfel-grotezk-regular`}
-  style={{
-    marginTop: activeProject?.name === "VIDEO" ? "-24px" : "-16px", // Adjust margin-top conditionally
-  }}
->
-  {insights &&
-    insights.map((item) => (
-      <div key={item.name} className="flex-col text-center">
-        <p className="text-[19px]">{item.values[0]?.value || 0}</p>
-        <p className="text-[12px] text-gray-500">{item.title}</p>
-      </div>
-    ))}
-</div>
-
   </div>
 
+  {/* Insights Section */}
+  <div
+    className={`bg-white rounded-lg mt-2 p-4 flex gap-4 justify-center text-black ${
+      activeProject?.name === "VIDEO" ? "h-16 mt-0" : "h-16 mt-0"
+    }`}
+  >
+    {insights &&
+      insights.map((item) => (
+        <div key={item.name} className="flex-col text-center">
+          <p className="text-[19px]">{item.values[0]?.value || 0}</p>
+          <p className="text-[12px] text-gray-500">{item.title}</p>
+        </div>
+      ))}
+  </div>
+</div>
 
-        <div className="ml-20 mt-5 flex flex-col gap-8 overflow-y-scroll overflow-x-hidden h-[500px]" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+
+        <div className="ml-20 mt-5 flex flex-col gap-8 overflow-y-scroll overflow-x-hidden h-[400px]" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <div className="flex items-center justify-between ">
   <span className="text-graphite">Was it a brand collaboration?</span>
   <div
@@ -451,7 +449,7 @@ export default function AddDetails() {
           {isBrandCollaboration && (
             <>
               <div className="text-black flex flex-col gap-5">
-                <p className="font-bold text-md">About Company</p>
+                <p className=" text-md">About Company</p>
                 <FormInput
                   placeholder="Enter name of company"
                   name="companyName"
@@ -467,12 +465,33 @@ export default function AddDetails() {
               </div>
 
               <div className="text-black flex flex-col gap-5">
-                <p className="font-bold text-md">Upload logo of the Company</p>
-                {/* <CustomFileInput /> */}
+                <p className="text-md">Upload logo of the Company</p>
+                {/* <ProjectCustomFileInput
+                onFileChange={(uploadedUrl) => updateFormDataForMedia({ companyLogo: uploadedUrl })}
+                placeholder="Upload a company logo from your device"
+                iconSrc="/assets/icons/onboarding/Upload.svg"
+                label="Upload company logo"
+              /> */}
+
+              <ProjectCustomFileInput
+                onFileChange={(uploadedUrl) => console.log("Uploaded URL:", uploadedUrl)}
+                placeholder="Upload a company logo from your device"
+                iconSrc="/assets/icons/onboarding/Upload.svg"
+                label="Upload company logo"
+                activeImageId={activeImageId} // Pass the activeImageId
+              />
               </div>
 
               <div className="text-black flex flex-col gap-5">
-                <p className="font-bold text-md">About the event</p>
+
+                <p className=" text-md">About the event</p>
+                <FormInput
+                  placeholder="Name of the event"
+                  name="eventName"
+                  value={currentFormData.eventName || selectionState.formData[activeProject?.mediaId]?.eventName || ""}
+                  onChange={(e) => handleInputChange(e, activeImageId)}
+                />
+
                 <NormalMultiSelect
                   label="Choose Event type"
                   options={eventTypes}
@@ -486,12 +505,7 @@ export default function AddDetails() {
                   onAddValue={(value) => handleAddValue("eventTypes", value, activeImageId)}
                   onRemoveValue={(value) => handleRemoveValue("eventTypes", value, activeImageId)}
                 />
-                <FormInput
-                  placeholder="Name of the event"
-                  name="eventName"
-                  value={currentFormData.eventName || selectionState.formData[activeProject?.mediaId]?.eventName || ""}
-                  onChange={(e) => handleInputChange(e, activeImageId)}
-                />
+              
               </div>
             </>
           )}

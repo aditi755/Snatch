@@ -141,6 +141,19 @@ export function SelectedProjectsProvider({ children }) {
       alert("Error uploading file. Please try again.");
     }
   };
+
+  const handleCompanyLogoUpload = async (file, mediaId) => {
+    try {
+      const fileUrl = await cloudinaryUpload(file);
+      updateFormDataForMedia(mediaId, { companyLogo: fileUrl });
+      console.log("Company logo uploaded successfully. URL:", fileUrl);
+      return fileUrl;
+    } catch (error) {
+      console.error("Error uploading company logo:", error);
+      alert("Error uploading company logo. Please try again.");
+      throw error;
+    }
+  };
   
   return (
     <SelectedProjectsContext.Provider
@@ -151,6 +164,7 @@ export function SelectedProjectsProvider({ children }) {
         removeFile,
         updateFormDataForMedia,
         handleFileUpload,
+        handleCompanyLogoUpload
       }}
     >
       {children}

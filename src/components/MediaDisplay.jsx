@@ -196,7 +196,7 @@ const MediaDisplay = ({ media }) => {
 
 
   return (
-    <div>
+    <div className="mb-20 ">
     <div className="grid xl:grid-cols-4 xl:gap-8 4xl:grid-cols-5 4xl:gap-4">
       {media?.length > 0 ? (
         media.map((mediaItem) => (

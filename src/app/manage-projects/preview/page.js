@@ -164,7 +164,7 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
                         alt={activeProject.name}
                         width={300}
                         height={1200}
-                        className=" h-[380px] object-cover rounded-lg"
+                        className=" h-[380px] bg-cover rounded-lg"
                       />
                       </div>
                     );
@@ -182,7 +182,7 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
                     );
                   } else if (activeProject.name === "CAROUSEL_ALBUM") {
                     return (                    
-                      <div className="relative h-[400px] p-5 w-[300px] rounded-lg overflow-hidden">
+                      <div className="relative h-[400px] p-5 w-[300px] rounded-lg overflow-hidden  my-5 mx-2">
   {activeProject.children.map((child, index) => (
     <div
       key={child.id}
@@ -193,20 +193,20 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
       }`}
     >
       {child.media_type === "IMAGE" ? (
-        <div className="flex justify-center items-center h-full w-full rounded-lg">
+        <div className="flex justify-center items-center h-full w-full rounded-lg mx-4">
           <Image
             src={child.media_url}
             alt={`Media ${child.id}`}
             width={300}
             height={400}
-            className="object-contain h-[500px] w-full rounded-lg"
+            className="object-cover h-full w-full rounded-lg"
           />
         </div>
       ) : (
-        <div className="flex justify-center items-center h-full w-full rounded-lg">
+        <div className="flex justify-center items-center h-full w-full rounded-lg mx-4">
           <video
             controls
-            className="object-contain h-full w-full rounded-lg"
+            className="bg-cover h-full w-full rounded-lg"
             src={child.media_url}
           >
             Your browser does not support the video tag.
