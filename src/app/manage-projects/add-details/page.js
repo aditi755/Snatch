@@ -245,7 +245,7 @@ export default function AddDetails() {
             </button>
           </div>
 
-          <div className="mt-4 overflow-y-scroll overflow-x-hidden h-[400px]" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }} >
+          <div className="mt-4 overflow-y-scroll overflow-x-hidden h-[400px] 7xl:h-[600px]" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }} >
             <p className="text-md font-semibold">Selected Projects</p>
             <p className="text-light-grey text-sm">
               {activeTab === "instagram"
@@ -314,7 +314,7 @@ export default function AddDetails() {
                       src={child.media_url}
                       alt={`Media ${child.id}`}
                       fill
-                      className="object-cover rounded-lg" // Object-cover for carousel images
+                      className="bg-cover rounded-lg" // Object-cover for carousel images
                     />
                   ) : (
                     <video
@@ -372,7 +372,7 @@ export default function AddDetails() {
 
   {/* Insights Section */}
   <div
-    className={`bg-white rounded-lg mt-2 p-4 flex gap-4 justify-center text-black ${
+    className={`bg-white rounded-lg mt-0 p-4 flex gap-4 justify-center text-black ${
       activeProject?.name === "VIDEO" ? "h-16 mt-0" : "h-16 mt-0"
     }`}
   >
