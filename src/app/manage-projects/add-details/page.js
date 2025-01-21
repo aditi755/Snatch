@@ -40,7 +40,7 @@ export default function AddDetails() {
     industries: [],
     eventTypes: [],
   });
-  const [isBrandCollaboration, setIsBrandCollaboration] = useState(false);
+  const [isBrandCollaboration, setIsBrandCollaboration] = useState(true);
 
   const requiredFields = [
     "titleName",
@@ -262,7 +262,9 @@ export default function AddDetails() {
         </div>
 
        
-        <div className="w-[258px] ml-20 mt-4 relative ">
+  <div className="7xl:absolute 7xl:left-[30%] 9xl:absolute 9xl:left-[33%] flex ">
+    
+  <div className="w-[258px] ml-20 mt-4 relative ">
   {/* Media Container right side */}
   <div
     className="w-full h-full rounded-lg overflow-hidden "
@@ -285,8 +287,8 @@ export default function AddDetails() {
               src={activeProject.mediaLink}
               alt={activeProject.name}
               width={20}
-              height={20} // Use `fill` to make the image take full width and height bg-cover makes it perfect
-              className=" bg-cover rounded-lg w-full h-full" 
+              height={20} 
+              className=" bg-cover  rounded-lg w-full h-full" 
             />
           );
         } else if (activeProject.name === "VIDEO") {
@@ -384,11 +386,12 @@ export default function AddDetails() {
         </div>
       ))}
   </div>
-</div>
+     </div>
 
 
-        <div className="ml-20 mt-5 flex flex-col gap-8 overflow-y-scroll overflow-x-hidden h-[400px]" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div className="ml-20 mt-5 flex flex-col gap-8 overflow-y-scroll overflow-x-hidden h-[70vh]  7xl:h-[80vh] 9xl:h-[80vh]   " style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <div className="flex items-center justify-between ">
+
   <span className="text-graphite">Was it a brand collaboration?</span>
   <div
     className={`flex items-center rounded-full p-1 cursor-pointer w-[60px] ${
@@ -499,19 +502,21 @@ export default function AddDetails() {
                   onAddValue={(value) => handleAddValue("eventTypes", value, activeImageId)}
                   onRemoveValue={(value) => handleRemoveValue("eventTypes", value, activeImageId)}
                 />
+
+                <div className="bg-transparent h-20"></div>
               
               </div>
             </>
           )}
 
-<div className="fixed bottom-2 left-1/2 transform -translate-x-1/2 h-[55px] bg-white rounded-lg w-[250px] border-t border-gray-300 py-2">
+<div className="fixed bottom-2 left-1/2 transform -translate-x-1/2 bg-white rounded-lg border-t border-gray-300 py-1 px-4">
   <div className="flex gap-2 justify-center mx-auto">
-    <div className="flex gap-2 w-[210px] h-[40px] justify-center bg-gray-100 rounded-sm">
-      <button className="w-[72px] px-4 py-1 border-electric-blue border-2 text-electric-blue rounded hover:bg-electric-blue hover:text-white transition-colors" onClick={handleBackClick}>
+    <div className="flex gap-2 px-2 py-1.5 justify-center bg-gray-100 rounded-md">
+      <button className=" px-4 py-1.5 border-electric-blue border-2 text-electric-blue rounded hover:bg-electric-blue hover:text-white transition-colors" onClick={handleBackClick}>
         Back
       </button>
       <button
-        className={`px-4 py-1 ${
+        className={`px-4 py-1.5  ${
           isFormComplete()
             ? "bg-electric-blue text-white hover:bg-blue-700"
             : "bg-gray-300 text-gray-500 cursor-not-allowed"
@@ -525,6 +530,10 @@ export default function AddDetails() {
   </div>
 </div>
         </div>
+
+  </div>
+
+
       </div>
     </div>
   );

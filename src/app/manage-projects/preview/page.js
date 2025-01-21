@@ -305,13 +305,7 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
           <div className="flex items-center space-x-4  mt-[3rem]">
   {/* Logo */}
   <div className="flex items-center">
-    {/* <Image
-      src="/assets/images/logo.svg" 
-      width={50}
-      height={50}
-      alt="CAI Logo"
-      className="h-12 w-12 object-contain rounded-full"
-    /> */}
+   
 
 {console.log(selectionState?.formData?.[activeImageId]?.companyLogo)}
 
@@ -322,7 +316,7 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
       width={50}
       height={50}
       alt="Company Logo"
-      className="h-12 w-12 object-cver rounded-full"
+      className="h-12 w-12 bg-cover rounded-full"
     />
   ) : (
     // Display the default image if no company logo is selected

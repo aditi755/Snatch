@@ -325,14 +325,18 @@ const renderInstagramTab = () => (
       {/* {renderInstagramTab()} */}
       {selectedTab === "instagram" ? renderInstagramTab() : renderUploadTab()}
 
-      <div className="fixed bottom-1 left-1/2 transform -translate-x-1/2 h-[67px] bg-white rounded-lg w-[300px] border-t border-gray-300 py-2">
-  <div className="flex gap-2 justify-center items-center mx-auto">
-    <div className="flex gap-2 w-[260px] h-[40px] justify-center bg-gray-100 rounded-sm">
-      <button className="w-[72px] px-2 py-1 border-electric-blue border-2 text-electric-blue rounded hover:bg-blue-700 transition-colors" onClick={handleBackClick}>
+      <div className="fixed bottom-2 left-1/2 transform -translate-x-1/2 bg-white rounded-lg border-t border-gray-300 py-1 px-4">
+  <div className="flex gap-2 justify-center mx-auto">
+    <div className="flex gap-2 px-2 py-1.5 justify-center bg-gray-100 rounded-md">
+      <button className=" px-4 py-1.5 border-electric-blue border-2 text-electric-blue rounded hover:bg-electric-blue hover:text-white transition-colors" onClick={handleBackClick}>
         Back
       </button>
-      <button className="px-4 py-1 bg-electric-blue text-white rounded hover:bg-electric-blue  transition-colors" onClick={handleProjectClick}>
-        Add Project details
+      <button
+        className={'px-4 py-1.5 border-electric-blue border-2 text-electric-blue rounded hover:bg-electric-blue hover:text-white transition-colors'}
+        onClick={handleProjectClick}
+      // Disable if form is incomplete
+      >
+        See preview
       </button>
     </div>
   </div>
