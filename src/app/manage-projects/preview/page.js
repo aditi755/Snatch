@@ -87,8 +87,8 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
         <p className="text-2xl text-black font-qimano">
           Pick content that you wish to highlight in your profile kit
         </p>
-        <p className="mx-auto text-black">
-          Fill in details for at least 4 projects
+        <p className="mx-auto text-black font-apfel-grotezk-regular">
+          Pick at least 4 projects
         </p>
       </div>
 
@@ -300,7 +300,7 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
             )) || "Industry"}
           </div>
 
-          <div className="w-full border-b-2 border-gray-300 mt-4"></div>
+          <div className="w-full border-b-[0.5px] border-gray-300 mt-4"></div>
 
           <div className="flex items-center space-x-4  mt-[3rem]">
   {/* Logo */}
@@ -361,7 +361,7 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
 
           <p className="text-graphite mt-5">{selectionState?.formData?.[activeImageId]?.description || "Description of the project"}</p>
 
-          <div className="w-full border-b-2 border-gray-300 mt-8"></div>
+          <div className="w-full border-b-[0.5px] border-gray-300 mt-8"></div>
 
           
 <div className="mt-5 ml-20 flex gap-20 justify-center items-center text-black w-[300px]">     
