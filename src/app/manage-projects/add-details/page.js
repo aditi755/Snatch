@@ -466,19 +466,13 @@ export default function AddDetails() {
 
               <div className="text-black flex flex-col gap-5">
                 <p className="text-md">Upload logo of the Company</p>
-                {/* <ProjectCustomFileInput
-                onFileChange={(uploadedUrl) => updateFormDataForMedia({ companyLogo: uploadedUrl })}
-                placeholder="Upload a company logo from your device"
-                iconSrc="/assets/icons/onboarding/Upload.svg"
-                label="Upload company logo"
-              /> */}
 
               <ProjectCustomFileInput
                 onFileChange={(uploadedUrl) => console.log("Uploaded URL:", uploadedUrl)}
                 placeholder="Upload a company logo from your device"
                 iconSrc="/assets/icons/onboarding/Upload.svg"
                 label="Upload company logo"
-                activeImageId={activeImageId} // Pass the activeImageId
+                activeImageId={activeImageId} 
               />
               </div>
 

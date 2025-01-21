@@ -10,16 +10,18 @@ const page = () => {
     <div className="mb-[500px] flex gap-3">
       <DashboardCard count={6} label={"Profile Visit"}/>
       <DashboardCard count={8} label={"Request Received"}/>
-      <DashboardCard  count={4} label={"Avg time spent"}/>
+      <DashboardCard  count={4} label={"Avg time spent"} className="flex-auto"/>
+      
+    
     </div>
 
-      <div className="absolute top-[21%] 4xl:top-[24%] 5xl:top-[27%]">
+      <div className="absolute top-[21%] 4xl:top-[24%] 5xl:top-[27%] flex-auto">
         <LocationCard /> 
       </div>
 
 
 
-    <div className="absolute top-[52%] 3xl:top-[55%] 4xl:top-[57%] 5xl:top-[63%] font-qimano ">
+    <div className="absolute top-[56%] 3xl:top-[62%] 4xl:top-[57%] 5xl:top-[71%] 7xl:top-[90%] 9xl:top-[120%] font-qimano flex-auto">
     <div className="w-[58vw] h-[47vh] bg-gray-300 rounded-xl">
 
 

@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { useSelectedProjects } from "@/app/manage-projects/context";
 import cloudinaryUpload from "@/utils/cloudinaryUpload";
@@ -9,20 +9,25 @@ const ProjectCustomFileInput = ({
   placeholder,
   iconSrc,
   label,
-  onFileChange, // Callback to handle the uploaded URL
-  activeImageId, // Pass the activeImageId to update the correct formData
+  onFileChange,
+  activeImageId,
 }) => {
   const [fileName, setFileName] = useState("");
-  const [imageSrc, setImageSrc] = useState(null); // For cropping
+  const [imageSrc, setImageSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-  const [isCropping, setIsCropping] = useState(false); // Modal toggle
+  const [isCropping, setIsCropping] = useState(false);
   const fileInputRef = useRef(null);
 
-  const { handleCompanyLogoUpload, updateFormDataForMedia } = useSelectedProjects();
+  const { handleCompanyLogoUpload, updateFormDataForMedia, selectionState } = useSelectedProjects();
 
-  console.log("activeImageId: from logo company", activeImageId);
+  // Retrieve file name from formData on component mount
+  useEffect(() => {
+    if (activeImageId && selectionState.formData[activeImageId]?.companyLogoFileName) {
+      setFileName(selectionState.formData[activeImageId].companyLogoFileName);
+    }
+  }, [activeImageId, selectionState.formData]);
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -31,7 +36,13 @@ const ProjectCustomFileInput = ({
   const handleFileChange = (event) => {
     if (event.target.files) {
       const selectedFile = event.target.files[0];
-      setFileName(selectedFile.name);
+      setFileName(selectedFile.name); // Set the file name (e.g., "girl.png")
+
+      // Update formData with the new file name
+      updateFormDataForMedia(activeImageId, {
+        companyLogoFileName: selectedFile.name,
+      });
+
       const reader = new FileReader();
       reader.readAsDataURL(selectedFile);
       reader.onload = () => {
@@ -47,11 +58,13 @@ const ProjectCustomFileInput = ({
 
   const cropImage = async () => {
     const croppedImage = await getCroppedImage(imageSrc, croppedAreaPixels, fileName);
-    const uploadedUrl = await handleCompanyLogoUpload(croppedImage); // Upload cropped file to Cloudinary
+    const uploadedUrl = await handleCompanyLogoUpload(croppedImage);
 
     // Update the formData for the specific activeImageId
-    console.log("activeImageId BEFORE IN CONTEXT", activeImageId);
-    updateFormDataForMedia(activeImageId, { companyLogo: uploadedUrl });
+    updateFormDataForMedia(activeImageId, {
+      companyLogo: uploadedUrl,
+      companyLogoFileName: fileName, // Save the file name in formData
+    });
 
     onFileChange(uploadedUrl); // Pass the uploaded URL to the parent component
     setIsCropping(false); // Close modal
@@ -60,7 +73,7 @@ const ProjectCustomFileInput = ({
 
   const getCroppedImage = (imageSrc, croppedAreaPixels, originalFileName) => {
     return new Promise((resolve) => {
-      const image = new window.Image(); // Use native Image constructor
+      const image = new window.Image();
       image.src = imageSrc;
       image.onload = () => {
         const canvas = document.createElement("canvas");
@@ -91,12 +104,13 @@ const ProjectCustomFileInput = ({
 
   return (
     <div className="mt-0">
+      {/* File Upload Section */}
       <div
         className="mt-0 flex gap-8 cursor-pointer rounded-md border border-stroke px-5 py-3 text-dark-grey outline-none transition hover:border-primary active:border-primary"
         onClick={handleButtonClick}
       >
         <Image src={iconSrc} alt="upload" width={30} height={20} />
-        <span>{fileName || placeholder}</span>
+        <span>{fileName || placeholder}</span> {/* Show file name or placeholder */}
       </div>
       <input
         type="file"
@@ -115,7 +129,7 @@ const ProjectCustomFileInput = ({
                 image={imageSrc}
                 crop={crop}
                 zoom={zoom}
-                aspect={4 / 3} // Adjust aspect ratio as needed
+                aspect={4 / 3}
                 onCropChange={setCrop}
                 onZoomChange={setZoom}
                 onCropComplete={onCropComplete}

@@ -143,7 +143,7 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
         </div>      
 
         {/* preview card */}
-        <div className="w-[864px] bg-white ml-28 mt-5 rounded-lg">
+        <div className="w-[864px] h-[430px]  bg-white ml-28 mt-5 rounded-lg">
           <div className="flex gap-5 ">
            <div className="w-[300px] h-full  ">
            {activeImageId !== null && (
@@ -180,68 +180,93 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
                       />
                       </div>
                     );
+                  } if (activeProject.name === "IMAGE") {
+                    return (
+                      <div className="relative h-[400px] p-5 w-[300px]">
+                        <Image
+                          src={activeProject.mediaLink}
+                          alt={activeProject.name}
+                          width={300}
+                          height={1200}
+                          className="h-[380px] bg-cover rounded-lg"
+                        />
+                      </div>
+                    );
+                  } else if (activeProject.name === "VIDEO") {
+                    return (
+                      <div className="relative h-[400px] p-5 w-[300px]">
+                        <video
+                          src={activeProject.mediaLink}
+                          controls
+                          width={300}
+                          height={1200}
+                          className="h-[400px] object-cover rounded-lg"
+                        />
+                      </div>
+                    );
                   } else if (activeProject.name === "CAROUSEL_ALBUM") {
-                    return (                    
-                      <div className="relative h-[400px] p-5 w-[300px] rounded-lg overflow-hidden  my-5 mx-2">
-  {activeProject.children.map((child, index) => (
-    <div
-      key={child.id}
-      className={`absolute inset-0 transition-transform duration-500 h-[580px] -mt-[90px] rounded-lg ${
-        (carouselIndexes[activeProject.mediaId] || 0) === index
-          ? "translate-x-0 opacity-100"
-          : "translate-x-50 opacity-0"
-      }`}
-    >
-      {child.media_type === "IMAGE" ? (
-        <div className="flex justify-center items-center h-full w-full rounded-lg mx-4">
-          <Image
-            src={child.media_url}
-            alt={`Media ${child.id}`}
-            width={300}
-            height={400}
-            className="object-cover h-full w-full rounded-lg"
-          />
-        </div>
-      ) : (
-        <div className="flex justify-center items-center h-full w-full rounded-lg mx-4">
-          <video
-            controls
-            className="bg-cover h-full w-full rounded-lg"
-            src={child.media_url}
-          >
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      )}
-    </div>
-  ))}
-
-  {/* Carousel Navigation */}
-  <button
-    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-6 h-6 flex justify-center items-center"
-    onClick={() =>
-      handleSlide(
-        activeProject.mediaId,
-        "prev",
-        activeProject.children.length
-      )
-    }
-  >
-    ❮
-  </button>
-  <button
-    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-6 h-6 flex justify-center items-center"
-    onClick={() =>
-      handleSlide(
-        activeProject.mediaId,
-        "next",
-        activeProject.children.length
-      )
-    }
-  >
-    ❯
-  </button>
-</div>
+                    return (
+                      <div className="relative h-[400px] p-5 w-[300px] rounded-lg overflow-hidden">
+                        {activeProject.children.map((child, index) => (
+                          <div
+                            key={child.id}
+                            className={`absolute inset-0 transition-transform duration-500 h-full w-full ${
+                              (carouselIndexes[activeProject.mediaId] || 0) === index
+                                ? "translate-x-0 opacity-100"
+                                : "translate-x-50 opacity-0"
+                            }`}
+                            style={{ padding: '20px' }} // Add padding here
+                          >
+                            {child.media_type === "IMAGE" ? (
+                              <div className="flex justify-center items-center h-full w-full rounded-lg">
+                                <Image
+                                  src={child.media_url}
+                                  alt={`Media ${child.id}`}
+                                  width={300}
+                                  height={400}
+                                  className="h-full w-full rounded-lg object-cover"
+                                />
+                              </div>
+                            ) : (
+                              <div className="flex justify-center items-center h-full w-full rounded-lg">
+                                <video
+                                  controls
+                                  className="h-full w-full rounded-lg object-cover"
+                                  src={child.media_url}
+                                >
+                                  Your browser does not support the video tag.
+                                </video>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                  
+                        {/* Carousel Navigation */}
+                        <button
+                          className="absolute left-6 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-6 h-6 flex justify-center items-center"
+                          onClick={() =>
+                            handleSlide(
+                              activeProject.mediaId,
+                              "prev",
+                              activeProject.children.length
+                            )
+                          }
+                        >
+                          ❮
+                        </button>
+                        <button
+                          className="absolute right-6 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-6 h-6 flex justify-center items-center"
+                          onClick={() =>
+                            handleSlide(
+                              activeProject.mediaId,
+                              "next",
+                              activeProject.children.length
+                            )
+                          }
+                        >
+                          ❯
+                        </button>
+                      </div>
                     );
                   } else if (activeProject.fileUrl) {
                     return (
@@ -280,13 +305,35 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
           <div className="flex items-center space-x-4  mt-[3rem]">
   {/* Logo */}
   <div className="flex items-center">
-    <Image
+    {/* <Image
       src="/assets/images/logo.svg" 
       width={50}
       height={50}
       alt="CAI Logo"
       className="h-12 w-12 object-contain rounded-full"
+    /> */}
+
+{console.log(selectionState?.formData?.[activeImageId]?.companyLogo)}
+
+{selectionState?.formData?.[activeImageId]?.companyLogo ? (
+    // Display the company logo if available
+    <Image
+      src={selectionState.formData[activeImageId].companyLogo}
+      width={50}
+      height={50}
+      alt="Company Logo"
+      className="h-12 w-12 object-cver rounded-full"
     />
+  ) : (
+    // Display the default image if no company logo is selected
+    <Image
+      src="/assets/images/logo.svg"
+      width={50}
+      height={50}
+      alt="CAI Logo"
+      className="h-12 w-12 object-contain rounded-full"
+    />
+  )}
   </div>
 
   {/* Divider */}
@@ -301,7 +348,14 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
   </span>{" "}
   • {selectionState?.formData?.[activeImageId]?.companyLocation || "Location of company"}
 </p>
-    <p>• Casa Cai Mumbai • Launch Event</p>
+    <p>• {selectionState?.formData?.[activeImageId]?.companyLocation || "Location "} • {selectionState?.formData?.[activeImageId]?.eventTypes?.map((eventType, index) => (
+      <span
+        key={index}
+        className="px-2 text-sm"
+      >
+        {eventType}
+      </span>
+    ))}</p>
   </div>
           </div>
 

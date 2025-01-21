@@ -52,6 +52,7 @@ export function SelectedProjectsProvider({ children }) {
       companyName: "",
       companyLocation: "",
       companyLogo: null,
+      companyLogoFileName: null,
       description: "",
       eventTypes: [],
       industries: [],
