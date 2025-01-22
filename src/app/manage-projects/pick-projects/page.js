@@ -336,7 +336,7 @@ const renderInstagramTab = () => (
         onClick={handleProjectClick}
       // Disable if form is incomplete
       >
-        See preview
+        Add Details
       </button>
     </div>
   </div>

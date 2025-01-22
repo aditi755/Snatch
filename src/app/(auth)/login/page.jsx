@@ -73,6 +73,47 @@ export default function Page() {
     }
   }
 
+  const handleVerifyEmail = async () => {
+    const validation = emailSchema.safeParse(email);
+    if (!validation.success) {
+      setError(validation.error.issues[0].message);
+      return;
+    }
+
+    if (!isLoaded || !signIn) return;
+
+    try {
+      // Start the sign-in process
+      const { supportedFirstFactors } = await signIn.create({ identifier: email });
+
+      // Ensure `supportedFirstFactors` exists and has valid entries
+      if (!supportedFirstFactors || supportedFirstFactors.length === 0) {
+        throw new Error('No supported first factors available for this email.');
+      }
+
+      // Find the appropriate first factor strategy
+      const firstFactor = supportedFirstFactors.find(
+        (factor) => factor.strategy === 'email_code'
+      );
+
+      if (!firstFactor) {
+        throw new Error('Email code strategy is not supported for this user.');
+      }
+
+      // Prepare the email address for OTP verification
+      await signIn.prepareFirstFactor({
+        strategy: firstFactor.strategy,
+        emailAddressId: firstFactor.emailAddressId,
+      });
+
+      // Navigate to OTP entry page
+      router.push(`/login/enter-otp?email=${email}`);
+    } catch (err) {
+      setError(err.message || 'Something went wrong.');
+      console.error('Sign-in error:', err);
+    }
+    };
+
   const handleKeyDown = (e) => {
     // Check if the Enter key is pressed
     if (e.key === "Enter") {
