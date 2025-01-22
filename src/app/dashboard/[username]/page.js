@@ -17,11 +17,7 @@ const page = () => {
 
       <div className="absolute top-[21%] 4xl:top-[24%] 5xl:top-[27%] flex-auto">
         <LocationCard /> 
-      </div>
-
-
-
-    <div className="absolute top-[56%] 3xl:top-[62%] 4xl:top-[57%] 5xl:top-[71%] 7xl:top-[90%] 9xl:top-[120%] font-qimano flex-auto">
+        <div className="absolute top-[110%]  font-qimano flex-auto">
     <div className="w-[58vw] h-[47vh] bg-gray-300 rounded-xl">
 
 
@@ -38,7 +34,8 @@ const page = () => {
 
     </div>
     </div>
-
+      </div>
+      
     </div>
   )
 }
