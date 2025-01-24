@@ -7,7 +7,8 @@ const ProjectsGrid = ({
   activeTab, 
   onProjectClick, 
   showStatus = false,
-  containerClassName = "grid grid-cols-2 gap-2 mt-4"
+  containerClassName = "grid grid-cols-2 gap-2 mt-4  overflow-y-scroll overflow-x-hidden max-h-[40vh]",
+
 }) => {
   const [carouselIndexes, setCarouselIndexes] = useState({});
 
@@ -25,7 +26,7 @@ const ProjectsGrid = ({
   };
 
   return (
-    <div className={containerClassName}>
+    <div className={containerClassName} style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
       {projects.map((project, index) => (
         <div
           key={index}

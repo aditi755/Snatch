@@ -112,10 +112,10 @@ const renderInstagramTab = () => (
       <p className="text-md">Selected projects from Instagram</p>
       <p className="text-light-grey">{selectionState?.instagramSelected?.length || "0"}</p>
 
-      <div className="mt-[18px] w-auto border-b border-1 border-gray-200 overflow-y-scroll"> 
+      <div className="mt-[18px] w-auto border-b border-1 border-gray-200  "> 
       </div>
       
-      <div className="grid grid-cols-2 gap-4 mt-7 max-h-[330px] overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      <div className="grid grid-cols-2 gap-4 mt-7 overflow-y-auto max-h-[40vh]" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         {selectionState?.instagramSelected?.map((project) => (
           <div key={project.mediaId} className="flex flex-col items-center">
             {/* Project Container */}
@@ -197,6 +197,7 @@ const renderInstagramTab = () => (
             </button>
           </div>
         ))}
+        <div className="-mb-10"></div>
       </div>
     </div>
 

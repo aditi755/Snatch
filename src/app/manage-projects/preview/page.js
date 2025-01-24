@@ -92,6 +92,8 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
         </p>
       </div>
 
+      <div className="flex justify-center 7xl:min-w-[93%] mx-auto">
+        
       <div className="flex flex-row font-apfel-grotezk-regular">
       <div className="w-[278px] bg-white text-black p-3">
           <div className="flex justify-between items-center border-b border-light-grey">
@@ -126,7 +128,7 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
             </button>
           </div>
 
-          <div className="mt-4 overflow-y-scroll overflow-x-hidden h-[400px]" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }} >
+          <div className="mt-4 h-full  " style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }} >
             <p className="text-md font-semibold">Selected Projects</p>
             <p className="text-light-grey text-sm">
               {activeTab === "instagram"
@@ -385,9 +387,10 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
     </div>
   </div>
        </div>
-
-
+       
       </div>
+      </div>
+
     </div>
   );
 }
@@ -403,59 +406,3 @@ export default function Preview() {
 }
 
 
-
-// <div className="relative h-[400px] p-5 w-[300px] rounded-lg">
-                      //   {activeProject.children.map((child, index) => (
-                      //     <div
-                      //       key={child.id}
-                      //       className={`absolute inset-0 transition-transform duration-500 h-[400px] rounded-lg ${
-                      //         (carouselIndexes[activeProject.mediaId] || 0) === index
-                      //           ? "translate-x-0 opacity-100"
-                      //           : "translate-x-50 opacity-0"
-                      //       }`}
-                      //     >
-                      //       {child.media_type === "IMAGE" ? (
-                      //         <Image
-                      //           src={child.media_url}
-                      //           alt={`Media ${child.id}`}
-                      //           fill
-                      //           className="object-cover h-[400px] p-5 rounded-lg"
-                      //         />
-                      //       ) : (
-                      //         <video
-                      //           controls
-                      //           className=" object-cover h-[400px] p-5 rounded-lg"
-                      //           src={child.media_url}
-                      //         >
-                      //           Your browser does not support the video tag.
-                      //         </video>
-                      //       )}
-                      //     </div>
-                      //   ))}
-            
-                      //   {/* Carousel Navigation */}
-                      //   <button
-                      //     className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-6 h-6 flex justify-center items-center"
-                      //     onClick={() =>
-                      //       handleSlide(
-                      //         activeProject.mediaId,
-                      //         "prev",
-                      //         activeProject.children.length
-                      //       )
-                      //     }
-                      //   >
-                      //     ❮
-                      //   </button>
-                      //   <button
-                      //     className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-6 h-6 flex justify-center items-center"
-                      //     onClick={() =>
-                      //       handleSlide(
-                      //         activeProject.mediaId,
-                      //         "next",
-                      //         activeProject.children.length
-                      //       )
-                      //     }
-                      //   >
-                      //     ❯
-                      //   </button>
-                      // </div>

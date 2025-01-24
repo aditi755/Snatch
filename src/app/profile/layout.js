@@ -55,9 +55,7 @@ export default function OnboardingLayout({ children }) {
           />
           <div className="relative mb-20 z-10 p-4 bg-white bg-opacity-90 rounded-lg shadow-lg">
             <DashboardPreview />
-          </div>
-
-          <div className="w-64 h-20 z-50 absolute top-[75%] sm:top-[76%] xl:top-[87%]   4xl:top-[80%] 5xl:top-[74%]  mx-auto 2xl:top-1/5 font-qimano">
+            <div className="w-64 h-20 z-50 absolute left-24 -bottom-24  mx-auto font-qimano">
             <div className="flex justify-center items-center gap-20 text-smoke">
               <div className="flex flex-col">
                 <h2 className="text-3xl">100K</h2>
@@ -76,6 +74,27 @@ export default function OnboardingLayout({ children }) {
               </div>
               </div>
             </div>
+          </div>
+{/* 
+          <div className="w-64 h-20 z-50 absolute top-[75%] sm:top-[76%] xl:top-[87%]   4xl:top-[80%] 5xl:top-[74%]  mx-auto 2xl:top-1/5 font-qimano">
+            <div className="flex justify-center items-center gap-20 text-smoke">
+              <div className="flex flex-col">
+                <h2 className="text-3xl">100K</h2>
+                <p className="text-1xl">Views</p>
+              </div>
+          
+
+              <div className="flex flex-col">
+                <h2 className="text-3xl">56K</h2>
+                <p className="text-1xl">Followers</p>
+              </div>
+          
+              <div className="flex flex-col">
+                <h2 className="text-3xl">35K</h2>
+                <p className="text-1xl">Likes</p>
+              </div>
+              </div>
+            </div> */}
 
 
         </div>
