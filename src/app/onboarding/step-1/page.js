@@ -13,7 +13,7 @@ import { useAuth } from "@clerk/nextjs";
 import DateInput from "@/components/DateInput";
 
 export default function Step1() {
-  const { formData, updateFormData } = useFormContext();
+  const { formData, updateFormData, isSaving } = useFormContext();
   const router = useRouter();
   const [formState, setFormState] = useState({
     username: "",
@@ -29,6 +29,8 @@ export default function Step1() {
   });
 
   const [numLinks, setNumLinks] = useState(formData?.length || 0);
+
+  console.log("saving", isSaving) //undefined
 
   useEffect(() => {
     // Synchronize formState with formData when formData updates

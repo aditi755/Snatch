@@ -12,13 +12,15 @@ import InfoNormalMultiSelect from "@/components/InfoNormalMultiSelect";
 // export const dynamic = 'force-dynamic';
 
 export default function Step2() {
-  const { formData, updateFormData } = useFormContext();
+  const { formData, updateFormData, isSaving } = useFormContext();
   const contentOptions = ["Story", "Reels", "Posts"];
   const compensationOptions = ["Gifting", "Sponsorships", "Affiliate", "Hosted", "Collaboration"];
   const languageList = [
     "English", "Spanish", "French", "German", "Mandarin", "Hindi", "Japanese", "Marathi", "Gujarati", "Tamil", "Telugu", "Bengali", "Portuguese", "Italian", "Russian", "Arabic", "Korean", "Vietnamese", "Indonesian", "Turkish", "Urdu"
   ];
 
+
+  console.log("saving", isSaving) //undefined
   // Handle changes for a specific field
   const handleAddValue = (fieldName, value) => {
     const updatedValues = [...(formData[fieldName] || []), value];

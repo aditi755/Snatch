@@ -4,7 +4,7 @@ const onboardingDataSchema = new mongoose.Schema(
     userId: {
      type: String,
      required: true,
-     unique: true,
+     //unique: true,
     },
     username: {
       type: String,
@@ -77,6 +77,17 @@ const onboardingDataSchema = new mongoose.Schema(
     dateOfBirth: {
       type: String,
     },
+
+    // Add other fields as needed
+    isDraft: {
+      type: Boolean,
+      default: true
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now
+    }
+    
   },
   { timestamps: true }
 );
