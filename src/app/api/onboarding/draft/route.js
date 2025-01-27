@@ -13,7 +13,7 @@ export async function GET(req) {
 
     const draft = await OnboardingData.findOne({ 
       userId,
-      isDraft: true 
+      //isDraft: true 
     });
 
     return NextResponse.json({ 
