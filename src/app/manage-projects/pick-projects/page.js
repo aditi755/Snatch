@@ -184,7 +184,7 @@ const renderInstagramTab = () => (
 
             {/* Delete Button - Outside and below the content */}
             <button
-              onClick={() => removeInstagramSelection(project.id)}
+              onClick={() => removeInstagramSelection(project.mediaId)}
               className="mt-2 p-1 hover:bg-gray-100 rounded-full transition-colors"
             >
               <Image

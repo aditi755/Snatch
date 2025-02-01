@@ -78,63 +78,73 @@ export default function Step1() {
 
     <div>
         <h2 className="text-3xl mt-10 font-qimano">Let&apos;s get Started !</h2>
-        <form
-      className="mt-6 w-[725px] xl:w-[726px] 5xl:w-[800px] h-[80vh] overflow-y-scroll mx-auto space-y-6 font-apfel-grotezk-regular "
-      style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      onSubmit={handleSubmit}
-    >
-      {/* First and Last Name */}
-      <div className="flex flex-row gap-6">
-        <FormInput
-          placeholder="First Name"
-          value={formState.firstName}
-          onChange={(e) => updateField("firstName", e.target.value)}
-        />
-        <FormInput
-          placeholder="Last Name"
-          value={formState.lastName}
-          onChange={(e) => updateField("lastName", e.target.value)}
-        />
-      </div>
 
-      {/* Gender Dropdown */}
-      <div className="flex flex-row gap-0">
-        <CustomDropdown
-          options={["Male", "Female", "Other", "Prefer not to say"]}
-          placeholder="Gender"
-          onSelect={(option) => updateField("gender", option)}
-          selected={formState.gender}
-        />
-        <DateInput 
+        <div className="">
+  <form
+    className="mt-6 w-full 2xl:w-[70dvw] 2xl:max-w-[760px] h-[80vh] overflow-y-scroll overflow-x-hidden mx-auto  space-y-6 font-apfel-grotezk-regular"
+    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+    onSubmit={handleSubmit}
+  >
+    {/* First and Last Name */}
+    <div className="flex flex-col md:flex-row gap-6">
+      <FormInput
+        placeholder="First Name"
+        value={formState.firstName}
+        onChange={(e) => updateField("firstName", e.target.value)}
+        className="w-full md:w-1/2"
+      />
+      <FormInput
+        placeholder="Last Name"
+        value={formState.lastName}
+        onChange={(e) => updateField("lastName", e.target.value)}
+        className="w-full md:w-1/2"
+      />
+    </div>
+
+    {/* Gender Dropdown and Date of Birth */}
+    <div className="flex flex-col md:flex-row gap-0">
+      <CustomDropdown
+        options={["Male", "Female", "Other", "Prefer not to say"]}
+        placeholder="Gender"
+        onSelect={(option) => updateField("gender", option)}
+        selected={formState.gender}
+        className="w-full md:w-1/2"
+      />
+      <DateInput
         placeholder="Date of birth"
         value={formState.dateOfBirth}
-        onChange={(value) => updateField("dateOfBirth", value)}/>
-      </div>
-
-      {/* Location */}
-      <FormInput
-        placeholder="Location"
-        value={formState.location}
-        onChange={(e) => updateField("location", e.target.value)}
+        onChange={(value) => updateField("dateOfBirth", value)}
+        className="w-full md:w-1/2"
       />
+    </div>
 
-      {/* Social Links */}
-      <div>
-        <h6 className="font-medium text-graphite">Add social links</h6>
-        <div className="mt-3">
-          <InstagramInput
-            value={formState.instagram}
-            onChange={(value) => updateField("instagram", value)}
-          />
-          {formState.links.slice(0, 4).map((link, index) => (
+    {/* Location */}
+    <FormInput
+      placeholder="Location"
+      value={formState.location}
+      onChange={(e) => updateField("location", e.target.value)}
+      className="w-full"
+    />
+
+    {/* Social Links */}
+    <div>
+      <h6 className="font-medium text-graphite">Add social links</h6>
+      <div className="mt-3">
+        <InstagramInput
+          value={formState.instagram}
+          onChange={(value) => updateField("instagram", value)}
+          className="w-full"
+        />
+        {formState.links.slice(0, 4).map((link, index) => (
           <SocialLinksDropdown
             key={index}
             initialData={link}
             onChange={(data) => handleLinkChange(index, data)}
-            onDelete={() => handleDeleteLink(index)} 
+            onDelete={() => handleDeleteLink(index)}
+            className="w-full"
           />
         ))}
-          <button
+        <button
           type="button"
           className="mt-4 flex items-center gap-2 text-dark-grey cursor-pointer"
           onClick={handleAddSocialLink}
@@ -142,24 +152,24 @@ export default function Step1() {
         >
           Add More Links
         </button>
-
-        </div>
       </div>
+    </div>
 
-      {/* Upload Picture & Background */}
-      <div className="space-y-4">
-        <CustomFileInput
-          //onFileChange={(file) => updateFormData({ profilePicture: file })}
-          onFileChange={(uploadedUrl) => updateFormData({ profilePicture: uploadedUrl})}
-          placeholder="Upload a profile picture from your device"
-          iconSrc="/assets/icons/onboarding/Upload.svg"
-          label="Upload picture"
-          fileNameKey="profilePictureName"
-        />
+    {/* Upload Picture & Background */}
+    <div className="space-y-4">
+      <CustomFileInput
+        onFileChange={(uploadedUrl) => updateFormData({ profilePicture: uploadedUrl })}
+        placeholder="Upload a profile picture from your device"
+        iconSrc="/assets/icons/onboarding/Upload.svg"
+        label="Upload picture"
+        fileNameKey="profilePictureName"
+        className="w-full"
+      />
+      <div className="bg-transparent w-full h-24"></div>
+    </div>
+  </form>
+</div>
 
-        <div className="bg-transparent w-full h-24"></div>
-      </div>
-    </form>
     </div>
 
   );

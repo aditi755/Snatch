@@ -125,7 +125,7 @@ export default function OnboardingLayout({ children }) {
         </div>
 
         {/* Right side: Form */}
-        <div className="w-1/2 flex flex-col  bg-white ">
+        <div className="w-1/2 grid grid-cols-1  bg-white ">
           <div className="w-[100vw] max-w-xl">{children}</div>
         </div>
       </div>

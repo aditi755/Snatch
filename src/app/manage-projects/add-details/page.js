@@ -28,18 +28,22 @@ export default function AddDetails() {
   const [carouselIndexes, setCarouselIndexes] = useState([]);
   const [activeImageId, setActiveImageId] = useState(null);
   const [insights, setInsights] = useState([]);
-  const [currentFormData, setCurrentFormData] = useState({
-    eventName: "",
-    eventLocation: "",
-    eventYear: "",
-    companyName: "",
-    companyLocation: "",
-    titleName: "",
-    description: "",
-    companyLogo: null,
-    industries: [],
-    eventTypes: [],
-  });
+  const [currentFormData, setCurrentFormData] = useState([
+    {
+      key: "",
+      eventName: "",
+      eventLocation: "",
+      eventYear: "",
+      companyName: "",
+      companyLocation: "",
+      titleName: "",
+      description: "",
+      companyLogo: null,
+      industries: [],
+      eventTypes: [],
+    },
+  ]);
+  
   const [isBrandCollaboration, setIsBrandCollaboration] = useState(true);
 
   const requiredFields = [
@@ -71,29 +75,31 @@ export default function AddDetails() {
       ? projects.find((project) => project.mediaId === activeImageId)
       : projects[0];
 
+
+
   useEffect(() => {
-    if (activeImageId !== null) {
+    if (activeImageId) {
       const savedData =
-        selectionState.formData &&
-        selectionState.formData[activeImageId]
-          ? selectionState.formData[activeImageId]
-          : {
-              eventName: "",
-              eventLocation: "",
-              eventYear: "",
-              companyName: "",
-              companyLocation: "",
-              titleName: "",
-              description: "",
-              companyLogo: null,
-              industries: [],
-              eventTypes: [],
-            };
+        selectionState?.formData?.find((item) => item.key === activeImageId) || {
+          key: activeImageId,
+          eventName: "",
+          eventLocation: "",
+          eventYear: "",
+          companyName: "",
+          companyLocation: "",
+          companyLogo: "",
+          companyLogoFileName: "",
+          description: "",
+          eventTypes: [],
+          industries: [],
+          titleName: "",
+          isDraft: true,
+        };
+
       setCurrentFormData(savedData);
     }
   }, [activeImageId, selectionState.formData]);
 
-  // Fetch insights whenever the active project changes
   useEffect(() => {
     if (activeProject) {
       const fetchData = async () => {
@@ -108,61 +114,40 @@ export default function AddDetails() {
     return null;
   }
 
-
   const handleProjectClick = async (mediaId) => {
+    if (mediaId === activeImageId) return; // Prevent unnecessary re-renders
+
     setActiveImageId(mediaId);
     const response = await fetchMediaInsights(mediaId);
     setInsights(response?.insights?.data || []);
-    if (mediaId) {
-      const url = `/manage-projects/add-details?media_id=${mediaId}`;
-      //router.push(url, undefined, { shallow: true });
-    }
   };
 
   const handleAddValue = (fieldName, value, mediaId) => {
-    const existingData = currentFormData[fieldName] || [];
-    if (existingData.includes(value)) {
-      return;
-    }
-
-    if (existingData.length < 5) {
-      const updatedValues = [...existingData, value];
-      setCurrentFormData((prevData) => ({
-        ...prevData,
-        [mediaId]: {
-          ...prevData[mediaId],
-          [fieldName]: updatedValues,
-        },
-      }));
-      updateFormDataForMedia(mediaId, {
-        ...currentFormData[mediaId],
-        [fieldName]: updatedValues,
-      });
-    } else {
-      alert("You can only select up to 5 industries.");
-    }
+    setCurrentFormData((prevData) => {
+      const updatedEntry = { ...prevData, [fieldName]: [...(prevData[fieldName] || []), value] };
+      updateFormDataForMedia(mediaId, updatedEntry);
+      return updatedEntry;
+    });
   };
 
   const handleRemoveValue = (fieldName, value, mediaId) => {
-    const updatedValues = (currentFormData[fieldName] || []).filter((item) => item !== value);
-    updateFormDataForMedia(mediaId, { [fieldName]: updatedValues });
+    setCurrentFormData((prevData) => {
+      const updatedValues = (prevData[fieldName] || []).filter((item) => item !== value);
+      const updatedEntry = { ...prevData, [fieldName]: updatedValues };
+      updateFormDataForMedia(mediaId, updatedEntry);
+      return updatedEntry;
+    });
   };
 
   const handleInputChange = (e, mediaId) => {
     const { name, value } = e.target;
     setCurrentFormData((prevData) => {
-      const updatedData = {
-        ...prevData,
-        [mediaId]: {
-          ...prevData[mediaId],
-          [name]: value,
-        },
-      };
-      updateFormDataForMedia(mediaId, updatedData[mediaId]);
+      const updatedData = { ...prevData, [name]: value };
+      updateFormDataForMedia(mediaId, updatedData);
       return updatedData;
     });
   };
-
+ 
   const handleSlide = (mediaId, direction, totalSlides) => {
     setCarouselIndexes((prev) => {
       const currentIndex = prev[mediaId] || 0;
@@ -183,20 +168,21 @@ export default function AddDetails() {
   };
 
   const isFormComplete = () => {
-    if (!activeImageId) return false; // No project selected
+    if (!activeImageId) return false; 
   
-    const formData = selectionState.formData[activeImageId] || {};
+    // Find the correct form data using the activeImageId
+    const formData = selectionState.formData.find((item) => item.key === activeImageId) || {};
   
     // Check if all required fields are filled
-    return requiredFields.every((field) => {
+    const areRequiredFieldsFilled = requiredFields.every((field) => {
       const value = formData[field];
-      if (Array.isArray(value)) {
-        return value.length > 0; // For arrays (e.g., industries, eventTypes)
-      }
-      return !!value; // For strings and other fields check that they have a value 
+      return value && (Array.isArray(value) ? value.length > 0 : value.trim() !== ""); // Handle arrays and strings
     });
+  
+    return areRequiredFieldsFilled;
   };
-
+  
+  
   const handleBackClick = () => {
    router.push("/manage-projects/pick-projects");
   }
@@ -428,11 +414,11 @@ export default function AddDetails() {
             label="Choose Industry (Max 5)"
             data={industryList}
             selectedValues={
-              currentFormData.industries?.length > 0
-                ? currentFormData.industries
-                : (selectionState.formData[activeProject?.mediaId]?.industries?.length > 0
-                  ? selectionState.formData[activeProject?.mediaId].industries
-                  : [])
+              currentFormData?.industries?.length > 0
+                ? currentFormData?.industries
+                : Array.isArray(selectionState?.formData)
+                ? selectionState?.formData.find(item => item.key === activeProject?.mediaId)?.industries || []
+                : []
             }
             onAddValue={(value) => handleAddValue("industries", value, activeImageId)}
             onRemoveValue={(value) => handleRemoveValue("industries", value, activeImageId)}
@@ -441,14 +427,14 @@ export default function AddDetails() {
           <TitleWithCounter
             label={"Give it a title"}
             name="titleName"
-            value={currentFormData.titleName || selectionState.formData[activeProject?.mediaId]?.titleName || ""}
+            value={currentFormData?.titleName || selectionState?.formData[activeProject?.mediaId]?.titleName || ""}
             onChange={(e) => handleInputChange(e, activeImageId)}
           />
 
           <TitleWithCounter
             name="description"
             label={"Add description"}
-            value={currentFormData.description || selectionState.formData[activeProject?.mediaId]?.description || ""}
+            value={currentFormData?.description || selectionState?.formData[activeProject?.mediaId]?.description || ""}
             onChange={(e) => handleInputChange(e, activeImageId)}
           />
 
@@ -459,13 +445,13 @@ export default function AddDetails() {
                 <FormInput
                   placeholder="Enter name of company"
                   name="companyName"
-                  value={currentFormData.companyName || selectionState.formData[activeProject?.mediaId]?.companyName || ""}
+                  value={currentFormData?.companyName || selectionState?.formData[activeProject?.mediaId]?.companyName || ""}
                   onChange={(e) => handleInputChange(e, activeImageId)}
                 />
                 <FormInput
                   placeholder="Enter location of company"
                   name="companyLocation"
-                  value={currentFormData.companyLocation || selectionState.formData[activeProject?.mediaId]?.companyLocation || ""}
+                  value={currentFormData?.companyLocation || selectionState?.formData[activeProject?.mediaId]?.companyLocation || ""}
                   onChange={(e) => handleInputChange(e, activeImageId)}
                 />
               </div>
@@ -488,7 +474,7 @@ export default function AddDetails() {
                 <FormInput
                   placeholder="Name of the event"
                   name="eventName"
-                  value={currentFormData.eventName || selectionState.formData[activeProject?.mediaId]?.eventName || ""}
+                  value={currentFormData?.eventName || selectionState?.formData[activeProject?.mediaId]?.eventName || ""}
                   onChange={(e) => handleInputChange(e, activeImageId)}
                 />
 
@@ -496,10 +482,10 @@ export default function AddDetails() {
                   label="Choose Event type"
                   options={eventTypes}
                   selectedValues={
-                    currentFormData.eventTypes?.length > 0
-                      ? currentFormData.eventTypes
-                      : (selectionState.formData[activeProject?.mediaId]?.eventTypes?.length > 0
-                        ? selectionState.formData[activeProject?.mediaId].eventTypes
+                    currentFormData?.eventTypes?.length > 0
+                      ? currentFormData?.eventTypes
+                      : (selectionState?.formData[activeProject?.mediaId]?.eventTypes?.length > 0
+                        ? selectionState?.formData[activeProject?.mediaId].eventTypes
                         : [])
                   }
                   onAddValue={(value) => handleAddValue("eventTypes", value, activeImageId)}
@@ -536,13 +522,8 @@ export default function AddDetails() {
 
   </div>
 
-
       </div>
-     </div>
-
-
-    
+     </div> 
     </div>
   );
 }
-

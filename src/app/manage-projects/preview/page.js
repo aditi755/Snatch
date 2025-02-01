@@ -30,6 +30,8 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
     ? projects.find((project) => project.mediaId === activeImageId)
     : projects[0];
 
+    console.log("preview activeimageid", activeImageId);
+
   useEffect(() => {
     setIsHydrated(true);
   }, []);
@@ -49,14 +51,27 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
     return null;
   }
 
-  // const handleProjectClick = (projectId) => {
-  //   setActiveImageId(projectId);
-  // };
-
   const handleProjectClick = (projectId) => {
     // Update the URL with the new activeImageId
     router.push(`/manage-projects/preview?activeImageId=${projectId}`);
   };
+
+  const finalSubmit = async () => {
+    try {
+      const response = await fetch('/api/projects/final', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Ensure JSON content type
+        },
+        body: JSON.stringify({ activeImageId }) // Send the activeImageId in the body
+      });
+  
+      console.log("FormData deleted successfully");
+    } catch (error) {
+      console.error("Error deleting formData:", error);
+      throw error;
+    }
+  }
 
 
   const handleSlide = (mediaId, direction, totalSlides) => {
@@ -226,7 +241,7 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
                                   alt={`Media ${child.id}`}
                                   width={300}
                                   height={400}
-                                  className="h-full w-full rounded-lg object-cover"
+                                  className="h-full w-full rounded-lg bg-cover"
                                 />
                               </div>
                             ) : (
@@ -289,17 +304,27 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
 
            <div className="w-full h-full mt-5">
 
-            <p className="text-2xl text-graphite font-qimano">{selectionState?.formData?.[activeImageId]?.titleName || "Title of the project"}</p>
+            <p className="text-2xl text-graphite font-qimano">{Array.isArray(selectionState?.formData) 
+    ? selectionState.formData.find(item => item.key === activeProject?.mediaId)?.titleName || "Title of the project"
+    : "Loading..."}</p>
 
             <div className="flex gap-1 flex-wrap max-w-[380px]">
-            {selectionState?.formData?.[activeImageId]?.industries?.map((industry, index) => (
-              <span
-                key={index}
-                className="bg-dark/10 text-dark-grey m-2 inline-block rounded border border-transparent py-1 px-2.5 text-xs font-medium"
-              >
-                {industry}
-              </span>
-            )) || "Industry"}
+
+          {Array.isArray(selectionState?.formData) &&
+            selectionState.formData.find((item) => item.key === activeImageId)?.industries?.length > 0 ? (
+              selectionState.formData
+                .find((item) => item.key === activeImageId)
+                ?.industries.map((industry, index) => (
+                  <span
+                    key={index}
+                    className="bg-dark/10 text-dark-grey m-2 inline-block rounded border border-transparent py-1 px-2.5 text-xs font-medium"
+                  >
+                    {industry}
+                  </span>
+                ))
+            ) : (
+              <span>Industry</span>
+            )}
           </div>
 
           <div className="w-full border-b-[0.5px] border-gray-300 mt-4"></div>
@@ -311,25 +336,26 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
 
 {console.log(selectionState?.formData?.[activeImageId]?.companyLogo)}
 
-{selectionState?.formData?.[activeImageId]?.companyLogo ? (
-    // Display the company logo if available
-    <Image
-      src={selectionState.formData[activeImageId].companyLogo}
-      width={50}
-      height={50}
-      alt="Company Logo"
-      className="h-12 w-12 bg-cover rounded-full"
-    />
-  ) : (
-    // Display the default image if no company logo is selected
-    <Image
-      src="/assets/images/logo.svg"
-      width={50}
-      height={50}
-      alt="CAI Logo"
-      className="h-12 w-12 object-contain rounded-full"
-    />
-  )}
+{selectionState?.formData?.find(item => item.key === activeImageId)?.companyLogo ? (
+  // Display the company logo if available
+  <Image
+    src={selectionState.formData.find(item => item.key === activeImageId).companyLogo}
+    width={50}
+    height={50}
+    alt="Company Logo"
+    className="h-12 w-12 bg-cover rounded-full"
+  />
+) : (
+  // Display the default image if no company logo is selected
+  <Image
+    src="/assets/images/logo.svg"
+    width={50}
+    height={50}
+    alt="CAI Logo"
+    className="h-12 w-12 object-contain rounded-full"
+  />
+)}
+
   </div>
 
   {/* Divider */}
@@ -340,22 +366,23 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
   <p>
   •{" "}
   <span className="text-graphite">
-    {selectionState?.formData?.[activeImageId]?.companyName || "Name of company"}
+  {selectionState?.formData?.find(item => item.key === activeImageId)?.companyName || "Name of company"}
   </span>{" "}
-  • {selectionState?.formData?.[activeImageId]?.companyLocation || "Location of company"}
+  •   {selectionState?.formData?.find(item => item.key === activeImageId)?.companyLocation || "Location of company"}
 </p>
-    <p>• {selectionState?.formData?.[activeImageId]?.companyLocation || "Location "} • {selectionState?.formData?.[activeImageId]?.eventTypes?.map((eventType, index) => (
-      <span
-        key={index}
-        className="px-2 text-sm"
-      >
-        {eventType}
-      </span>
-    ))}</p>
+    <p>•   {selectionState?.formData?.find(item => item.key === activeImageId)?.companyLocation || "Location of company"}
+    •  {selectionState?.formData?.find(item => item.key === activeImageId)?.eventTypes?.map((eventType, index) => (
+    <span
+      key={index}
+      className="px-2 text-sm"
+    >
+      {eventType}
+    </span>
+  )) || "Event Types "}</p>
   </div>
           </div>
 
-          <p className="text-graphite mt-5">{selectionState?.formData?.[activeImageId]?.description || "Description of the project"}</p>
+          <p className="text-graphite mt-5"> {selectionState?.formData?.find(item => item.key === activeImageId)?.description || "Description of the project"}</p>
 
           <div className="w-full border-b-[0.5px] border-gray-300 mt-8"></div>
 
@@ -381,7 +408,7 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
       <button className="w-[72px] px-4 py-1 border-electric-blue border-2 text-electric-blue rounded hover:bg-blue-700 transition-colors  " onClick={handleBackClick}>
         Back
       </button>
-      <button className="px-4 py-1 bg-electric-blue text-white rounded hover:bg-electric-blue  transition-colors">
+      <button className="px-4 py-1 bg-electric-blue text-white rounded hover:bg-electric-blue  transition-colors" onClick={finalSubmit}>
         Submit
       </button>
     </div>

@@ -35,7 +35,7 @@ export default function OnboardingLayout({ children }) {
             className="absolute p-4 rounded-xl top-0 left-0 w-full h-screen object-left-bottom"
           />
 
-          <div className="relative mb-20 z-10 p-4 bg-white bg-opacity-90 rounded-lg shadow-lg">
+          <div className="relative mb-20 z-10 2xl:p-4 py-2 bg-white bg-opacity-90 rounded-lg shadow-lg grid grid-rows-1">
             <DashboardPreview />
             <div className="w-64 h-20 z-50 absolute left-24 -bottom-24  mx-auto font-qimano">
             <div className="flex justify-center items-center gap-20 text-smoke">
