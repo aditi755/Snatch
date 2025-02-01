@@ -3,6 +3,8 @@ import connectDb from "@/db/mongoose";
 import ProjectDraft from "@/models/project.model";
 import { getAuth } from "@clerk/nextjs/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req) {
   try {
     await connectDb();
