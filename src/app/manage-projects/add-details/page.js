@@ -75,30 +75,56 @@ export default function AddDetails() {
       ? projects.find((project) => project.mediaId === activeImageId)
       : projects[0];
 
+      console.log("actvieprohject add-details", activeProject)
 
+
+  // useEffect(() => {
+  //   if (activeImageId) {
+  //     const savedData =
+  //       selectionState?.formData?.find((item) => item.key === activeImageId) || {
+  //         key: activeImageId,
+  //         eventName: "",
+  //         eventLocation: "",
+  //         eventYear: "",
+  //         companyName: "",
+  //         companyLocation: "",
+  //         companyLogo: "",
+  //         companyLogoFileName: "",
+  //         description: "",
+  //         eventTypes: [],
+  //         industries: [],
+  //         titleName: "",
+  //         isDraft: true,
+  //       };
+
+  //     setCurrentFormData(savedData);
+  //   }
+  // }, [activeImageId, selectionState.formData]);
+
+  // Auto-select first project's formData when no project is selected
 
   useEffect(() => {
-    if (activeImageId) {
-      const savedData =
-        selectionState?.formData?.find((item) => item.key === activeImageId) || {
-          key: activeImageId,
-          eventName: "",
-          eventLocation: "",
-          eventYear: "",
-          companyName: "",
-          companyLocation: "",
-          companyLogo: "",
-          companyLogoFileName: "",
-          description: "",
-          eventTypes: [],
-          industries: [],
-          titleName: "",
-          isDraft: true,
-        };
+  let selectedImageId = activeImageId ?? projects?.[0]?.mediaId; // Default to first project
+  let savedData =
+    selectionState?.formData?.find((item) => item.key === selectedImageId) || {
+      key: selectedImageId,
+      eventName: "",
+      eventLocation: "",
+      eventYear: "",
+      companyName: "",
+      companyLocation: "",
+      companyLogo: "",
+      companyLogoFileName: "",
+      description: "",
+      eventTypes: [],
+      industries: [],
+      titleName: "",
+      isDraft: true,
+    };
 
-      setCurrentFormData(savedData);
-    }
-  }, [activeImageId, selectionState.formData]);
+  setCurrentFormData(savedData);
+}, [activeImageId, selectionState.formData, projects]);
+
 
   useEffect(() => {
     if (activeProject) {

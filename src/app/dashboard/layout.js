@@ -33,6 +33,8 @@ export default function OnboardingLayout({ children }) {
             alt="Background Image"
             layout="fill"
             className="absolute p-4 rounded-xl top-0 left-0 w-full h-screen object-left-bottom"
+            loading="eager"
+            priority
           />
 
           <div className="relative mb-20 z-10 2xl:p-4 py-2 bg-white bg-opacity-90 rounded-lg shadow-lg grid grid-rows-1">

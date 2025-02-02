@@ -106,6 +106,8 @@ export default function OnboardingLayout({ children }) {
             alt="Background Image"
             layout="fill"
             className="absolute p-10 rounded-md top-0 left-0 w-full h-full object-left-bottom"
+            loading="eager"
+            priority
           />
           <div className="relative mb-20 z-10 p-0 mt-20 bg-white bg-opacity-90 rounded-xl shadow-lg font-apfel-grotezk-regular">
             <Preview />

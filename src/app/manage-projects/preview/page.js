@@ -5,6 +5,7 @@ import { useSelectedProjects } from "../context";
 import ProjectsGrid from "@/components/ProjectsGrid";
 import { useRouter, useSearchParams } from "next/navigation";
 import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
+import Popup from "@/components/Popup";
 
  function PreviewContent() {
   const [activeTab, setActiveTab] = useState("instagram");
@@ -20,6 +21,44 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
   const router = useRouter();
   const searchParams = useSearchParams();
   const activeImageId = searchParams.get("activeImageId");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleSubmit = () => {
+    setIsModalOpen(true);
+
+  };
+
+  const handleContinueEditing = () => {
+    setIsModalOpen(false);
+    // Add logic for continue editing
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleNextStep = () => {
+    setIsModalOpen(false);
+    // Add logic for next step data submit
+    const finalSubmit = async () => {
+      try {
+        const response = await fetch('/api/projects/final', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json', // Ensure JSON content type
+          },
+          body: JSON.stringify({ activeImageId }) // Send the activeImageId in the body
+        });
+    
+        console.log("FormData deleted successfully");
+      } catch (error) {
+        console.error("Error deleting formData:", error);
+        throw error;
+      }
+    }
+finalSubmit();
+  };
 
   const projects = activeTab === "instagram"
   ? selectionState.instagramSelected
@@ -56,24 +95,6 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
     router.push(`/manage-projects/preview?activeImageId=${projectId}`);
   };
 
-  const finalSubmit = async () => {
-    try {
-      const response = await fetch('/api/projects/final', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // Ensure JSON content type
-        },
-        body: JSON.stringify({ activeImageId }) // Send the activeImageId in the body
-      });
-  
-      console.log("FormData deleted successfully");
-    } catch (error) {
-      console.error("Error deleting formData:", error);
-      throw error;
-    }
-  }
-
-
   const handleSlide = (mediaId, direction, totalSlides) => {
     setCarouselIndexes((prev) => {
       const currentIndex = prev[mediaId] || 0;
@@ -97,7 +118,7 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
   }
 
   return (
-    <div className="flex flex-col items-start  h-[77vh] bg-smoke w-full space-x-8 overflow-x-hidden overflow-y-auto">
+    <div className={`flex flex-col items-start h-[77vh] w-full space-x-8 overflow-x-hidden overflow-y-auto ${isModalOpen ? 'bg-transparent pointer-events-none' : 'bg-transparent'}`}>
       <div className="flex flex-col mx-auto items-start">
         <p className="text-2xl text-black font-qimano">
           Pick content that you wish to highlight in your profile kit
@@ -172,7 +193,7 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
                   if (!activeProject) {
                     return <p>No project selected</p>;
                   }
-            
+
                   if (activeProject.name === "IMAGE") {
                     return (
                       <div className="relative h-[400px] p-5 w-[300px]">
@@ -332,6 +353,13 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
           <div className="flex items-center space-x-4  mt-[3rem]">
   {/* Logo */}
   <div className="flex items-center">
+
+        
+  <div className="pointer-events-auto">
+      {isModalOpen && (
+        <Popup onClose={handleCloseModal} onContinueEditing={handleCloseModal} onNextStep={handleNextStep} />
+      )}
+      </div>
    
 
 {console.log(selectionState?.formData?.[activeImageId]?.companyLogo)}
@@ -408,12 +436,19 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
       <button className="w-[72px] px-4 py-1 border-electric-blue border-2 text-electric-blue rounded hover:bg-blue-700 transition-colors  " onClick={handleBackClick}>
         Back
       </button>
-      <button className="px-4 py-1 bg-electric-blue text-white rounded hover:bg-electric-blue  transition-colors" onClick={finalSubmit}>
-        Submit
-      </button>
-    </div>
-  </div>
-       </div>
+
+      <div>
+            <button
+              className="px-5 py-1 bg-electric-blue text-white rounded hover:bg-electric-blue transition-colors pointer-events-auto"
+              onClick={handleSubmit}
+            >
+              Save
+            </button>
+      
+          </div>
+          </div>
+        </div>
+            </div>
        
       </div>
       </div>

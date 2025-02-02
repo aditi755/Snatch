@@ -71,6 +71,8 @@ export default function SignUp() {
         width={557}
         height={764}
         className=" w-full max-h-[50vh] aspect-auto lg:max-h-full rounded-sm object-fill"
+        loading="eager"
+        priority
       />
 
         {/* Signup Frame and Logo */}
@@ -82,6 +84,8 @@ export default function SignUp() {
       width={304}
       height={40}
       className="hidden lg:block mx-auto"
+      loading="eager"
+      priority
     />
 
     {/* Logo (absolute inside the frame) */}
@@ -91,6 +95,8 @@ export default function SignUp() {
       width={220}
       height={50}
       className="absolute top-1 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+      loading="eager"
+      priority
     />
 
   </div>
@@ -102,6 +108,8 @@ export default function SignUp() {
         width={189}
         height={20}
         className="w-[120px] block lg:hidden mx-auto absolute top-10 left-1/2 transform -translate-x-1/2 z-20"
+        loading="eager"
+        priority
         />
     </div>
 
