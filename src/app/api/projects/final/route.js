@@ -33,16 +33,27 @@ export async function POST(req) {
     // Function to update isDraft for the correct activeImageId in formData and instagramSelected
     const updateIsDraftForActiveImageId = (items, idKey) => {
       return items.map((item) => {
-        if (item[idKey] === activeImageId) {
-          return { ...item, isDraft: false }; // Update isDraft to false for the matching item
+        if (item.key === activeImageId) {
+          console.log("accessing ITEM", item.key, activeImageId);
+          return { ...item, isDraft: false }; 
         }
-        return item; // Return the item unchanged if it doesn't match
+        return item; 
       });
     };
 
+    const updateInstagramSelectedforActiveImageId = (items, idKey) => {
+     return items.map((item, key) => {
+      if (item.mediaId === activeImageId) {
+        console.log("accessing ITEM", item.mediaId, activeImageId)
+        return { ...item, isDraft: false };
+      }
+      return item; 
+     })
+    }
+
     // Update formData and instagramSelected where activeImageId matches
     project.formData = updateIsDraftForActiveImageId(project.formData, activeImageId);
-    project.instagramSelected = updateIsDraftForActiveImageId(project.instagramSelected, activeImageId);
+    project.instagramSelected = updateInstagramSelectedforActiveImageId(project.instagramSelected, activeImageId);
 
     console.log("✅ Updated project:", project.formData, project.instagramSelected);
 
