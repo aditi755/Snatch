@@ -19,6 +19,7 @@ export default function AddDetails() {
     handleFileUpload,
     updateFormDataForMedia,
     handleCompanyLogoUpload,
+    toggleIsBrandCollaboration 
   } = useSelectedProjects();
 
   const router = useRouter();
@@ -41,23 +42,36 @@ export default function AddDetails() {
       companyLogo: null,
       industries: [],
       eventTypes: [],
+      isBrandCollaboration: true,
     },
   ]);
   
   const [isBrandCollaboration, setIsBrandCollaboration] = useState(true);
+
 
   const requiredFields = [
     "titleName",
     "description",
     "industries",
   ];
+
   
   if (isBrandCollaboration) {
     requiredFields.push("companyName", "companyLocation");
   }
 
+
   const handleToggle = () => {
-    setIsBrandCollaboration(!isBrandCollaboration);
+    const newIsBrandCollaboration = !isBrandCollaboration;
+    console.log("new isbrnadcollaboration", isBrandCollaboration, newIsBrandCollaboration);
+    setIsBrandCollaboration(newIsBrandCollaboration);
+
+    setCurrentFormData((prevData) => {
+      const updatedEntry = { ...prevData, isBrandCollaboration: newIsBrandCollaboration };
+      console.log("toggled entry", updatedEntry);
+      updateFormDataForMedia(activeImageId, updatedEntry);
+      return updatedEntry;
+    });
   };
 
   useEffect(() => {
@@ -70,41 +84,23 @@ export default function AddDetails() {
       ? selectionState.instagramSelected
       : selectionState.uploadedFiles;
 
+      useEffect(() => {
+        if (!activeImageId && projects?.length) {
+          setActiveImageId(projects[0].mediaId);
+        }
+      }, []);  
+      
+      console.log("actieimageid for first time", activeImageId)
+
   const activeProject =
     activeImageId !== null
       ? projects.find((project) => project.mediaId === activeImageId)
       : projects[0];
 
-      console.log("actvieprohject add-details", activeProject)
-
-
-  // useEffect(() => {
-  //   if (activeImageId) {
-  //     const savedData =
-  //       selectionState?.formData?.find((item) => item.key === activeImageId) || {
-  //         key: activeImageId,
-  //         eventName: "",
-  //         eventLocation: "",
-  //         eventYear: "",
-  //         companyName: "",
-  //         companyLocation: "",
-  //         companyLogo: "",
-  //         companyLogoFileName: "",
-  //         description: "",
-  //         eventTypes: [],
-  //         industries: [],
-  //         titleName: "",
-  //         isDraft: true,
-  //       };
-
-  //     setCurrentFormData(savedData);
-  //   }
-  // }, [activeImageId, selectionState.formData]);
-
   // Auto-select first project's formData when no project is selected
 
   useEffect(() => {
-  let selectedImageId = activeImageId ?? projects?.[0]?.mediaId; // Default to first project
+  let selectedImageId = activeImageId ?? projects?.[0]?.mediaId; 
   let savedData =
     selectionState?.formData?.find((item) => item.key === selectedImageId) || {
       key: selectedImageId,
@@ -120,6 +116,7 @@ export default function AddDetails() {
       industries: [],
       titleName: "",
       isDraft: true,
+      isBrandCollaboration: true, 
     };
 
   setCurrentFormData(savedData);
@@ -151,6 +148,7 @@ export default function AddDetails() {
   const handleAddValue = (fieldName, value, mediaId) => {
     setCurrentFormData((prevData) => {
       const updatedEntry = { ...prevData, [fieldName]: [...(prevData[fieldName] || []), value] };
+      console.log("upadted enetry", updatedEntry);
       updateFormDataForMedia(mediaId, updatedEntry);
       return updatedEntry;
     });
@@ -169,6 +167,7 @@ export default function AddDetails() {
     const { name, value } = e.target;
     setCurrentFormData((prevData) => {
       const updatedData = { ...prevData, [name]: value };
+      console.log("upadted data", updatedData);
       updateFormDataForMedia(mediaId, updatedData);
       return updatedData;
     });
@@ -187,10 +186,11 @@ export default function AddDetails() {
     });
   };
 
+
   const handlePreviewClick = () => {
-    const previewUrl = `/manage-projects/preview/?activeImageId=${activeImageId}`;
-    // Navigate to the preview page
-    router.push(previewUrl);
+    router.push(
+      `/manage-projects/preview/?activeImageId=${activeImageId}`
+    );
   };
 
   const isFormComplete = () => {
@@ -212,6 +212,8 @@ export default function AddDetails() {
   const handleBackClick = () => {
    router.push("/manage-projects/pick-projects");
   }
+
+  
   return (
     <div className="flex flex-col items-start space-x-8 h-[77vh] w-full overflow-x-hidden overflow-y-hidden">
       <div className="flex flex-col mx-auto items-start">

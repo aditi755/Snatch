@@ -328,12 +328,12 @@ const renderInstagramTab = () => (
 
       <div className="fixed bottom-2 left-1/2 transform -translate-x-1/2 bg-white rounded-lg border-t border-gray-300 py-1 px-4">
   <div className="flex gap-2 justify-center mx-auto">
-    <div className="flex gap-2 px-2 py-1.5 justify-center bg-gray-100 rounded-md">
+    <div className="flex gap-2 px-3 py-1.5 justify-center bg-gray-100 rounded-md">
       <button className=" px-4 py-1.5 border-electric-blue border-2 text-electric-blue rounded hover:bg-electric-blue hover:text-white transition-colors" onClick={handleBackClick}>
         Back
       </button>
       <button
-        className={'px-4 py-1.5 border-electric-blue border-2 text-electric-blue rounded hover:bg-electric-blue hover:text-white transition-colors'}
+        className={'px-4 py-1.7 bg-electric-blue border-2 text-white rounded-md  transition-colors'}
         onClick={handleProjectClick}
       // Disable if form is incomplete
       >

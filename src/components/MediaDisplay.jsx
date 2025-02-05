@@ -164,7 +164,7 @@ const MediaDisplay = ({ media }) => {
           </div>
         ))
       ) : (
-        <p>No media found</p>
+        <p>Fetching all your posts...</p>
       )}
     </div>
       </div>

@@ -13,6 +13,8 @@ import Popup from "@/components/Popup";
     selectionState,
     handleFileUpload,
     updateFormDataForImage,
+    isBrandCollaboration,
+    setIsBrandCollaboration
   } = useSelectedProjects();
  // const [activeImageId, setActiveImageId] = useState(null);
   const [carouselIndexes, setCarouselIndexes] = useState({});
@@ -23,6 +25,7 @@ import Popup from "@/components/Popup";
   const activeImageId = searchParams.get("activeImageId");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  //const isBrandCollaboration = searchParams.get('isBrandCollaboration');
 
   const handleSubmit = () => {
     setIsModalOpen(true);
@@ -108,10 +111,6 @@ finalSubmit();
     });
   };
 
-  console.log(
-    "selectionstate from preview ", activeImageId, selectionState,
-    selectionState?.formData?.[activeImageId]?.eventName || "No data for this ID"
-  );
   
   const handleBackClick = () => {
    router.push("/manage-projects/add-details")
@@ -350,7 +349,12 @@ finalSubmit();
 
           <div className="w-full border-b-[0.5px] border-gray-300 mt-4"></div>
 
-          <div className="flex items-center space-x-4  mt-[3rem]">
+          <div  className={`flex items-center space-x-4 ${
+    selectionState?.formData?.find(item => item.key === activeImageId)
+      ?.isBrandCollaboration
+      ? "mt-[3rem]"
+      : "mt-[0]"
+  }`}>
   {/* Logo */}
   <div className="flex items-center">
 
@@ -359,60 +363,62 @@ finalSubmit();
       {isModalOpen && (
         <Popup onClose={handleCloseModal} onContinueEditing={handleCloseModal} onNextStep={handleNextStep} />
       )}
-      </div>
-   
+  </div> 
 
-{console.log(selectionState?.formData?.[activeImageId]?.companyLogo)}
+{selectionState?.formData?.find(item => item.key === activeImageId)?.isBrandCollaboration && (
+  <div className="brand-collaboration-section flex gap-3">
+    {/* Company Logo */}
+    {selectionState?.formData?.find(item => item.key === activeImageId)?.companyLogo ? (
+      // Display the company logo if available
+      <Image
+        src={selectionState.formData.find(item => item.key === activeImageId).companyLogo}
+        width={50}
+        height={50}
+        alt="Company Logo"
+        className="h-12 w-12 bg-cover rounded-full"
+      />
+    ) : (
+      // Display the default image if no company logo is selected
+      <Image
+        src="/assets/images/logo.svg"
+        width={50}
+        height={50}
+        alt="CAI Logo"
+        className="h-12 w-12 object-contain rounded-full"
+      />
+    )}
 
-{selectionState?.formData?.find(item => item.key === activeImageId)?.companyLogo ? (
-  // Display the company logo if available
-  <Image
-    src={selectionState.formData.find(item => item.key === activeImageId).companyLogo}
-    width={50}
-    height={50}
-    alt="Company Logo"
-    className="h-12 w-12 bg-cover rounded-full"
-  />
-) : (
-  // Display the default image if no company logo is selected
-  <Image
-    src="/assets/images/logo.svg"
-    width={50}
-    height={50}
-    alt="CAI Logo"
-    className="h-12 w-12 object-contain rounded-full"
-  />
+    {/* Divider */}
+    <div className="h-12 border-l border-gray-400"></div>
+
+    {/* Text Details */}
+    <div className="text-gray-500 text-sm space-y-1">
+      <p>
+        •{" "}
+        <span className="text-graphite">
+          {selectionState?.formData?.find(item => item.key === activeImageId)?.companyName || "Name of company"}
+        </span>{" "}
+        • {selectionState?.formData?.find(item => item.key === activeImageId)?.companyLocation || "Location of company"}
+      </p>
+      <p>
+        • {selectionState?.formData?.find(item => item.key === activeImageId)?.companyLocation || "Location of company"}
+        •{" "}
+        {selectionState?.formData?.find(item => item.key === activeImageId)?.eventTypes?.map((eventType, index) => (
+          <span key={index} className="px-2 text-sm">
+            {eventType}
+          </span>
+        )) || "Event Types"}
+      </p>
+    </div>
+  </div>
 )}
 
-  </div>
-
-  {/* Divider */}
-  <div className="h-12 border-l border-gray-400"></div>
-
-  {/* Text Details */}
-  <div className="text-gray-500 text-sm space-y-1">
-  <p>
-  •{" "}
-  <span className="text-graphite">
-  {selectionState?.formData?.find(item => item.key === activeImageId)?.companyName || "Name of company"}
-  </span>{" "}
-  •   {selectionState?.formData?.find(item => item.key === activeImageId)?.companyLocation || "Location of company"}
-</p>
-    <p>•   {selectionState?.formData?.find(item => item.key === activeImageId)?.companyLocation || "Location of company"}
-    •  {selectionState?.formData?.find(item => item.key === activeImageId)?.eventTypes?.map((eventType, index) => (
-    <span
-      key={index}
-      className="px-2 text-sm"
-    >
-      {eventType}
-    </span>
-  )) || "Event Types "}</p>
-  </div>
+          </div>
           </div>
 
-          <p className="text-graphite mt-5"> {selectionState?.formData?.find(item => item.key === activeImageId)?.description || "Description of the project"}</p>
+          <p className={`${isBrandCollaboration ? 'text-graphite mr-3  mt-5' : 'text-graphite mr-3 mt-0'}`}> {selectionState?.formData?.find(item => item.key === activeImageId)?.description || "Description of the project"}</p>
 
-          <div className="w-full border-b-[0.5px] border-gray-300 mt-8"></div>
+          <div  className={`w-full border-b-[0.5px] border-gray-300 ${selectionState?.formData?.find(item => item.key === activeImageId)?.isBrandCollaboration ? "mt-8" : "mt-40"}`}></div>
 
           
 <div className="mt-5 ml-20 flex gap-20 justify-center items-center text-black w-[300px]">     

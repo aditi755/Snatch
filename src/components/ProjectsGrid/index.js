@@ -56,7 +56,7 @@ const ProjectsGrid = ({
                         src={child.media_url}
                         alt={`Media ${child.id}`}
                         fill
-                        className="object-cover rounded-md"
+                        className="bg-cover rounded-md"
                       />
                     ) : (
                       <video

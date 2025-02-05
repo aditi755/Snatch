@@ -16,7 +16,8 @@ const instagramSelectedSchema = new mongoose.Schema({
   mediaId: { type: String, required: true },
   mediaLink: { type: String, required: true },
   children: { type: [instagramChildSchema], default: [] }, // Array of children
-  isDraft: { type: Boolean, default: true }, // Individual draft flag
+  isDraft: { type: Boolean, default: true }, 
+  
 });
 
   const formDataValueSchema = new mongoose.Schema({
@@ -33,6 +34,7 @@ const instagramSelectedSchema = new mongoose.Schema({
   industries: { type: [String], default: [] }, // Array of strings
   titleName: { type: String, default: "" },
   isDraft: { type: Boolean, default: true }, // Individual draft flag
+  isBrandCollaboration : {type: Boolean, default: true}
 });
 
 const uploadedFilesSchema = new mongoose.Schema({

@@ -20,7 +20,8 @@ export function SelectedProjectsProvider({ children }) {
     formData: {},
   });
   const [isSaving, setIsSaving] = useState(false);
-
+  const [isBrandCollaboration, setIsBrandCollaboration] = useState(true);
+  
   // Fetch draft data on initial load
   useEffect(() => {
     const fetchDraftData = async () => {
@@ -92,12 +93,18 @@ export function SelectedProjectsProvider({ children }) {
       } finally {
         setIsSaving(false);
       }
-    }, 1000), // 1-second debounce
+    }, 7000), // 5-second debounce
     [userId]
   );
 
+
+    const toggleIsBrandCollaboration = useCallback(() => {
+    setIsBrandCollaboration(prev => !prev);
+  }, []);
+
+
 // Update form data for Instagram media (adapted for formData array) without next key value
-const updateFormDataForMedia = (mediaId, newFormData) => {
+const updateFormDataForMedia = (mediaId, newFormData, isBrandCollaboration) => {
   const defaultFormData = {
     key: "",
     eventName: "",
@@ -112,6 +119,7 @@ const updateFormDataForMedia = (mediaId, newFormData) => {
     industries: [],
     titleName: "",
     isDraft: true,
+    isBrandCollaboration: true,
   };
 
   setSelectionState((prevState) => {
@@ -335,6 +343,9 @@ const addInstagramSelection = (mediaLink, mediaId, name, children = []) => {
         updateFormDataForMedia,
         handleFileUpload,
         handleCompanyLogoUpload,
+        isBrandCollaboration, 
+        setIsBrandCollaboration,
+        toggleIsBrandCollaboration,
         isSaving,
       }}
     >
