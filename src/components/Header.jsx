@@ -3,8 +3,8 @@ import React from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation"; 
 import SvgComponent from "@/components/svg/Instagramsvg";
-import Writesvg from "./svg/writesvg";
-import Viewsvg from "./svg/Viewsvg";
+import Writesvg from "@/components/svg/Writesvg";
+import Viewsvg from "@/components/svg/Viewsvg";
 
 const steps = [
   {
@@ -35,22 +35,6 @@ const Header = () => {
             {/* Step Marker */}
             <div className="flex flex-col items-center px-10">
               {/* SVG Icon */}
-              {/* <Image
-                src={step.icon}
-                alt={`${step.label} Icon`}
-                width={32}
-                height={32}
-                className={`w-5 h-5 transition-all duration-300 ${
-                  pathname === step.id ? "text-lime-yellow" : "text-white"
-                }`}
-                style={{
-                  filter:
-                    pathname === step.id
-                      ? "invert(81%) sepia(66%) saturate(316%) hue-rotate(7deg) brightness(97%) contrast(104%)" // Yellow color filter
-                      : "invert(100%)", // White color filter
-                }}
-              /> */}
-
 <div
   className={`w-5 h-5 transition-all duration-300 mr-4 ${
     pathname === step.id ? "text-lime-yellow" : "text-white"
