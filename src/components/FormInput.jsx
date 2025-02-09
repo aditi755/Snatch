@@ -30,7 +30,7 @@ const FormInput = ({ ...props }) => {
         onFocus={handleFocus}
         onBlur={handleBlur}
         className={`w-full bg-transparent rounded-md border py-[10px] px-5 outline-none transition 
-          ${isFilled ? 'border-black text-black' : isFocused ? 'border-electric-blue text-electric-blue' : 'border-gray-300'}
+          ${isFilled ? 'border-light-grey text-black' : isFocused ? 'border-electric-blue text-electric-blue' : 'border-gray-300'}
           disabled:cursor-default disabled:bg-gray-2`}
       />
     </div>

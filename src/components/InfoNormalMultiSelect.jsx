@@ -76,7 +76,7 @@ const InfoNormalMultiSelect = ({ label, options, selectedValues, onAddValue, onR
             selectedValues.map((value, index) => (
               <span
                 key={`${label}-${index}`}
-                className="m-[5px] flex items-center justify-center border-[.5px] border-stroke bg-[#0037EB] bg-opacity-10 py-[7px] px-[20px] text-sm font-medium text-graphite relative z-20"
+                className="m-[5px] flex items-center justify-center border-[.5px] border-stroke bg-[#0037EB] bg-opacity-10 py-[7px] px-[20px] text-sm font-medium text-graphite relative z-20 rounded-lg"
               >
                 {value}
                 <span

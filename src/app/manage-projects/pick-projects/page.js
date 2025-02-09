@@ -8,7 +8,8 @@ import Slider from "react-slick";
 import MediaDisplay from "@/components/MediaDisplay";
 import { useSelectedProjects } from "../context";
 import { useRouter } from "next/navigation";
-
+import SvgComponent from "@/components/svg/Instagramsvg";
+import Uploadsvg from "@/components/svg/Uploadsvg";
 export default function PickProjects() {
   const [isHydrated, setIsHydrated] = useState(false);
   const [selectedTab, setSelectedTab] = useState("instagram");
@@ -19,7 +20,8 @@ export default function PickProjects() {
     selectionState, 
     handleFileUpload, 
     addInstagramSelection,
-    removeInstagramSelection
+    removeInstagramSelection, 
+    removeFile
   } = useSelectedProjects();
 
   
@@ -98,8 +100,19 @@ export default function PickProjects() {
     };
 
     const handleProjectClick = () => {
-      router.push("/manage-projects/add-details");
-    }
+      const totalSelected = selectionState.instagramSelected.length + selectionState.uploadedFiles.length;
+
+      console.log("Total selected:", totalSelected);
+      
+      if (totalSelected >= 4) {
+        router.push("/manage-projects/add-details");
+      } else {
+        alert("Please select at least 4 projects before proceeding.");
+      }
+    };
+
+    const isDisabled = selectionState.instagramSelected.length + selectionState.uploadedFiles.length < 4;
+    
    
     const handleBackClick = () => {
      router.push("/profile")  
@@ -108,9 +121,9 @@ export default function PickProjects() {
 const renderInstagramTab = () => (
   <div className="flex justify-center gap-10 mt-5">  
 
-    <div className="w-[278px] h-full bg-white text-black p-3" >
-      <p className="text-md">Selected projects from Instagram</p>
-      <p className="text-light-grey">{selectionState?.instagramSelected?.length || "0"}</p>
+    <div className="w-[278px] h-full bg-white text-black p-3 rounded-lg" >
+      <p className="text-md font-apfel-grotezk-regular">Selected projects from Instagram</p>
+      <p className="text-light-grey font-apfel-grotezk-regular">{selectionState?.instagramSelected?.length || "0"} Selected</p>
 
       <div className="mt-[18px] w-auto border-b border-1 border-gray-200  "> 
       </div>
@@ -201,124 +214,154 @@ const renderInstagramTab = () => (
       </div>
     </div>
 
-    <div className="w-[70vw] h-[70vh] text-black rounded-md p-5 overflow-y-scroll"  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-    <MediaDisplay media={media} />
+    <div className="w-[70vw] h-[70vh] text-black rounded-md overflow-y-auto"  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+    <MediaDisplay media={media} displayType="instagram"/>
     </div>
 
 
   </div>
 );
 
-  const renderUploadTab = () => (
-    <div className="flex gap-10 mt-5">
-      <div className="w-[278px] h-[60vh] bg-white text-black p-3 overflow-auto">
-        <p className="text-md">Selected Files for Upload</p>
-        <p className="text-light-grey">{selectionState?.uploadedFiles?.length || "0" } selected</p>
+const renderUploadTab = () => (
+  <div className="flex gap-10 mt-5">
+    <div className="w-[278px] h-[60vh] bg-white text-black p-3 rounded-lg">
+      {/* Header section */}
+      <div>
+        <p className="text-md font-apfel-grotezk-regular">Selected Files for Upload</p>
+        <p className="text-light-grey font-apfel-grotezk-regular">{selectionState?.uploadedFiles?.length || "0"} selected</p>
+      </div>
 
-        
-        <div className="mt-[18px] w-auto border-b border-1 border-gray-200"> 
+      {/* Border line */}
+      <div className="mt-[18px] w-auto border-b border-1 border-gray-200"></div>
+
+      {/* Scrollable area */}
+      <div className="mt-5 h-[calc(60vh-120px)] overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div className="grid grid-cols-2 gap-2">
+          {selectionState.uploadedFiles.map((file, index) => (
+            <div key={index} className="flex flex-col justify-center items-center">
+              <div className="w-full h-full border-2 border-light-grey rounded-lg flex justify-center items-center">
+                {/* Check if the file is an image */}
+                {file.fileUrl?.match(/\.(jpeg|jpg|png|gif|webp|svg)$/i) ? (
+                  <Image
+                    src={file.fileUrl}
+                    alt={file.fileName}
+                    width={200}
+                    height={50}
+                    className="bg-cover h-36"
+                  />
+                ) : file.fileUrl?.match(/\.(mp4|webm|ogg|mov)$/i) ? (
+                  /* Check if the file is a video */
+                  <video
+                    src={file.fileUrl}
+                    controls
+                    width={200}
+                    height={50}
+                    className="object-cover h-36"
+                  />
+                ) : (
+                  <span>Invalid file type</span>
+                )}
+              </div>
+
+              <button
+                onClick={() => removeFile(file.mediaId)}
+                className="mt-2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <Image
+                  src="/assets/images/delete.svg"
+                  alt="delete"
+                  width={16}
+                  height={16}
+                  className="cursor-pointer w-20 h-6"
+                />
+              </button>
+            </div>
+          ))}
         </div>
+      </div>
+    </div>
 
-        <div className="mt-5 grid grid-cols-2 gap-2">
-        {selectionState.uploadedFiles.map((file, index) => (
-  <div key={index} className="flex justify-center items-center">
-    <div className="w-[200px] h-[150px] border-2 border-light-grey rounded-md flex justify-center items-center">
-      {/* Check if the file is an image */}
-      {file.fileUrl?.match(/\.(jpeg|jpg|png|gif|webp|svg)$/i) ? (
-        <Image
-          src={file.fileUrl}
-          alt={file.fileName}
-          width={200}
-          height={150}
-          className="object-contain"
+    {/* Upload area */}
+    <div className="w-[70vw] h-[70vh] text-black rounded-md pt-1">
+      <div className="flex gap-6 7xl:justify-center  h-full">
+        <label
+          htmlFor="file-upload"
+          className="cursor-pointer w-[200px] h-[200px] border-2 border-light-grey rounded-md flex justify-center items-center"
+        >
+          <div className="flex flex-col justify-center items-center">
+          <span className="font-qimano text-xl">Upload your files</span>
+          <span className="font-apfel-grotezk-regular text-sm text-light-grey px-3">Only png, jpg, and .mp4 files <span className="mx-auto ml-10 font-apfel-grotezk-mittel">of max limit 5mb</span></span>
+          <span className="mt-2 text-dark-grey text-2xl">
+            <Image
+              src="/assets/images/Upload-folder.svg"
+              alt="Upload Icon"
+              width={44}
+              height={44}
+              className="h-20 w-[200px]"
+              loading="eager"
+              priority
+            />
+          </span>
+          </div>
+        </label>
+        <input
+          id="file-upload"
+          type="file"
+          accept="image/*,video/*,image/svg+xml"
+          multiple
+          className="hidden"
+          onChange={handleFileChange}
         />
-      ) : file.fileUrl?.match(/\.(mp4|webm|ogg|mov)$/i) ? (
-        /* Check if the file is a video */
-        <video
-          src={file.fileUrl}
-         controls 
-          width={200}
-          height={150}
-          className="object-contain"
-        />
-      ) : (
-        <span>Invalid file type</span>
-      )}
+         <MediaDisplay uploadedFiles={selectionState.uploadedFiles}  displayType="uploaded"/>
+      </div>
     </div>
   </div>
-))}
-        </div>
-      </div>
+);
 
-      <div className="w-[70vw] h-[70vh] text-black rounded-md p-5">
-        <div className="flex justify-center items-center h-full">
-          <label
-            htmlFor="file-upload"
-            className="cursor-pointer w-[200px] h-[200px] border-2 border-light-grey rounded-md flex justify-center items-center"
-          >
-            <span className="mt-2 text-dark-grey text-2xl">
-            <Image
-            src="/assets/icons/onboarding/Upload2.svg"
-            alt="Upload Icon"
-            width={30}
-            height={34}
-            className="h-20 w-20"
-          />
-            </span>
-          </label>
-          <input
-            id="file-upload"
-            type="file"
-            accept="image/*,video/*,image/svg+xml"
-            multiple
-            className="hidden"
-            onChange={handleFileChange}
-          />
-        </div>
-      </div>
-    </div>
-  );
 
-  return (
-    <div className="flex flex-col h-[77vh] bg-smoke w-full space-x-8 overflow-hidden" >
+return (
+    <div className="flex flex-col h-[77vh] max-w-[1800px] 7xl:max-w-[2500px] mx-auto bg-smoke w-full space-x-8 overflow-hidden" >
       
-      <div className="flex mx-auto items-start">
+      <div className="flex flex-col mx-auto items-start text-graphite">
         <p className="text-2xl text-black font-qimano">
           Pick content that you wish to highlight in your profile kit
         </p>
+        <span className="mx-auto font-qimano ">
+  {(selectionState?.instagramSelected?.length || 0) + (selectionState?.uploadedFiles?.length || 0)} / 12 Selected
+</span>
+
       </div>
 
-      <div className="flex w-full border-b border-gray-300 mt-5 items-center ">
+      <div className="flex w-full border-b border-gray-300 mt-0 items-center ">
       <button
           onClick={() => handleTabClick("instagram")}
-          className={`flex-1 py-2 text-lg font-semibold text-center flex items-center justify-center gap-2 ${
+          className={`flex-1 py-2 text-md font-semibold text-center flex items-center justify-center ${
             selectedTab === "instagram"
               ? "text-electric-blue border-b-2 border-electric-blue"
               : "text-gray-500"
           }`}
         >
-          <Image
-            src="/assets/icons/onboarding/Instagram.svg"
-            alt="Instagram Icon"
-            width={30}
-            height={34}
-          />
-          Instagram
+        <SvgComponent
+        style={{
+          color: selectedTab === "instagram" ? "blue" : "",
+        }}
+      />
+      Instagram
         </button>
+
         <button
           onClick={() => handleTabClick("upload")}
-          className={`flex-1 py-2 text-lg font-semibold text-center flex items-center justify-center gap-2 ${
+          className={`flex-1 py-2 text-md font-semibold text-center flex items-center justify-center ${
             selectedTab === "upload"
               ? "text-electric-blue border-b-2 border-electric-blue"
               : "text-gray-500"
           }`}
         >
-          <Image
-            src="/assets/icons/onboarding/Upload2.svg"
-            alt="Upload Icon"
-            width={30}
-            height={34}
-          />
+        <Uploadsvg
+        style={{
+          color: selectedTab === "upload" ? "blue" : "", height: "35px"
+        }}
+      />  
           Upload
         </button>
       </div>
@@ -326,16 +369,20 @@ const renderInstagramTab = () => (
       {/* {renderInstagramTab()} */}
       {selectedTab === "instagram" ? renderInstagramTab() : renderUploadTab()}
 
-      <div className="fixed bottom-2 left-1/2 transform -translate-x-1/2 bg-white rounded-lg border-t border-gray-300 py-1 px-4">
+      <div className="fixed bottom-2 left-1/2 transform -translate-x-1/2 bg-white rounded-lg border-t border-gray-300 py-1 px-4 mb-2">
   <div className="flex gap-2 justify-center mx-auto">
     <div className="flex gap-2 px-3 py-1.5 justify-center bg-gray-100 rounded-md">
       <button className=" px-4 py-1.5 border-electric-blue border-2 text-electric-blue rounded hover:bg-electric-blue hover:text-white transition-colors" onClick={handleBackClick}>
         Back
       </button>
       <button
-        className={'px-4 py-1.7 bg-electric-blue border-2 text-white rounded-md  transition-colors'}
+        // className={'px-4 py-1.7 bg-electric-blue border-2 text-white rounded-md  transition-colors'}
+
+        className={`px-4 py-1.7 border-2 rounded-md transition-colors 
+          ${isDisabled ? "bg-[#6C7FA5] text-light-grey cursor-not-allowed" : "bg-electric-blue text-white"}
+        `}
         onClick={handleProjectClick}
-      // Disable if form is incomplete
+        disabled={isDisabled}
       >
         Add Details
       </button>

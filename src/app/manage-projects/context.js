@@ -259,11 +259,11 @@ const addInstagramSelection = (mediaLink, mediaId, name, children = []) => {
   
 
   // Remove uploaded file
-  const removeFile = (fileName) => {
+  const removeFile = (mediaId) => {
     setSelectionState((prevState) => {
       const newState = {
         ...prevState,
-        uploadedFiles: prevState.uploadedFiles.filter((file) => file.fileName !== fileName),
+        uploadedFiles: prevState.uploadedFiles.filter((file) => file.mediaId !== mediaId),
       };
 
       const timestamp = new Date().toISOString();

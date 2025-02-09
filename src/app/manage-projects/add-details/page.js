@@ -12,6 +12,8 @@ import ProjectsGrid from "@/components/ProjectsGrid";
 import { industryList, eventTypes } from "@/data/portfolio/industry";
 import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
 import ProjectCustomFileInput from "@/components/ProjectCustomFileInput";
+import SvgComponent from "@/components/svg/Instagramsvg";
+import Uploadsvg from "@/components/svg/Uploadsvg";
 
 export default function AddDetails() {
   const {
@@ -229,21 +231,25 @@ export default function AddDetails() {
      <div className="flex justify-center 7xl:min-w-[93%] mx-auto">
 
      <div className="flex flex-row font-apfel-grotezk-regular mt-8">
-        <div className="w-[278px] bg-white text-black p-3">
-          <div className="flex justify-between items-center border-b border-light-grey">
+        <div className="w-[278px] bg-white text-black p-3 rounded-lg">
+          <div className="flex justify-between items-center border-b w-[260px]  border-light-grey">
             <button
               className={`relative px-4 py-2 text-lg font-medium ${
                 activeTab === "instagram" ? "text-electric-blue" : "text-light-grey"
               }`}
               onClick={() => setActiveTab("instagram")}
             >
-              <div className="flex justify-center items-center">
-              <Image src="/assets/images/instagram.svg" alt="instagram" width={10} height={10} className="w-10 h-4" />
+              <div className="flex justify-center items-center ml-4 font-apfel-grotezk-regular">
+             <SvgComponent
+              style={{
+                color: activeTab === "instagram" ? "blue" : "",
+              }}
+            />
               IG
               </div>
               
               {activeTab === "instagram" && (
-                <span className="absolute bottom-[-1px] left-0 w-full h-[2px] bg-electric-blue"></span>
+                <span className="absolute bottom-[-1px] left-0 w-32 h-[2px] bg-electric-blue"></span>
               )}
             </button>
             <button
@@ -252,8 +258,12 @@ export default function AddDetails() {
               }`}
               onClick={() => setActiveTab("uploaded")}
             >
-             <div className="flex justify-center items-center">
-              <Image src="/assets/images/upload-icon.svg" alt="instagram" width={10} height={10} className="w-10 h-4" />
+             <div className="flex justify-center items-center font-apfel-grotezk-regular">
+             <Uploadsvg
+            style={{
+              color: activeTab === "upload" ? "blue" : "", height: "35px"
+            }}
+          />  
               Uploaded
               </div>
               {activeTab === "uploaded" && (
@@ -263,7 +273,7 @@ export default function AddDetails() {
           </div>
 
           <div className="mt-4 h-full  " style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }} >
-            <p className="text-md font-semibold">Selected Projects</p>
+            <p className="text-md">Selected Projects</p>
             <p className="text-light-grey text-sm">
               {activeTab === "instagram"
                 ? selectionState.instagramSelected.length
@@ -281,7 +291,7 @@ export default function AddDetails() {
        
   <div className=" flex ">
     
-  <div className="w-[258px] ml-20 mt-4 relative ">
+  <div className="w-[258px] ml-20 mt-0 relative ">
   {/* Media Container right side */}
   <div
     className="w-full h-full rounded-lg overflow-hidden "
@@ -295,7 +305,7 @@ export default function AddDetails() {
     {(activeImageId !== null || projects.length > 0) &&
       (() => {
         if (!activeProject) {
-          return <p>No project selected</p>;
+          return <p className="text-graphite flex justify-center items-center h-full">No project selected</p>;
         }
 
         if (activeProject.name === "IMAGE") {
@@ -376,12 +386,27 @@ export default function AddDetails() {
           );
         } else if (activeProject.fileUrl) {
           return (
-            <Image
-              src={activeProject.fileUrl}
-              alt={activeProject.fileName}
-              fill
-              className="object-cover rounded-lg" // Object-cover for file images
-            />
+            <div className="w-full h-full border-2 border-light-grey rounded-lg flex justify-center items-center">
+              {activeProject.fileUrl.match(/\.(jpeg|jpg|gif|png)$/) ? (
+                <Image
+                  src={activeProject.fileUrl}
+                  alt={activeProject.fileName}
+                  width={200}
+                  height={150}
+                  className="bg-cover h-full w-full"
+                />
+              ) : (
+                <video
+                  src={activeProject.fileUrl}
+                  controls
+                  width={200}
+                  height={150}
+                  className="object-cover h-full w-full"
+                >
+                  Your browser does not support the video tag.
+                </video>
+              )}
+            </div>
           );
         }
 
@@ -406,10 +431,11 @@ export default function AddDetails() {
      </div>
 
 
-        <div className="ml-20 mt-5 flex flex-col gap-8 overflow-y-scroll overflow-x-hidden h-[70vh]  7xl:h-[80vh] 9xl:h-[80vh]   " style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div className="ml-20 mt-0 flex flex-col gap-8 overflow-y-scroll overflow-x-hidden h-[70vh]  7xl:h-[80vh] 9xl:h-[80vh]   " style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <div className="flex items-center justify-between ">
 
-  <span className="text-graphite">Was it a brand collaboration?</span>
+  <span className="text-graphite font-apfel-grotezk-mittel">Was it a brand collaboration?</span>
+
   <div
     className={`flex items-center rounded-full p-1 cursor-pointer w-[60px] ${
       isBrandCollaboration ? 'bg-electric-blue justify-end' : 'bg-gray-300 justify-start'
@@ -437,6 +463,9 @@ export default function AddDetails() {
     </div>
   </div>
 </div>
+
+
+<div className="border-b  border-light-grey"></div>
 
           <MultiSelectInput
             label="Choose Industry (Max 5)"
@@ -469,7 +498,10 @@ export default function AddDetails() {
           {isBrandCollaboration && (
             <>
               <div className="text-black flex flex-col gap-5">
-                <p className=" text-md">About Company</p>
+                <div className="flex flex-row gap-2">
+                <p className=" text-md whitespace-nowrap">About Company</p>
+                <div className="border-b  border-light-grey w-full mb-3"></div>
+                </div>
                 <FormInput
                   placeholder="Enter name of company"
                   name="companyName"
@@ -485,7 +517,10 @@ export default function AddDetails() {
               </div>
 
               <div className="text-black flex flex-col gap-5">
-                <p className="text-md">Upload logo of the Company</p>
+              <div className="flex flex-row gap-2">
+                <p className=" text-md whitespace-nowrap">Upload logo of the Company</p>
+                <div className="border-b  border-light-grey w-full mb-3"></div>
+                </div>
 
               <ProjectCustomFileInput
                 onFileChange={(uploadedUrl) => console.log("Uploaded URL:", uploadedUrl)}
@@ -498,7 +533,10 @@ export default function AddDetails() {
 
               <div className="text-black flex flex-col gap-5">
 
-                <p className=" text-md">About the event</p>
+              <div className="flex flex-row gap-2">
+                <p className=" text-md whitespace-nowrap">About the Event</p>
+                <div className="border-b  border-light-grey w-full mb-3"></div>
+                </div>
                 <FormInput
                   placeholder="Name of the event"
                   name="eventName"
@@ -526,7 +564,7 @@ export default function AddDetails() {
             </>
           )}
 
-<div className="fixed bottom-2 left-1/2 transform -translate-x-1/2 bg-white rounded-lg border-t border-gray-300 py-1 px-4">
+<div className="fixed bottom-2 left-1/2 transform -translate-x-1/2 bg-white rounded-lg border-t border-gray-300 py-1 px-4 mb-2">
   <div className="flex gap-2 justify-center mx-auto">
     <div className="flex gap-2 px-2 py-1.5 justify-center bg-gray-100 rounded-md">
       <button className=" px-4 py-1.5 border-electric-blue border-2 text-electric-blue rounded hover:bg-electric-blue hover:text-white transition-colors" onClick={handleBackClick}>

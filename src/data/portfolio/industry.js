@@ -22,4 +22,4 @@ export const industryList = [
     "Web Design & Development", "Wine & Spirits",
   ];
 
-  export const eventTypes = ["Conference", "Workshop", "Webinar", "Networking"];
+  export const eventTypes = ["Conference", "Workshop", "Webinar", "Networking", "Product Launch", "Brand Activation", "Store Opening", "Exclusive Brand Experience", "Networking", "Industry Conference","Panel Livestream", "Virtual Event", "Podcast or Interview ", "Workshop or Training Session"];

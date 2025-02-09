@@ -361,7 +361,12 @@ export async function GET(req) {
 
 
     console.log("igACCOUNT RESPOSNE and data",  igAccountIdData);
-
+ 
+    //igACCOUNT RESPOSNE and data { id: '535627486306379' } -> jaini that is failing and showinf no public ig account food 
+  //igACCOUNT RESPOSNE and data {  --> shloka's case console.log that worked and connected the accoutn that worked 
+  // instagram_business_account: { id: '17841409565815156' },
+  // id: '449593552484839'
+//}
     if (!igAccountIdResponse.ok || !igAccountIdData.instagram_business_account) {
       return NextResponse.json({ error: "No connected public Instagram Account found" }, { status: 500 });
     }

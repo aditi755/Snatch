@@ -84,15 +84,31 @@ const ProjectsGrid = ({
                   </button>
                 </div>
               </div>
+            ) : <div className="w-full h-full border-1 border-light-grey rounded-lg flex justify-center items-center">
+            {project.mediaLink || project.fileUrl ? (
+              (project.mediaLink || project.fileUrl).match(/\.(jpeg|jpg|gif|png)$/) ? (
+                <Image
+                  src={project.mediaLink || project.fileUrl}
+                  alt={project.name || project.fileName}
+                  width={200}
+                  height={150}
+                  className="bg-cover h-36"
+                />
+              ) : (
+                <video
+                  src={project.mediaLink || project.fileUrl}
+                  controls
+                  width={200}
+                  height={150}
+                  className="object-cover h-36"
+                >
+                  Your browser does not support the video tag.
+                </video>
+              )
             ) : (
-              <Image
-                src={project.mediaLink || project.fileUrl}
-                alt={project.name || project.fileName}
-                width={200}
-                height={150}
-                className="bg-cover rounded-md h-[150px]"
-              />
+              <p>No media available</p>
             )}
+          </div>}
 
             {showStatus && (
               <div className="absolute top-0 right-0 p-2 bg-white bg-opacity-60">

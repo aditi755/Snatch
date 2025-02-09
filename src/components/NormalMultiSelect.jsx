@@ -40,7 +40,7 @@ const NormalMultiSelect = ({ label, options, selectedValues, onAddValue, onRemov
 
       {/* Input container */}
       <div
-        className="relative z-20 w-full bg-transparent rounded-md border border-gray-300 p-[2px] pr-8 text-graphite outline-none transition focus:border-primary active:border-primary cursor-pointer"
+        className="relative z-20 w-full bg-transparent border border-gray-300 p-[2px] pr-8 text-graphite outline-none transition focus:border-primary active:border-primary cursor-pointer"
         onClick={toggleDropdown}
       >
         <div className="flex flex-wrap items-center gap-2 min-h-[40px] " style={{ padding: "0px" }}>
@@ -49,7 +49,7 @@ const NormalMultiSelect = ({ label, options, selectedValues, onAddValue, onRemov
             selectedValues.map((value, index) => (
               <span
                 key={`${label}-${index}`}
-                className="m-[5px] flex items-center justify-center border-[.5px] border-stroke bg-[#0037EB] bg-opacity-10 py-[7px] px-[20px] text-sm font-medium text-graphite relative z-20"
+                className="m-[5px] flex items-center justify-center border-[.5px] border-stroke bg-[#0037EB] bg-opacity-10 py-[7px] px-[20px] text-sm font-medium text-graphite relative z-20 rounded-md"
               >
                 {value}
                 <span
@@ -100,7 +100,7 @@ const NormalMultiSelect = ({ label, options, selectedValues, onAddValue, onRemov
 
       {/* Dropdown List */}
       {isDropdownOpen && (
-        <ul className="absolute mt-2 w-full rounded-lg border border-stroke bg-[#E9E9E9] py-2 z-50">
+        <ul className="absolute mt-2 w-full rounded-lg border border-stroke bg-[#E9E9E9] py-2 h-44 overflow-y-scroll ">
           {options.map((option, idx) => (
             <li
               key={idx}
