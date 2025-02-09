@@ -44,14 +44,14 @@ export default function OnboardingLayout({ children }) {
   
   return (
     <FormProvider>
-      <div className="flex h-screen bg-white justify-center">
+      <div className="flex h-screen bg-white">
         {/* Left side: Image with Preview */}
-        <div className="w-[660px] overflow-hidden relative flex items-center justify-center bg-white">
+        <div className="w-[45vw] overflow-hidden relative flex items-center justify-center bg-white h-[100vh] ">
           <Image
             src="/assets/images/signup_background.png"
             alt="Background Image"
             layout="fill"
-            className="absolute p-10 rounded-md top-0 left-0 w-full h-full object-left-bottom"
+            className="absolute p-6 rounded-md top-0 left-0 w-full h-full object-left-bottom"
             loading="eager"
             priority
           />
@@ -154,7 +154,7 @@ export default function OnboardingLayout({ children }) {
         </div>
 
         {/* Right side: Form */}
-        <div className="w-[900px] flex flex-col justify-center items-center bg-whitee">
+        <div className="w-[900px] flex flex-col flex-grow justify-center items-center bg-white">
           <div className="w-[100vw] max-w-3xl">{children}</div>
         </div>
       </div>

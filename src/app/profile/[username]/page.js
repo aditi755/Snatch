@@ -52,7 +52,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-white relative font-qimano">
+    <div className="flex justify-center flex-grow items-center h-screen bg-white relative font-qimano">
       <div className="flex absolute top-10 space-x-6">
         {menuItems.map((item) => (
           <div
