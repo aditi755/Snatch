@@ -29,6 +29,7 @@ import SvgComponent from "@/components/svg/Instagramsvg";
   const [isModalOpen, setIsModalOpen] = useState(false);
   //const isBrandCollaboration = searchParams.get('isBrandCollaboration');
 
+  const requiredFields = ["titleName", "description", "industries"];
   const handleSubmit = () => {
     setIsModalOpen(true);
 
@@ -87,6 +88,27 @@ console.log("preview activeimageid", activeProject,  activeImageId);
   useEffect(() => {
     setIsHydrated(true);
   }, []);
+
+
+ // Compute status for each project
+  const getProjectStatus = (project) => {
+    if (activeProject && String(project.mediaId) === String(activeProject.mediaId)) {
+      return "Selected";
+    }
+    const formEntry = selectionState.formData.find(
+      (item) => String(item.key) === String(project.mediaId)
+    );
+    if (formEntry) {
+      const isComplete = requiredFields.every((field) => !!formEntry[field]);
+      return isComplete ? "Done" : "Draft";
+    }
+    return "Draft";
+  };
+
+  const computedProjects = projects.map((project) => ({
+    ...project,
+    status: getProjectStatus(project),
+  }));
 
     // Fetch insights whenever the active project changes
     useEffect(() => {
@@ -238,7 +260,7 @@ console.log("preview activeimageid", activeProject,  activeImageId);
                 : selectionState.uploadedFiles.length}{" "}
             </p>
             <ProjectsGrid
-              projects={projects}
+              projects={computedProjects}
               activeTab={activeTab}
               onProjectClick={handleProjectClick}
               showStatus={true}

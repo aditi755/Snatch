@@ -236,7 +236,7 @@ const MediaDisplay = ({ media, uploadedFiles, displayType }) => {
 
               {/* Selected Line */}
               {isUploadedFileSelected(file._id) && (
-                <div className="absolute bottom-0 left-0 right-0 bg-electric-blue h-[35px] flex items-center justify-center font-apfel-grotezk-regular">
+                <div className="absolute bottom-0 left-0 right-0 bg-electric-blue h-[35px] flex items-center justify-center font-apfel-grotezk-regular rounded-b-md">
                   <Image
                     src="/assets/images/okay.svg"
                     alt="okay"

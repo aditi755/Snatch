@@ -215,6 +215,30 @@ export default function AddDetails() {
    router.push("/manage-projects/pick-projects");
   }
 
+  const getProjectStatus = (project) => {
+    // const formEntry = selectionState?.formData?.find(item => item.key === project.mediaId);
+    // const isComplete = formEntry && requiredFields.every(field => !!formEntry[field]);
+    // return isComplete ? "Done" : "Editing";
+    if (activeProject && project.mediaId === activeProject.mediaId) {
+      return "Editing";
+    }
+    const formEntry = selectionState.formData.find(
+      (item) => item.key === project.mediaId
+    );
+    if (formEntry) {
+      const isComplete = requiredFields.every((field) => !!formEntry[field]);
+      console.log("iscomplete project", isComplete)
+      return isComplete ? "Done" : "Draft";
+    }
+    return "Draft";
+  };
+
+  // Map projects to add a status property
+  const computedProjects = projects.map(project => ({
+    ...project,
+    status: getProjectStatus(project),
+  }));
+
   
   return (
     <div className="flex flex-col items-start space-x-8 h-[77vh] w-full overflow-x-hidden overflow-y-hidden">
@@ -280,7 +304,7 @@ export default function AddDetails() {
                 : selectionState.uploadedFiles.length}{" "}
             </p>
             <ProjectsGrid
-              projects={projects}
+              projects={computedProjects}
               activeTab={activeTab}
               onProjectClick={handleProjectClick}
               showStatus={true}
