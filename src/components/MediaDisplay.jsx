@@ -62,7 +62,7 @@ const MediaDisplay = ({ media, uploadedFiles, displayType }) => {
   };
 
   return (
-    <div className="mb-20 flex justify-start 7xl:justify-center">
+    <div className="mb-20 flex  justify-start 7xl:justify-center">
       <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 max-w-screen-lg 4xl:max-w-screen-xl">
         {/* Render Instagram Media */}
         {displayType === "instagram" && media?.length > 0 ? (

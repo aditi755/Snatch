@@ -51,7 +51,6 @@ const projectDraftSchema = new mongoose.Schema({
   uploadedFiles: { type: [uploadedFilesSchema], default: [] },
   instagramSelected: { type: [instagramSelectedSchema], default: [] }, 
   formData: { type: [formDataValueSchema], default: [] },
-  //isDraft: { type: Boolean, default: true }, 
   updatedAt: { type: Date, default: Date.now },
 });
 

@@ -1,22 +1,23 @@
 import React from 'react'
-import DashboardCard from '@/components/DashboardCard'
-import LocationCard from '@/components/LocationCard'
-
+// import DashboardCard from '@/components/DashboardCard'
+// import LocationCard from '@/components/LocationCard'
+import DashboardCardwrapper from '@/components/DashboardCardwrapper'
+import LocationWrapper from '@/components/LocationWrapper'
 const page = () => {
 
   return (
     <div className="relative flex flex-col p-3  ">
 
     <div className="mb-[500px] flex gap-3">
-      <DashboardCard count={6} label={"Profile Visit"}/>
-      <DashboardCard count={8} label={"Request Received"}/>
-      <DashboardCard  count={4} label={"Avg time spent"} className="flex-auto"/>
+      <DashboardCardwrapper count={6} label={"Profile Visit"}/>
+      <DashboardCardwrapper count={8} label={"Request Received"}/>
+      <DashboardCardwrapper  count={4} label={"Avg time spent"} className="flex-auto"/>
       
     
     </div>
 
       <div className="absolute top-[21%] 4xl:top-[24%] 5xl:top-[27%] flex-auto">
-        <LocationCard /> 
+        <LocationWrapper /> 
         <div className="absolute top-[110%]  font-qimano flex-auto">
     <div className="w-[58vw] h-[47vh] bg-gray-300 rounded-xl">
 

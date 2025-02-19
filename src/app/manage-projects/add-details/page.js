@@ -86,6 +86,8 @@ export default function AddDetails() {
       ? selectionState.instagramSelected
       : selectionState.uploadedFiles;
 
+      console.log("PROJECTS ON ADD DETAILS PAGE", projects, selectionState.instagramSelected);
+
       useEffect(() => {
         if (!activeImageId && projects?.length) {
           setActiveImageId(projects[0].mediaId);

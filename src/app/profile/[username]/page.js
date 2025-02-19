@@ -1,8 +1,10 @@
-
 "use client";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useFormContext } from "@/app/onboarding/context";
+import Portfolio from "@/components/Profilepage/Portfolio";
+import About from "@/components/Profilepage/About";
+import Audience from "@/components/Profilepage/Audience";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("portfolio");
@@ -36,8 +38,6 @@ const Profile = () => {
       const response = await fetch("/api/auth/instagram");
       const data = await response.json();
 
-      console.log("data url", data.url)
-
       if (data.url) {
         window.location.href = data.url; // Redirect to Instagram OAuth via fb
       } else {
@@ -51,8 +51,23 @@ const Profile = () => {
     }
   };
 
+  // Function to render tab content
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "portfolio":
+        return <Portfolio />;
+      case "about":
+        return <About />;
+      case "audience":
+        return <Audience />;
+      default:
+        return <Portfolio />;
+    }
+  };
+
   return (
-    <div className="flex justify-center flex-grow items-center h-screen bg-white relative font-qimano">
+    <div className="flex flex-col items-center h-screen bg-white relative font-qimano">
+      {/* Tabs */}
       <div className="flex absolute top-10 space-x-6">
         {menuItems.map((item) => (
           <div
@@ -72,36 +87,35 @@ const Profile = () => {
         ))}
       </div>
 
-      <h1 className="text-3xl absolute top-1/3 transform -translate-y-1/3">
-        Connect with Instagram to add projects
-      </h1>
-      <p className="text-md absolute top-[40%] transform -translate-y-1/3 h-auto max-w-[380px] text-center leading-relaxed">
-        Link your Instagram account here to add projects to
-        <span className="block max-w-[300px] text-center mx-auto">
-          make your portfolio and show to brands
-        </span>
-      </p>
+     {!isConnected ? (
 
-      <button
-        onClick={!isConnected ? handleLogin : null}
-        disabled={loading || isConnected}
-        className={`w-[230px] h-[47px] mt-5 ${
-          isConnected
-            ? "bg-green-600 text-white cursor-not-allowed"
-            : "bg-electric-blue text-white"
-        } border border-light-grey rounded-md text-center font-medium ${
-          !isConnected && "hover:bg-electric-blue hover:text-white"
-        }`}
-      >
-        {loading
-          ? "Redirecting..."
-          : isConnected
-          ? "Your account is connected"
-          : "Login to Instagram"}
-      </button>
+      <div className="flex flex-col items-center">
+        <h1 className="text-3xl absolute top-1/3 transform -translate-y-1/3">
+          Connect with Instagram to add projects
+        </h1>
+        <p className="text-md absolute top-[40%] transform -translate-y-1/3 h-auto max-w-[380px] text-center leading-relaxed">
+          Link your Instagram account here to add projects to
+          <span className="block max-w-[300px] text-center mx-auto">
+            make your portfolio and show to brands
+          </span>
+        </p>
+
+        <button
+          onClick={handleLogin}
+          disabled={loading}
+          className="w-[230px] h-[47px] mt-5 bg-electric-blue text-white border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white absolute top-[50%] transform -translate-y-1/2"
+        >
+          {loading ? "Redirecting..." : "Login to Instagram"}
+        </button>
+      </div>
+    ) : (
+   <div className="flex justify-center mt-20 h-full">
+        {renderTabContent()}
+    </div> 
+
+)}
     </div>
   );
 };
 
 export default Profile;
-
