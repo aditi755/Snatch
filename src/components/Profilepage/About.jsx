@@ -81,9 +81,9 @@ const About = () => {
     <div className="max-w-2xl mx-auto p-4 flex flex-col gap-10">
       {/* Accordion 1 – About You */}
       <Accordion title="About You*" isOpen={openIndex === 0} onToggle={() => toggleAccordion(0)}>
-        <div className="text-gray-600 w-full overflow-y-auto h-[270px]">
+        <div className="text-gray-600 w-full overflow-y-auto h-[270px]" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {aboutQuestions.map((item, index) => (
-            <div key={index} className="mb-4 border p-2 rounded-md">
+            <div key={index} className="mb-4 p-2 rounded-md"  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               <QuestionCounter
                 label={`Question ${index + 1}`}
                 value={item.question}
@@ -120,9 +120,9 @@ const About = () => {
 
       {/* Other Accordion sections would follow the same pattern */}
       <Accordion title="About Audience*" isOpen={openIndex === 1} onToggle={() => toggleAccordion(1)}>
-        <div className="text-gray-600 w-full overflow-y-auto h-[270px]">
+        <div className="text-gray-600 w-full overflow-y-auto h-[270px]"  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {audienceQuestions.map((item, index) => (
-            <div key={index} className="mb-4 border p-2 rounded-md">
+            <div key={index} className="mb-4 p-2 rounded-md">
               <QuestionCounter
                 label={`Question ${index + 1}`}
                 value={item.question}
@@ -158,9 +158,9 @@ const About = () => {
 
 
        <Accordion title="Brand Connection*" isOpen={openIndex === 2} onToggle={() => toggleAccordion(2)}>
-        <div className="text-gray-600 w-full overflow-y-auto h-[270px]">
+        <div className="text-gray-600 w-full overflow-y-auto h-[270px]"  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {brandQuestions.map((item, index) => (
-            <div key={index} className="mb-4 border p-2 rounded-md">
+            <div key={index} className="mb-4 p-2 rounded-md">
               <QuestionCounter
                 label={`Question ${index + 1}`}
                 value={item.question}

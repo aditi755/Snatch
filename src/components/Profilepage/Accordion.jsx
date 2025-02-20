@@ -7,7 +7,7 @@ const Accordion = ({ title, children, isOpen, onToggle }) => {
     <div className="border rounded-lg overflow-hidden">
       <button
         onClick={onToggle}
-        className="w-[584px] p-2 text-left bg-white transition-colors flex justify-between items-center"
+        className="w-[584px] p-2 text-left bg-white transition-colors flex justify-between items-center"  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         <div className="flex flex-col">
           <span className="font-medium text-xl text-electric-blue font-qimano">{title}</span>
