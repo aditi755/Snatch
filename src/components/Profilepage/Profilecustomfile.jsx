@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 import UploadImageModal from "../UploadImageModal";
 
-const Profilecustomfile = ({ onFileChange, placeholder, iconSrc, label, type }) => {
+const Profilecustomfile = ({ onFileChange, placeholder, iconSrc, label, type, currentQuestionIndex }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  console.log("currentQuestionIndex", currentQuestionIndex);
 
   const handleImageSelect = (imageUrl) => {
     console.log("iamgeurl", imageUrl)
@@ -21,7 +23,7 @@ const Profilecustomfile = ({ onFileChange, placeholder, iconSrc, label, type }) 
       >
         <Image src={iconSrc} alt="upload" width={30} height={20} />
         <span className="border-r-2 border-gray-300 -ml-4 "></span>
-        <span className="-ml-4">{selectedImage || placeholder}</span>
+        <span className="-ml-4 font-apfel-grotezk-regular">{selectedImage || placeholder}</span>
       </div>
 
       {/* Upload Image Modal */}
@@ -31,6 +33,7 @@ const Profilecustomfile = ({ onFileChange, placeholder, iconSrc, label, type }) 
           onClose={() => setIsModalOpen(false)}
           onImageSelect={handleImageSelect}
           type={type}
+          questionIndex={currentQuestionIndex}
         />
       )}
     </div>

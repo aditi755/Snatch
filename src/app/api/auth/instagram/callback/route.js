@@ -274,6 +274,15 @@
 
 
 
+//const REDIRECT_URI = 'https://wf7s4f88-3000.inc1.devtunnels.ms/manage-projects/pick-projects';
+    //igACCOUNT RESPOSNE and data { id: '535627486306379' } -> jaini that is failing and showing no public ig account food 
+  //igACCOUNT RESPOSNE and data {  --> shloka's case console.log that worked and connected the accoutn that worked 
+  
+    // const igAccountInfoResponse = await fetch(
+    //   `https://graph.facebook.com/v17.0/${instagramAccountId}?fields=username,name,profile_picture_url,account_type&access_token=${longLivedAccessToken}`
+    // );
+    // const igAccountInfoData = await igAccountInfoResponse.json();
+    // console.log("Account Type:", igAccountInfoData,igAccountInfoData.account_type); // Returns "BUSINESS", or "CREATOR"
 
 import { NextResponse } from "next/server";
 import User from "@/models/user.model"; 
@@ -282,8 +291,10 @@ import connectDb from "@/db/mongoose";
 
  const CLIENT_ID = '1068594868074995';
  const CLIENT_SECRET = '7aa94560586507e6c840da8105090984';
- const REDIRECT_URI = 'https://snatch-pi.vercel.app/manage-projects/pick-projects'
-//const REDIRECT_URI = 'https://wf7s4f88-3000.inc1.devtunnels.ms/manage-projects/pick-projects';
+ //const REDIRECT_URI = 'https://snatch-pi.vercel.app/manage-projects/pick-projects'
+ 
+const REDIRECT_URI = 'https://wf7s4f88-3000.inc1.devtunnels.ms/manage-projects/pick-projects';
+
  export const dynamic = 'force-dynamic';
 
 export async function GET(req) {
@@ -362,8 +373,7 @@ export async function GET(req) {
 
     console.log("igACCOUNT RESPOSNE and data",  igAccountIdData);
  
-    //igACCOUNT RESPOSNE and data { id: '535627486306379' } -> jaini that is failing and showinf no public ig account food 
-  //igACCOUNT RESPOSNE and data {  --> shloka's case console.log that worked and connected the accoutn that worked 
+
   // instagram_business_account: { id: '17841409565815156' },
   // id: '449593552484839'
 //}
@@ -372,12 +382,6 @@ export async function GET(req) {
     }
 
     const instagramAccountId = igAccountIdData.instagram_business_account.id;
-
-    // const igAccountInfoResponse = await fetch(
-    //   `https://graph.facebook.com/v17.0/${instagramAccountId}?fields=username,name,profile_picture_url,account_type&access_token=${longLivedAccessToken}`
-    // );
-    // const igAccountInfoData = await igAccountInfoResponse.json();
-    // console.log("Account Type:", igAccountInfoData,igAccountInfoData.account_type); // Returns "BUSINESS", or "CREATOR"
 
     // Check if the user exists in the database
     let user = await User.findOne({ userId });

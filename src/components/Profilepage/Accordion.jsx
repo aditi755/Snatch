@@ -11,7 +11,7 @@ const Accordion = ({ title, children, isOpen, onToggle }) => {
       >
         <div className="flex flex-col">
           <span className="font-medium text-xl text-electric-blue font-qimano">{title}</span>
-          <span className="font-medium text-md text-gray-600">
+          <span className="font-medium text-sm text-gray-600 font-apfel-grotezk-regular">
             At least one response is mandatory
           </span>
         </div>

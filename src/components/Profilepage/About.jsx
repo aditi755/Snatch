@@ -5,7 +5,9 @@ import React, { useState, useEffect, useCallback } from "react";
 import Accordion from "./Accordion";
 import Profilecustomfile from "./Profilecustomfile";
 import QuestionCounter from "./QuestionCounter";
-import { saveQuestionsToDB } from "@/utils/postQuestions";
+import Image from "next/image";
+import { saveQuestionsToDB, fetchProfileData, removeQuestion } from "@/utils/postQuestions";
+
 const About = () => {
   
   const [aboutQuestions, setAboutQuestions] = useState([{ question: "", answer: "", coverImage: null }]);
@@ -15,8 +17,24 @@ const About = () => {
   const [openIndex, setOpenIndex] = useState(null);
   const [typingTimeout, setTypingTimeout] = useState(null);
 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { aboutQuestions, audienceQuestions, brandQuestions } = await fetchProfileData();
+        setAboutQuestions(aboutQuestions);
+        setAudienceQuestions(audienceQuestions);
+        setBrandQuestions(brandQuestions);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const debounceSave = useCallback((section, questions) => {
-    console.log("deboucne func called")
+    console.log("deboucne func called", section, questions)
     if (typingTimeout) clearTimeout(typingTimeout);
     
     const timeout = setTimeout(() => {
@@ -26,14 +44,18 @@ const About = () => {
     setTypingTimeout(timeout);
   }, [typingTimeout]);
 
- 
-
-  const handleQuestionChange = (e, index, sectionKey) => {
+  const handleQuestionChange = (e, index, sectionKey, defaultQuestion) => {
     const newQuestions = [...(sectionKey === "about" ? aboutQuestions : sectionKey === "audience" ? audienceQuestions : brandQuestions)];
-    newQuestions[index].question = e.target.value;
+  
+    // Ensure a valid question is always set
+    const selectedQuestion = e.target.value?.trim() || defaultQuestion;
+  
+    newQuestions[index].question = selectedQuestion;
+  
     updateSectionState(sectionKey, newQuestions);
-    debounceSave(sectionKey, newQuestions);
+    debounceSave(sectionKey, newQuestions); // Send updated questions to the API
   };
+  
 
   const handleAnswerChange = (e, index, sectionKey) => {
     const newQuestions = [...(sectionKey === "about" ? aboutQuestions : sectionKey === "audience" ? audienceQuestions : brandQuestions)];
@@ -55,9 +77,8 @@ const About = () => {
     debounceSave(sectionKey, newQuestions);
   };
 
-  const removeQuestion = (index, sectionKey) => {
-    const newQuestions = (sectionKey === "about" ? aboutQuestions : sectionKey === "audience" ? audienceQuestions : brandQuestions).filter((_, i) => i !== index);
-    updateSectionState(sectionKey, newQuestions);
+  const handleRemoveQuestion = (index, sectionKey, questionTitle) => {
+    removeQuestion(index, sectionKey, questionTitle, updateSectionState);
   };
 
   const updateSectionState = (sectionKey, newState) => {
@@ -86,8 +107,8 @@ const About = () => {
             <div key={index} className="mb-4 p-2 rounded-md"  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               <QuestionCounter
                 label={`Question ${index + 1}`}
-                value={item.question}
-                onQuestionChange={(e) => handleQuestionChange(e, index, "about")}
+                value={item.question }
+                onQuestionChange={(e) => handleQuestionChange(e, index, "about",  questions[0])}
                 onAnswerChange={(e) => handleAnswerChange(e, index, "about")}
                 maxLength={100}
                 name={`aboutQuestion_${index}`}
@@ -103,17 +124,19 @@ const About = () => {
                 iconSrc="/assets/icons/onboarding/Upload.svg"
                 label="Cover Picture"
                 type="about"
+                currentQuestionIndex={index}
               />
               {index > 0 && (
-                <button onClick={() => removeQuestion(index, "about")} className="text-red-500 text-sm mt-2">
+                <button onClick={() => handleRemoveQuestion(index, "about", item.question)} className="text-red-500 text-sm mt-2">
                   Remove Question
                 </button>
               )}
             </div>
           ))}
           <div className="flex mt-2 cursor-pointer" onClick={() => addQuestion("about")}>
-            <p className="font-qimano text-graphite">Add a new question</p>
-            <div className="flex-1 ml-2 mt-2.5 border-t border-gray-200"></div>
+          <Image src="/assets/images/plus.svg" width={25} height={25} alt="plus icon" className="mr-1"/>
+            <p className="font-qimano text-graphite mt-1">Add a new question</p>
+            <div className="flex-1 ml-2 mt-3.5 border-t border-gray-200"></div>
           </div>
         </div>
       </Accordion>
@@ -141,17 +164,19 @@ const About = () => {
                 iconSrc="/assets/icons/onboarding/Upload.svg"
                 label="Cover Picture"
                 type="audience"
+                currentQuestionIndex={index}
               />
               {index > 0 && (
-                <button onClick={() => removeQuestion(index, "audience")} className="text-red-500 text-sm mt-2">
+                <button onClick={() => handleRemoveQuestion(index, "audience")} className="text-red-500 text-sm mt-2">
                   Remove Question
                 </button>
               )}
             </div>
           ))}
           <div className="flex mt-2 cursor-pointer" onClick={() => addQuestion("audience")}>
-            <p className="font-qimano text-graphite">Add a new question</p>
-            <div className="flex-1 ml-2 mt-2.5 border-t border-gray-200"></div>
+            <Image src="/assets/images/plus.svg" width={25} height={25} alt="plus icon" className="mr-1"/>
+            <p className="font-qimano text-graphite mt-1">Add a new question</p>
+            <div className="flex-1 ml-2 mt-3.5 border-t border-gray-200"></div>
           </div>
         </div>
       </Accordion>
@@ -164,7 +189,7 @@ const About = () => {
               <QuestionCounter
                 label={`Question ${index + 1}`}
                 value={item.question}
-                onQuestionChange={(e) => handleQuestionChange(e, index, "brand")}
+                onQuestionChange={(e) => handleQuestionChange(e, index, "brand",  questions[0])}
                 onAnswerChange={(e) => handleAnswerChange(e, index, "brand")}
                 selectedQuestion={item.question} // Pass selected question
                 onSelectQuestion={(question) => handleSelectQuestion(question, index, "brand")}
@@ -179,17 +204,19 @@ const About = () => {
                 iconSrc="/assets/icons/onboarding/Upload.svg"
                 label="Cover Picture"
                 type="brand"
+                currentQuestionIndex={index}
               />
               {index > 0 && (
-                <button onClick={() => removeQuestion(index, "brand")} className="text-red-500 text-sm mt-2">
+                <button onClick={() => handleRemoveQuestion(index, "brand")} className="text-red-500 text-sm mt-2">
                   Remove Question
                 </button>
               )}
             </div>
           ))}
           <div className="flex mt-2 cursor-pointer" onClick={() => addQuestion("brand")}>
-            <p className="font-qimano text-graphite">Add a new question</p>
-            <div className="flex-1 ml-2 mt-2.5 border-t border-gray-200"></div>
+          <Image src="/assets/images/plus.svg" width={25} height={25} alt="plus icon" className="mr-1"/>
+            <p className="font-qimano text-graphite mt-1">Add a new question</p>
+            <div className="flex-1 ml-2 mt-3.5 border-t border-gray-200"></div>
           </div>
         </div>
       </Accordion> 

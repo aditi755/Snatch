@@ -1,22 +1,87 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { fetchProfileData } from "@/utils/postQuestions";
 import Image from "next/image";
 import clsx from "clsx";
 
-export default function UploadImageModal({ isOpen, onClose, onImageSelect, type }) {
-  const [predefinedImages] = useState([
-    "/assets/images/questionbackground.svg",
-    "/assets/images/questionbackground.svg",
-    "/assets/images/questionbackground.svg",
-    "/assets/images/questionbackground.svg",
-  ]);
+export default function UploadImageModal({ isOpen, onClose, onImageSelect, type, questionIndex }) {
+
+  const imagesByType =  [
+      "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740396552/7_r6djcr.jpg",
+      "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740392519/3_koofyi.jpg",
+      "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740396410/4_fcsbyd.jpg",
+      "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740396474/2_svbihw.jpg",
+      "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740397248/10_o9u87n.jpg"
+    ]
+
+
   const [uploadedImages, setUploadedImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [hovered, setHovered] = useState(false);
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
 
-  const scrollRef = useRef(null); // Ref for scrolling container
+  const scrollRef = useRef(null);
 
+
+  const fetchData = async () => {
+    try {
+      console.log("type first", type);
+      const { aboutQuestions, audienceQuestions, brandQuestions } = await fetchProfileData();
+      console.log("Fetched questionnaires:", { aboutQuestions, audienceQuestions, brandQuestions });
+  
+      let defaultImage = "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740397248/10_o9u87n.jpg";
+      let currentImage = defaultImage;
+      let currentQuestion = "";
+      let currentAnswer = "";
+  
+      // Determine which array to use based on the `type` prop
+      let questionsArray;
+      switch (type) {
+        case "about":
+          questionsArray = aboutQuestions;
+          break;
+        case "audience":
+          questionsArray = audienceQuestions;
+          break;
+        case "brand":
+          questionsArray = brandQuestions;
+          break;
+        default:
+          console.warn("Invalid type provided");
+          return;
+      }
+  
+      console.log("Selected questions array:", questionsArray);
+  
+      // Check if the questions array exists and has questions
+      if (questionsArray && questionsArray.length > 0) {
+        // Use questionIndex to get the correct question
+        const selectedQuestion = questionsArray[questionIndex];
+        if (selectedQuestion) {
+          currentImage = selectedQuestion.coverImage || defaultImage;
+          currentQuestion = selectedQuestion.question || "";
+          currentAnswer = selectedQuestion.answer || "";
+          console.log("CURRENTIMAGE", currentImage);
+          console.log("CURRENTQUESTION", currentQuestion);
+          console.log("CURRENTANSWER", currentAnswer);
+        }
+      }
+  
+      console.log("Selected image:", currentImage);
+      setSelectedImage(currentImage);
+      setQuestion(currentQuestion); // Set the question state
+      setAnswer(currentAnswer); // Set the answer state
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+
+    useEffect(() => {
+    fetchData();
+  }, []);
+  
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -41,12 +106,13 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type 
 
    // Map type to colors
    const typeColors = {
-    about: "bg-lime-yellow", // Yellow for about
-    audience: "bg-electric-blue", // Blue for audience
-    brand: "bg-black", // Black for brand
+    about: "bg-lime-yellow", 
+    audience: "bg-electric-blue",
+    brand: "bg-black", 
   };
 
-  const cardColor = typeColors[type]; // Default to yellow if type is not provided
+  const cardColor = typeColors[type]; 
+  const predefinedImages = imagesByType || [];
 
   const handleClose = () => {
     console.log("Modal close triggered");
@@ -68,8 +134,8 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type 
                   Select an image that sets with the vibe of your question
                 </p>
               </div>
-              <button onClick={handleClose} className="text-red-500 text-lg">
-                ×
+              <button onClick={handleClose} className="text-red-500 text-lg ">
+                <Image src="/assets/images/close.svg" alt="Close" width={20} height={20} />
               </button>
             </div>
 
@@ -102,12 +168,10 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type 
                 hovered ? "h-[100%]" : "h-[50%]"
               )}
               >
-                <p className="text-center font-qimano  text-graphite">Preview of the question card.</p>
+                <p className="text-center font-qimano  text-graphite">{question}</p>
                 {hovered && (
                 <p className="text-xs text-center  text-graphite">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, hic sunt, possimus 
-                  architecto saepe explicabo ullam delectus inventore vel labore quibusdam quos 
-                  doloremque aliquid amet facilis nostrum voluptate ab fuga.
+                 {answer}
                 </p>
               )}
               </div>
