@@ -110,6 +110,9 @@ export async function POST(req) {
     const body = await req.json();
     const { apiKey } = body;
 
+    console.log("apikey", apiKey);
+    console.log("body", body);
+    console.log("api key process env", process.env.CRON_JOB_API_KEY);
     // Validate API key
     if (apiKey !== process.env.CRON_JOB_API_KEY) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
