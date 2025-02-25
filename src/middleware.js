@@ -7,7 +7,7 @@ const isPublicRoute = createRouteMatcher([
   "/",
   "/login(.*)",
   "/signup(.*)",
- 
+  "/api/auth/refreshInstagram",
 ]);
 
 export default clerkMiddleware(async (authFn, request) => {
