@@ -25,49 +25,6 @@ export function SelectedProjectsProvider({ children }) {
   // Fetch draft data on initial load
   useEffect(() => {
     const fetchDraftData = async () => {
-    //   try {
-    //     if (!userId) {
-    //       console.error("User ID is missing.");
-    //       return;
-    //     }
-
-    //     // Check localStorage for cached data
-    //     const localData = JSON.parse(localStorage.getItem(`selectionState_${userId}`) || "{}");
-    //     console.log("Local data for user:", userId, localData);
-
-    //     // Fetch data from MongoDB
-    //     const response = await fetch("/api/projects/draft");
-    //     const { data: mongoData } = await response.json();
-    //     console.log("MongoDB data:", mongoData);
-
-    //     if (mongoData) {
-    //       // Compare timestamps to determine which data is more recent
-    //       const localTimestamp = localData.updatedAt
-    //         ? new Date(localData.updatedAt).getTime()
-    //         : 0;
-    //       const mongoTimestamp = new Date(mongoData.updatedAt).getTime();
-
-    //       if (mongoTimestamp > localTimestamp) {
-    //         // Use MongoDB data if it's more recent
-    //         console.log("Using MongoDB data");
-    //         setSelectionState(mongoData);
-    //         localStorage.setItem(`selectionState_${userId}`, JSON.stringify(mongoData));
-    //       } else if (Object.keys(localData).length > 0) {
-    //         // Use localStorage data if it's more recent or equal
-    //         console.log("Using localStorage data");
-    //         setSelectionState(localData);
-    //       }
-    //     } else if (Object.keys(localData).length > 0) {
-    //       // Use localStorage data if no data in MongoDB
-    //       console.log("Using localStorage data (no MongoDB data)");
-    //       setSelectionState(localData);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching draft data:", error);
-    //   }
-    // };
-
-
     try {
       if (!userId) {
         console.error("User ID is missing.");
