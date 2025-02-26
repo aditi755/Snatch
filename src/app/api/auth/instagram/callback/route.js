@@ -400,6 +400,8 @@ export async function GET(req) {
     );
     const pagesData = await igAccountResponse.json();
 
+    console.log("pagesData of my fb account", pagesData);
+
     if (!igAccountResponse.ok || !pagesData.data || pagesData.data.length === 0) {
       return NextResponse.json({ error: "No connected Facebook Pages found" }, { status: 500 });
     }
