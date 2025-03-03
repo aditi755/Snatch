@@ -6,8 +6,8 @@ import connectDb from "@/db/mongoose";
 
 const CLIENT_ID = '1068594868074995';
 const CLIENT_SECRET = '7aa94560586507e6c840da8105090984';
-const REDIRECT_URI = 'https://snatch-pi.vercel.app/manage-projects/pick-projects'
-//const REDIRECT_URI = 'https://wf7s4f88-3000.inc1.devtunnels.ms/manage-projects/pick-projects';
+//const REDIRECT_URI = 'https://snatch-pi.vercel.app/manage-projects/pick-projects'
+const REDIRECT_URI = 'https://wf7s4f88-3000.inc1.devtunnels.ms/manage-projects/pick-projects';
 
 export const dynamic = 'force-dynamic';
 

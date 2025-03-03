@@ -66,9 +66,9 @@ const Profile = () => {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen bg-white relative font-qimano">
-      {/* Tabs */}
-      <div className="flex absolute top-10 space-x-6">
+    <div className="flex flex-grow flex-col items-center h-screen bg-white relative font-qimano">
+      {/* Tabs  to have scroll on audinece */}
+      <div className="flex absolute top-10 space-x-6 ">
         {menuItems.map((item) => (
           <div
             key={item}
@@ -89,7 +89,7 @@ const Profile = () => {
 
      {!isConnected ? (
 
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center ">
         <h1 className="text-3xl absolute top-1/3 transform -translate-y-1/3">
           Connect with Instagram to add projects
         </h1>
@@ -109,7 +109,8 @@ const Profile = () => {
         </button>
       </div>
     ) : (
-   <div className="flex justify-center mt-20 h-full">
+   <div className="flex flex-grow justify-center mt-20 h-full bg-white">
+    {/* do this overflow-x-hidden and ml-44 only in audience not all */}
         {renderTabContent()}
     </div> 
 
