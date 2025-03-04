@@ -1,5 +1,5 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+  
 const QuestionCounter = ({
   value,
   onQuestionChange,
@@ -28,7 +28,7 @@ const QuestionCounter = ({
       "How do you know when something’s actually connecting with your audience?",
       "What’s one thing your audience has taught you about your influence?",
       "How do you hope your audience feels after every post?",
-      "Other", 
+      "Other",
     ],
     brand: [
       "What’s one thing that makes a brand an instant yes for you?",
@@ -37,7 +37,7 @@ const QuestionCounter = ({
       "What’s one thing you won’t compromise on in a partnership?",
       "What’s been your most unexpected collab—and why did it click?",
       "What’s one thing brands might not know about working with you?",
-      "Other",  
+      "Other",
     ],
   };
 
@@ -45,19 +45,31 @@ const QuestionCounter = ({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isOtherSelected, setIsOtherSelected] = useState(false); // Track if "Other" is selected
 
+  // Ensure that if no question is selected, default the state to the first question
+  useEffect(() => {
+    if (!selectedQuestion && !isOtherSelected) {
+      onSelectQuestion(questions[0]);
+    }
+  }, [selectedQuestion, isOtherSelected, questions, onSelectQuestion]);
+
   const handleSelect = (question, index) => {
     if (!question || question.trim() === "") {
-      question = questions[0]; 
+      question = questions[0];
     }
 
     if (question === "Other") {
       setIsOtherSelected(true);
-      onSelectQuestion(""); 
+      onSelectQuestion("");
     } else {
-      setIsOtherSelected(false); 
-      onSelectQuestion(question); 
+      setIsOtherSelected(false);
+      onSelectQuestion(question);
     }
     setDropdownOpen(false);
+  };
+
+  const handleQuestionChange = (e) => {
+    console.log("onQuestionChange fired!", e.target.value);
+    onQuestionChange(e); // Pass event to parent
   };
 
   return (
@@ -109,7 +121,7 @@ const QuestionCounter = ({
             type="text"
             placeholder="Type your custom question..."
             value={value}
-            onChange={onQuestionChange}
+            onChange={handleQuestionChange}
             className="w-full p-2 border border-gray-300 rounded-md font-apfel-grotezk-regular focus:outline-none"
           />
         </div>
@@ -123,7 +135,7 @@ const QuestionCounter = ({
           value={answerValue}
           onChange={onAnswerChange}
           placeholder="Enter your response here..."
-          className="bg-transparent w-full p-3 rounded-md border-t-2 font-apfel-grotezk-regular border-gray-200 focus:outline-none text-gray-700 text-sm  resize-none"
+          className="bg-transparent w-full px-0 py-2 rounded-md border-t-2 font-apfel-grotezk-regular border-gray-200 focus:outline-none text-gray-700 text-sm resize-none"
           rows={2}
         />
         <span className="absolute bottom-2 right-3 text-xs text-gray-500">

@@ -43,6 +43,10 @@ const qimano = localFont({
 export const metadata = {
   title: "Snatch",
   description: "Connecting Influencers",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+  },
 };
 
 export default function RootLayout({ children }) {

@@ -22,9 +22,10 @@ const About = () => {
     const fetchData = async () => {
       try {
         const { aboutQuestions, audienceQuestions, brandQuestions } = await fetchProfileData();
-        setAboutQuestions(aboutQuestions);
-        setAudienceQuestions(audienceQuestions);
-        setBrandQuestions(brandQuestions);
+      // Ensure at least one question exists in each section
+      setAboutQuestions(aboutQuestions.length > 0 ? aboutQuestions : [{ question: "", answer: "", coverImage: null }]);
+      setAudienceQuestions(audienceQuestions.length > 0 ? audienceQuestions : [{ question: "", answer: "", coverImage: null }]);
+      setBrandQuestions(brandQuestions.length > 0 ? brandQuestions : [{ question: "", answer: "", coverImage: null }]);
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
@@ -45,15 +46,21 @@ const About = () => {
   }, [typingTimeout]);
 
   const handleQuestionChange = (e, index, sectionKey, defaultQuestion) => {
+    console.log(`handleQuestionChange triggered for index: ${index}, section: ${sectionKey}`);
+    console.log("defaultQuestion:", defaultQuestion);
+    console.log("Event value:", e.target.value);
+
+    if (!e.target.value) {
+        console.log("Empty input detected, falling back to default question:", defaultQuestion);
+    }
+
     const newQuestions = [...(sectionKey === "about" ? aboutQuestions : sectionKey === "audience" ? audienceQuestions : brandQuestions)];
-  
-    // Ensure a valid question is always set
+
     const selectedQuestion = e.target.value?.trim() || defaultQuestion;
-  
     newQuestions[index].question = selectedQuestion;
-  
+
     updateSectionState(sectionKey, newQuestions);
-    debounceSave(sectionKey, newQuestions); // Send updated questions to the API
+    debounceSave(sectionKey, newQuestions);
   };
   
 
@@ -93,7 +100,7 @@ const About = () => {
 
   const handleSelectQuestion = (question, index, sectionKey) => {
     const newQuestions = [...(sectionKey === "about" ? aboutQuestions : sectionKey === "audience" ? audienceQuestions : brandQuestions)];
-    newQuestions[index].question = question;
+    newQuestions[index].question = question  || newQuestions[0]?.question || ""; //changed now added ||
     updateSectionState(sectionKey, newQuestions);
   };
 
@@ -108,7 +115,7 @@ const About = () => {
               <QuestionCounter
                 label={`Question ${index + 1}`}
                 value={item.question }
-                onQuestionChange={(e) => handleQuestionChange(e, index, "about",  questions[0])}
+                onQuestionChange={(e) => handleQuestionChange(e, index, "about",  aboutQuestions[0]?.question)}
                 onAnswerChange={(e) => handleAnswerChange(e, index, "about")}
                 maxLength={100}
                 name={`aboutQuestion_${index}`}

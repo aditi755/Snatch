@@ -5,6 +5,15 @@ import { fetchProfileData } from "@/utils/postQuestions";
 import Image from "next/image";
 import clsx from "clsx";
 
+// At the top of the file, add this mapping object
+const imageNameMapping = {
+  "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740396552/7_r6djcr.jpg": "Sunlit Studio",
+  "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740392519/3_koofyi.jpg": "Urban Coffee Shop",
+  "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740396410/4_fcsbyd.jpg": "Modern Workspace",
+  "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740396474/2_svbihw.jpg": "Creative Corner",
+  "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740397248/10_o9u87n.jpg": "Minimalist Desktop"
+};
+
 export default function UploadImageModal({ isOpen, onClose, onImageSelect, type, questionIndex }) {
 
   const imagesByType =  [
@@ -21,6 +30,8 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
   const [hovered, setHovered] = useState(false);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const [iconSrc, setIconSrc] = useState("");
+  const [tempSelectedImage, setTempSelectedImage] = useState(null); // Add this new state
 
   const scrollRef = useRef(null);
 
@@ -41,12 +52,15 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
       switch (type) {
         case "about":
           questionsArray = aboutQuestions;
+          setIconSrc("/assets/images/aboutIcon.svg");
           break;
         case "audience":
           questionsArray = audienceQuestions;
+          setIconSrc("/assets/images/audienceIcon.svg");
           break;
         case "brand":
           questionsArray = brandQuestions;
+          setIconSrc("/assets/images/brandIcon.svg");
           break;
         default:
           console.warn("Invalid type provided");
@@ -80,7 +94,9 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
 
     useEffect(() => {
     fetchData();
-  }, []);
+    // Reset temp selection when modal opens
+    setTempSelectedImage(null);
+  }, [isOpen]);
   
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -91,10 +107,12 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
     }
   };
 
+  // Find the handleImageSelect function and modify it:
   const handleImageSelect = (image) => {
-    console.log("imahge", image)
-    setSelectedImage(image);
-    onImageSelect(image);
+    console.log("image", image);
+    const imageName = imageNameMapping[image] || 'Selected Image';
+    setTempSelectedImage({ url: image, name: imageName }); // Update temporary selection
+    setSelectedImage(image); // Update preview
   };
 
   const handleScroll = (direction) => {
@@ -106,17 +124,25 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
 
    // Map type to colors
    const typeColors = {
-    about: "bg-lime-yellow", 
-    audience: "bg-electric-blue",
-    brand: "bg-black", 
+    about: { bg: "bg-lime-yellow", text: "text-graphite" },
+    audience: { bg: "bg-electric-blue", text: "text-white" },
+    brand: { bg: "bg-graphite", text: "text-lime-yellow" },
   };
 
-  const cardColor = typeColors[type]; 
+  const cardType = typeColors[type] || typeColors.about; 
   const predefinedImages = imagesByType || [];
 
   const handleClose = () => {
     console.log("Modal close triggered");
     onClose(); // Calls the parent function
+  };
+
+  // Add new confirmation handler
+  const handleConfirmUpload = () => {
+    if (tempSelectedImage) {
+      onImageSelect(tempSelectedImage.url); // Send to parent only on confirmation
+      onClose();
+    }
   };
 
   return (
@@ -148,61 +174,65 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 mt-5">
               {/* Interactive Preview Card */}
               <div
-                className="relative border rounded-md w-[135px] h-[228px] overflow-hidden cursor-pointer"
+                className="relative border rounded-md w-[165px] h-[228px] overflow-hidden cursor-pointer"
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
               >
                 {/* Selected Image or Default */}
                 <Image
-                  src={selectedImage || "/assets/images/preview.svg"}
+                  src={selectedImage || "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740397248/10_o9u87n.jpg"}
                   alt="Preview"
                   className="w-full h-full object-cover"
-                  width={135}
+                  width={165}
                   height={228}
                 />
                 
                 {/* Sliding Yellow Question Box */}
               <div
-               className={clsx(
-                `absolute left-0 bottom-0 w-full ${cardColor} flex flex-col items-center justify-center text-white transition-all duration-300 rounded-t-md text-graphite`,
-                hovered ? "h-[100%]" : "h-[50%]"
-              )}
+                className={clsx(
+                  `absolute left-0 bottom-0 w-full flex flex-col items-center justify-center transition-all duration-300 rounded-t-md`,
+                  cardType.bg, cardType.text, 
+                  hovered ? "h-[100%]" : "h-[50%]"
+                )}
               >
-                <p className="text-center font-qimano  text-graphite">{question}</p>
-                {hovered && (
-                <p className="text-xs text-center  text-graphite">
-                 {answer}
-                </p>
-              )}
+                <Image src={iconSrc || "/assets/images/about-icon.svg"} alt="about-icon" height={10} width={10} className="w-20 h-17 mt-1"/>
+                      <p className={clsx("text-center font-qimano", cardType.text)}>
+                      {question}
+                      </p>
+
+                      {hovered && (
+                      <p
+                      className={clsx(
+                      "text-xs text-center font-apfel-grotezk-regular mt-4",
+                      cardType.text // Dynamically apply text color
+                      )}
+                      >
+                      {answer}
+                      </p>
+                  )}
               </div>
               </div>
 
                 {/* Scrollable Image Row with Navigation */}
                 <div className="relative flex-1">
                 {/* Left Scroll Button */}
-                <button
-                  onClick={() => handleScroll("left")}
-                  className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full shadow-md z-10"
-                >
-                  ←
-                </button>
 
                 <div
                   ref={scrollRef}
-                  className="flex overflow-x-auto space-x-4 scrollbar-hide px-3 w-[480px]"
+                  className="flex overflow-x-auto space-x-4 scrollbar-hide px-3 w-[480px]" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
                   {/* Uploaded + Predefined Images */}
                   {[...uploadedImages, ...predefinedImages].map((image, index) => (
                     <div
                       key={index}
                       onClick={() => handleImageSelect(image)}
-                      className="cursor-pointer border rounded-md overflow-hidden flex-shrink-0 w-[135px] h-[228px]"
+                      className="cursor-pointer border rounded-md overflow-hidden flex-shrink-0 w-[165px] h-[228px]"
                     >
                       <Image
                         src={image}
                         alt={`Image ${index + 1}`}
-                        className="w-[135px] h-[228px] object-cover"
-                        width={135}
+                        className="w-[165px] h-[228px] object-cover"
+                        width={165}
                         height={228}
                       />
                     </div>
@@ -212,14 +242,17 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
                 {/* Right Scroll Button */}
                 <button
                   onClick={() => handleScroll("right")}
-                  className="absolute -right-80  top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full shadow-md z-10"
+                  className="absolute w-[45px] h-[43px] -right-80 top-1/2 transform -translate-y-1/2 bg-[#212121]/60 p-3 rounded-full shadow-lg flex items-center justify-center"
                 >
-                  →
+                  <Image src="/assets/images/forwardArrowBlack.svg" alt="Right Arrow" width={20} height={20} className="w-5 h-5" />
                 </button>
               </div>
             </div>
 
-            <button className="bg-electric-blue px-5 py-3 text-white rounded-md flex justify-center items-center mx-auto ">
+            <button 
+              onClick={handleConfirmUpload}
+              className="bg-electric-blue px-5 py-3 text-white rounded-md flex justify-center items-center mx-auto"
+            >
               <p className="font-apfel-grotezk-regular text-lg">Confirm Upload</p>
             </button>
 
@@ -230,4 +263,3 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
   );
 }
 
- 
