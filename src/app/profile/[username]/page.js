@@ -66,8 +66,8 @@ const Profile = () => {
   };
 
   return (
-    <div className="flex flex-grow flex-col items-center h-screen bg-white relative font-qimano">
-      {/* Tabs  to have scroll on audinece */}
+    <div className={`flex flex-grow flex-col items-center h-screen bg-white relative font-qimano ${activeTab === "audience" ? "overflow-visible" : "overflow-hidden"}`}>
+      {/* Tabs */}
       <div className="flex absolute top-10 space-x-6 ">
         {menuItems.map((item) => (
           <div
@@ -87,34 +87,35 @@ const Profile = () => {
         ))}
       </div>
 
-     {!isConnected ? (
+      {!isConnected ? (
+        <div className="flex flex-col items-center ">
+          <h1 className="text-3xl absolute top-1/3 transform -translate-y-1/3">
+            Connect with Instagram to add projects
+          </h1>
+          <p className="text-md absolute top-[40%] transform -translate-y-1/3 h-auto max-w-[380px] text-center leading-relaxed">
+            Link your Instagram account here to add projects to
+            <span className="block max-w-[300px] text-center mx-auto">
+              make your portfolio and show to brands
+            </span>
+          </p>
 
-      <div className="flex flex-col items-center ">
-        <h1 className="text-3xl absolute top-1/3 transform -translate-y-1/3">
-          Connect with Instagram to add projects
-        </h1>
-        <p className="text-md absolute top-[40%] transform -translate-y-1/3 h-auto max-w-[380px] text-center leading-relaxed">
-          Link your Instagram account here to add projects to
-          <span className="block max-w-[300px] text-center mx-auto">
-            make your portfolio and show to brands
-          </span>
-        </p>
-
-        <button
-          onClick={handleLogin}
-          disabled={loading}
-          className="w-[230px] h-[47px] mt-5 bg-electric-blue text-white border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white absolute top-[50%] transform -translate-y-1/2"
+          <button
+            onClick={handleLogin}
+            disabled={loading}
+            className="w-[230px] h-[47px] mt-5 bg-electric-blue text-white border border-light-grey rounded-md text-center font-medium hover:bg-electric-blue hover:text-white absolute top-[50%] transform -translate-y-1/2"
+          >
+            {loading ? "Redirecting..." : "Login to Instagram"}
+          </button>
+        </div>
+      ) : (
+        <div
+          className={`flex flex-grow justify-center mt-20 h-full bg-white ${
+            activeTab === "audience" ? "overflow-visible" : ""
+          }`}
         >
-          {loading ? "Redirecting..." : "Login to Instagram"}
-        </button>
-      </div>
-    ) : (
-   <div className="flex flex-grow justify-center mt-20 h-full bg-white">
-    {/* do this overflow-x-hidden and ml-44 only in audience not all */}
-        {renderTabContent()}
-    </div> 
-
-)}
+          {renderTabContent()}
+        </div>
+      )}
     </div>
   );
 };

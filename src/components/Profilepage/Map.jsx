@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ComposableMap, Geographies, Geography } from "react-simple-maps";
+import { ComposableMap, Geographies, Geography} from "react-simple-maps";
 import countries from "i18n-iso-countries";
 import en from "i18n-iso-countries/langs/en.json";
 
@@ -43,7 +43,7 @@ const SimpleWorldMap = () => {
 
   return (
     <div>
-    <ComposableMap projection="geoMercator" projectionConfig={{ scale: 100 }} width={800} height={400}>
+    <ComposableMap projection="geoMercator" projectionConfig={{ scale: 100 }} width={800} height={400} style={{ width: "100%", height: "auto" }} >
       <Geographies geography={geoUrl}>
         {({ geographies }) =>
           geographies.map((geo) => {
@@ -72,11 +72,11 @@ const SimpleWorldMap = () => {
 {topCountries.map((country, index) => (
   <div key={index} className="flex justify-between items-center border-b border-gray-300 py-3 font-apfel-grotesk-regular ml-3 mr-2">
     <span className="flex gap-5">
-    <span className="text-gray-500 text-sm">0{index + 1}</span>
-    <span className=" font-medium text-gray-500">{country.name}</span>
+    <span className="text-gray-500 text-sm flex items-center">0{index + 1}</span>
+    <span className=" font-medium text-md text-graphite font-apfel-grotezk-regular">{country.name}</span>
       </span>
     
-    <span className="text-electric-blue ">{country.percentage}%</span>
+    <span className="text-electric-blue text-sm " style={{ fontFamily: "Open Sans" }}>{country.percentage}%</span>
   </div>
 ))}
 </div>

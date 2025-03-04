@@ -73,7 +73,7 @@ const AgeRangeChart = () => {
         backgroundColor: '#0037EB',
         borderColor: '#0037EB',
         borderWidth: 0,
-        barThickness: 10,
+        barThickness: 5,
         borderRadius: 5,
       },
     ],
@@ -107,7 +107,7 @@ const AgeRangeChart = () => {
   };
 
   return (
-    <div style={{ width: '100%', maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
+    <div style={{ width: '250px', maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
       {/* Gender Selection Buttons */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}>
         {['all', 'men', 'women'].map((gender) => (
@@ -117,11 +117,11 @@ const AgeRangeChart = () => {
             style={{
               padding: '4px 16px',
               borderRadius: '5px',
-              border: '1px solid #0037EB',
-              backgroundColor: selectedGender === gender ? '#0037EB' : 'transparent',
-              color: selectedGender === gender ? '#fff' : '#0037EB',
+              backgroundColor: selectedGender === gender ? '#0037EB' : 'rgba(33, 33, 33, 0.1)',
+              color: selectedGender === gender ? '#fff' : 'black',
               cursor: 'pointer',
               transition: '0.3s',
+              fontFamily: 'font-apfel-grotezk-regular ',
             }}
           >
             {gender.charAt(0).toUpperCase() + gender.slice(1)}
@@ -131,14 +131,14 @@ const AgeRangeChart = () => {
 
       {/* Bar Chart */}
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', height: '300px' }}>
-        <div style={{ width: '60%', height: '100%', marginLeft: '24px' }}>
+        <div style={{ width: '60%', height: '100%', marginLeft: '0px', fontFamily: 'Open Sans' }}>
           <Bar data={chartData} options={options} />
         </div>
 
         {/* Percentage Labels */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', marginLeft: '10px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', marginRight: '-100px' }}>
           {chartData.datasets[0].data.map((value, index) => (
-            <span key={index} style={{ fontSize: '12px', color: 'black' }}>
+            <span key={index} style={{ fontSize: '12px', color: '#0037EB', fontFamily: 'Open Sans' }}>
               {value}%
             </span>
           ))}
