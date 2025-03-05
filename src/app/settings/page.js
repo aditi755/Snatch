@@ -6,60 +6,6 @@ import Image from "next/image";
 export default function Page() {
   const [isConnected, setIsConnected] = useState(false);
   const [loading, setLoading] = useState(false);
-// const [finalizedImages, setFinalizedImages] = useState([]);
-// const [finalizedFormData, setFinalizedFormData] = useState([]);
-// const [formData, setFormData] = useState(null);
-// const key = "18030304070228137";
-
-// useEffect(() => {
-//   const fetchFinalizedImages = async () => {
-//     try {
-//       const response = await fetch(`/api/projects/all-projects?key=${key}`);
-//       const data = await response.json();
-
-//       if (data.success) {
-//         setFinalizedImages(data.finalizedImages);
-//         setFinalizedFormData(data.finalizedFormData);
-//       } else {
-//         console.error("Error:", data.error);
-//       }
-//     } catch (error) {
-//       console.error("Error fetching finalized images:", error);
-//     }
-//   };
-
-//   fetchFinalizedImages();
-// }, []);
-
-//   // Function to fetch form data by key
-//   const fetchFormDataByKey = async (key) => {
-//     try {
-//       const response = await fetch(`/api/projects/all-projects?key=${key}`);
-//       const data = await response.json();
-//       console.log("data fin settings", data);
-
-//       if (data.success) {
-//         console.log("✅ Form Data:", data.formData);
-//         return data.formData;
-//       } else {
-//         console.error("Error:", data.error);
-//       }
-//     } catch (error) {
-//       console.error("Error fetching form data:", error);
-//     }
-//   };
-
-//   // Fetch data when key changes
-//   useEffect(() => {
-//     const getData = async () => {
-//       const data = await fetchFormDataByKey(key);
-//       setFormData(data);
-//     };
-
-//     if (key) getData();
-//   }, [key]); // Runs when key changes
-
-
  useEffect(() => {
     const checkConnection = async () => {
       try {
@@ -124,9 +70,65 @@ export default function Page() {
           : "Login to Instagram"}
       </button>
 
+      <button className="px-4 py-2 bg-electric-blue text-white rounded-lg ml-10" onClick={handleLogin}>Refresh Instagram login</button>
+
     </div>
   );
 }
+
+
+// const [finalizedImages, setFinalizedImages] = useState([]);
+// const [finalizedFormData, setFinalizedFormData] = useState([]);
+// const [formData, setFormData] = useState(null);
+// const key = "18030304070228137";
+
+// useEffect(() => {
+//   const fetchFinalizedImages = async () => {
+//     try {
+//       const response = await fetch(`/api/projects/all-projects?key=${key}`);
+//       const data = await response.json();
+
+//       if (data.success) {
+//         setFinalizedImages(data.finalizedImages);
+//         setFinalizedFormData(data.finalizedFormData);
+//       } else {
+//         console.error("Error:", data.error);
+//       }
+//     } catch (error) {
+//       console.error("Error fetching finalized images:", error);
+//     }
+//   };
+
+//   fetchFinalizedImages();
+// }, []);
+
+//   // Function to fetch form data by key
+//   const fetchFormDataByKey = async (key) => {
+//     try {
+//       const response = await fetch(`/api/projects/all-projects?key=${key}`);
+//       const data = await response.json();
+//       console.log("data fin settings", data);
+
+//       if (data.success) {
+//         console.log("✅ Form Data:", data.formData);
+//         return data.formData;
+//       } else {
+//         console.error("Error:", data.error);
+//       }
+//     } catch (error) {
+//       console.error("Error fetching form data:", error);
+//     }
+//   };
+
+//   // Fetch data when key changes
+//   useEffect(() => {
+//     const getData = async () => {
+//       const data = await fetchFormDataByKey(key);
+//       setFormData(data);
+//     };
+
+//     if (key) getData();
+//   }, [key]); // Runs when key changes
 
 
 
