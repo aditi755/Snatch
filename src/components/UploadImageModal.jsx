@@ -140,7 +140,10 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
   // Add new confirmation handler
   const handleConfirmUpload = () => {
     if (tempSelectedImage) {
-      onImageSelect(tempSelectedImage.url); // Send to parent only on confirmation
+      onImageSelect({
+        url: tempSelectedImage.url,
+        name: tempSelectedImage.name || imageNameMapping[tempSelectedImage.url] || 'Selected Image'
+      }); // Send both URL and name to parent
       onClose();
     }
   };
@@ -195,7 +198,7 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
                   hovered ? "h-[100%]" : "h-[50%]"
                 )}
               >
-                <Image src={iconSrc || "/assets/images/about-icon.svg"} alt="about-icon" height={10} width={10} className="w-20 h-17 mt-1"/>
+                <Image src={iconSrc || "/assets/images/aboutIcon.svg"} alt="about-icon" height={10} width={10} className="w-20 h-17 mt-1"/>
                       <p className={clsx("text-center font-qimano", cardType.text)}>
                       {question}
                       </p>

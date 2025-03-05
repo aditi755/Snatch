@@ -26,7 +26,8 @@ import mongoose from "mongoose";
 const questionSchema = new mongoose.Schema({
   question: String,
   answer: String,
-  coverImage: String, // Ensure this matches the payload field name
+  coverImage: String, 
+  coverImageName: String,
 });
 
 const sectionSchema = new mongoose.Schema({
