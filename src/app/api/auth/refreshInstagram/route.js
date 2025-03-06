@@ -10,7 +10,7 @@ import { getAuth } from "@clerk/nextjs/server";
  export const dynamic = "force-dynamic";
  
 export async function POST(req) {
-  try {
+  try {z
     // Parse the request body
     const body = await req.json();
     const { apiKey } = body;

@@ -54,6 +54,23 @@ export default function Home() {
             Click here: {userId ? "Dashboard" : "Signup"} page
           </Link>
         </p>
+
+  <div className="flex gap-4">
+        <p>
+         <Link
+           className="text-2xl"
+           href="/privacy-policy"  
+           >Privacy Policy</Link>        
+        </p>
+
+        <p>
+         <Link
+           className="text-2xl"
+           href="/terms-and-services"  
+           >Terms and Services</Link>        
+        </p>
+        </div>
+
       </div>
     </Suspense>
   );
