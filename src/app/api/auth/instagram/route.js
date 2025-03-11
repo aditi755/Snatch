@@ -9,12 +9,18 @@ const SCOPES = [
   'instagram_manage_insights',
   'pages_show_list',
   'pages_read_engagement',
+  'business_management'
 ].join(',');
 
 export async function GET() {
-    const instagramAuthUrl = `https://www.facebook.com/v17.0/dialog/oauth?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(
-      REDIRECT_URI
-    )}&response_type=code&scope=${SCOPES}`;
+    //  const instagramAuthUrl = `https://www.facebook.com/v21.0/dialog/oauth?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(
+    //   REDIRECT_URI
+    // )}&response_type=code&scope=${SCOPES}`; 
+    const instagramAuthUrl = `https://www.facebook.com/v21.0/dialog/oauth?
+  client_id=${CLIENT_ID}&
+  redirect_uri=${encodeURIComponent(REDIRECT_URI)}&
+  auth_type=reauthorize& 
+  &response_type=code&scope=${SCOPES}`;
   
     return NextResponse.json({ url: instagramAuthUrl });
   }
