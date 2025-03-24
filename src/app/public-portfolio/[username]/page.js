@@ -11,7 +11,9 @@ function PortfolioContent({ ownerId }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const username = window.location.pathname.split("/").pop(); // Extract username from URL
+        const pathnameParts = window.location.pathname.split("/");
+        const username = pathnameParts[pathnameParts.length - 1] || pathnameParts[pathnameParts.length - 2]; 
+
         const url = ownerId
           ? `/api/public-portfolio/userinfo?userId=${ownerId}`
           : `/api/public-portfolio/userinfo?username=${username}`;
