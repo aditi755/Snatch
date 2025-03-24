@@ -7,6 +7,7 @@ import { useFormContext } from "../onboarding/context";
 import Preview from "@/components/Preview";
 import { useRouter } from "next/navigation";
 import DashboardPreview from "@/components/DashboardPreview";
+import StatsCard from "@/components/StatsCard";
 
 export default function OnboardingLayout({ children }) {
 
@@ -39,7 +40,7 @@ export default function OnboardingLayout({ children }) {
 
           <div className="relative mb-20 z-10 2xl:p-4 py-2 bg-white bg-opacity-90 rounded-lg shadow-lg grid grid-rows-1">
             <DashboardPreview />
-            <div className="w-64 h-20 z-50 absolute left-24 -bottom-24  mx-auto font-qimano">
+            {/* <div className="w-64 h-20 z-50 absolute left-24 -bottom-24  mx-auto font-qimano">
             <div className="flex justify-center items-center gap-20 text-smoke">
               <div className="flex flex-col">
                 <h2 className="text-3xl">100K</h2>
@@ -57,7 +58,8 @@ export default function OnboardingLayout({ children }) {
                 <p className="text-1xl">Likes</p>
               </div>
               </div>
-            </div>
+            </div> */}
+            <StatsCard />
           </div>
 
         

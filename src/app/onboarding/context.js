@@ -48,7 +48,7 @@ export const FormProvider = ({ children }) => {
         console.log("Local data for user:", userId, localData);
 
         // Step 2: Always fetch the latest data from MongoDB
-        const response = await fetch("/api/onboarding/draft");
+        const response = await fetch("/api/onboarding/draft")
         const { data: mongoData } = await response.json();
         console.log("MongoDB data:", mongoData);
 

@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { useFormContext } from "@/app/onboarding/context";
+import React, {memo} from "react";
 
-export default function Preview() {
+function Preview() {
  const { formData } = useFormContext(); 
 
  let profileImageSrc = "/assets/images/profile_defaultOnborad.svg"; 
@@ -136,3 +137,5 @@ export default function Preview() {
       </div>
     );
   }
+
+  export default memo(Preview);

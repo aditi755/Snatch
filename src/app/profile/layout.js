@@ -7,11 +7,13 @@ import { useRouter } from "next/navigation";
 import { FormProvider } from "../onboarding/context";
 import DashboardPreview from "@/components/DashboardPreview";
 import {useAuth} from "@clerk/nextjs";
+import StatsCard from "@/components/StatsCard";
+
 
 export default function OnboardingLayout({ children }) {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const router = useRouter();
-  const {isSignedIn, isLoaded} = useAuth();
+  const {isSignedIn, isLoaded, userId} = useAuth();
 
   if(!isLoaded){
   return <div className="flex justify-center items-center text-2xl h-screen">Loading...</div>
@@ -41,6 +43,29 @@ export default function OnboardingLayout({ children }) {
   const handleSettingClick = () => {
    router.push("/settings")
   }
+
+  const handlePortfolioClick = () => {
+    if (!userId) {
+      console.error("No userId found, user not signed in!");
+      return;
+    }
+  
+    const storedFormData = localStorage.getItem(`formData_${userId}`);
+  //get the username from the userId
+    if (storedFormData) {
+      const parsedData = JSON.parse(storedFormData);
+      const username = parsedData?.username;
+  
+      if (username) {
+        router.push(`/public-portfolio/${username}`);
+      } else {
+        console.error("Username not found in formData!");
+      }
+    } else {
+      console.error("No formData found in localStorage!");
+    }
+  };
+  
   
   return (
     <FormProvider>
@@ -57,25 +82,7 @@ export default function OnboardingLayout({ children }) {
           />
           <div className="relative mb-20 z-10 p-4 bg-white bg-opacity-90 rounded-lg shadow-lg">
             <DashboardPreview />
-            <div className="w-64 h-20 z-50 absolute left-24 -bottom-24  mx-auto font-qimano">
-            <div className="flex justify-center items-center gap-20 text-smoke">
-              <div className="flex flex-col">
-                <h2 className="text-3xl">100K</h2>
-                <p className="text-1xl">Views</p>
-              </div>
-          
-
-              <div className="flex flex-col">
-                <h2 className="text-3xl">56K</h2>
-                <p className="text-1xl">Followers</p>
-              </div>
-          
-              <div className="flex flex-col">
-                <h2 className="text-3xl">35K</h2>
-                <p className="text-1xl">Likes</p>
-              </div>
-              </div>
-            </div>
+            <StatsCard />
           </div>
 
         </div>
@@ -129,20 +136,28 @@ export default function OnboardingLayout({ children }) {
           )}
 
           {/* Other Buttons */}
-          <div className="w-[265px] h-[56px] gap-2 bg-gray-100 flex justify-between items-center rounded-md p-2">
+          <div className="w-[299px] h-[56px] gap-2 bg-gray-100 flex justify-between items-center rounded-md p-2">
             <button
               onClick={handleProfileClick}
-              className="w-[122px] h-[37px] bg-transparent text-electric-blue border border-electric-blue rounded-md text-center font-medium hover:bg-electric-blue hover:text-white"
+              className="px-2 py-2 bg-transparent text-electric-blue border border-electric-blue rounded-md text-center font-medium hover:bg-electric-blue hover:text-white"
             >
               Edit Profile
             </button>
 
             <button
               onClick={handleNextClick}
-              className="w-[135px] h-[37px] bg-transparent text-electric-blue border border-electric-blue rounded-md text-center font-medium hover:bg-electric-blue hover:text-white"
+              className="px-2 py-2 bg-transparent text-electric-blue border border-electric-blue rounded-md text-center font-medium hover:bg-electric-blue hover:text-white"
             >
               Manage Projects
             </button>
+
+            <button
+              onClick={handlePortfolioClick}
+              className="px-2 py-2 bg-electric-blue text-white border border-electric-blue rounded-md text-center font-medium hover:bg-electric-blue hover:text-white"
+            >
+              <Image src="/assets/images/share.svg" alt="share" width={20} height={20} />
+            </button>
+            
           </div>
 
           <button

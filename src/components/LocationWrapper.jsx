@@ -1,7 +1,18 @@
-import React from 'react'
-import LocationCard from './LocationCard';
-const LocationWrapper = () => {
-    return <LocationCard />;
-}
+import React from "react";
+import LocationCard from "./LocationCard";
 
-export default LocationWrapper
+const LocationWrapper = ({
+  topLocations,
+  selectedLocationType,
+  setSelectedLocationType,
+}) => {
+  return (
+    <LocationCard
+      topLocations={topLocations}
+      selectedLocationType={selectedLocationType}
+      setSelectedLocationType={setSelectedLocationType}
+    />
+  );
+};
+
+export default LocationWrapper;
