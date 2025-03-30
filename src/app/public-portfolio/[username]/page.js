@@ -1,52 +1,105 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
+import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import posthog from "posthog-js";
+import PortfolioStatsCard from "@/components/PortfolioStatsCard";
 import { FormProvider } from "@/app/onboarding/context";
-import StatsCard from "@/components/StatsCard";
+import ProfileOverview from "@/components/public-portfolio/ProfileOverview";
+import {  useFetchPortfolio, useCheckScreenSize, Loader} from "@/utils/public-portfolio/portfolio";
+
 
 function PortfolioContent({ ownerId }) {
-  const [formData, setFormData] = useState(null);
+  const containerRef = useRef(null);
+  const formData = useFetchPortfolio(ownerId);
+  const isMobile = useCheckScreenSize();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const pathnameParts = window.location.pathname.split("/");
-        const username = pathnameParts[pathnameParts.length - 1] || pathnameParts[pathnameParts.length - 2]; 
+  // Track scroll relative to the document, not container
+  const { scrollYProgress } = useScroll();
+  const [currentDirection, setCurrentDirection] = useState("column");
 
-        const url = ownerId
-          ? `/api/public-portfolio/userinfo?userId=${ownerId}`
-          : `/api/public-portfolio/userinfo?username=${username}`;
-
-        const response = await fetch(url);
-        const result = await response.json();
-
-        if (result.success) {
-          setFormData(result.data);
-        } else {
-          console.error("Error fetching data:", result.error);
-        }
-      } catch (error) {
-        console.error("Error fetching portfolio:", error);
-      }
-    };
-
-    fetchData();
-  }, [ownerId]);
-
-  if (!formData) {
-    return <div className="h-screen flex items-center justify-center text-white">Loading...</div>;
-  }
+  useMotionValueEvent(scrollYProgress, "change", (value) => {
+    const direction = value <= 0.34 ? "column" : "row";
+    setCurrentDirection(direction);
+  });
+  
+  useMotionValueEvent(scrollYProgress, "change", (value) => {
+   console.log(value);
+  })
+ 
+  const height = useTransform(scrollYProgress, [0, 0.34], ["73vh", "10vh"]);
+  const backgroundColor = useTransform(
+    scrollYProgress,
+    [0, 0.64],
+    ["#000000", "#686868"]
+  );
+    // Scale and translateY for name animation
+    const scale = useTransform(
+      scrollYProgress,
+      [0, 0.3],
+      isMobile ? [2.5, 1.2] : [5, 2.5] // Smaller scale for mobile
+    );
+    const translateY = useTransform(
+      scrollYProgress,
+      [0, 0.3],
+      isMobile ? ["3vh", "1vh"] : ["6vh", "3vh"]
+    );
+    const usernameOpacity = useTransform(scrollYProgress, [0, 0.30], [1, 0]);
+    const usernameVisibility = useTransform(scrollYProgress, [0, 0.30], ["visible", "hidden"]);
+    const displayNone = useTransform(
+      scrollYProgress,
+      [0, 0.31],
+      ["visible", "hidden"]
+    );
+    const industryOpacity = useTransform(scrollYProgress, [0, 0.30], [1, 0]);
+    const industryVisibility = useTransform(scrollYProgress, [0, 0.30], ["visible", "hidden"]);
+    const statsY = useTransform(scrollYProgress, [0, 0.30], ["0vh", "-32vh"]);
+    const buttonY = useTransform(scrollYProgress, [0, 0.30], ["0vh", "-48vh"]);
+    const scaleY = useTransform(scrollYProgress, [0, 0.34], ["73vh", "10vh"]);
+  
+  
+    if (!formData) {
+      return <Loader />;
+    }
+  
 
   return (
-    <div className="h-screen bg-graphite text-white flex flex-col items-center justify-center">
-      <div className="text-3xl font-bold">
-        {formData.firstName || "Name"} {formData.lastName || ""}
-      </div>
-      <div className="text-2xl mt-2">{`@${formData.username || "username"}`}</div>
-    </div>
+    
+    <div className=" h-[200vh] py-[2%] px-[3%] relative" ref={containerRef}>
+  {/* Sticky header that animates */}
+  <ProfileOverview
+    formData={formData}
+    height={height}
+    backgroundColor={backgroundColor}
+    scale={scale}
+    translateY={translateY}
+    usernameOpacity={usernameOpacity}
+    usernameVisibility={usernameVisibility}
+    industryOpacity={industryOpacity}
+    industryVisibility={industryVisibility}
+    displayNone={displayNone}
+    buttonY={buttonY}
+    statsY={statsY}
+    currentDirection={currentDirection}
+    ref={containerRef}
+    // containerRef={containerRef}
+  />
+
+  {/* Content that creates scroll space */}
+  <motion.div
+    className=" w-full h-[100vh] z-0 relative"
+    style={{ height: "100vh" }}
+  >
+    <p className="text-5xl">
+      Press Kit
+    </p>
+  </motion.div>
+</div>
+
   );
 }
+
 
 export default function PublicPortfolioPage({ ownerId }) {
   useEffect(() => {
