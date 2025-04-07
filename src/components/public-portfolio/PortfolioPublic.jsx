@@ -82,11 +82,11 @@ const PortfolioPublic = () => {
   return (
   <div className="w-full mx-auto lg:max-w-[1600px] max-w-[500px] p-6">
   {projects.length > 0 ? (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
+    <div className="grid grid-cols-3 lg:grid-cols-4 gap-1 lg:gap-8">
       {projects.map((project, index) => (
         <div key={index} className="rounded-lg p-2">
           {project.mediaType === "CAROUSEL_ALBUM" && project.children ? (
-            <div className="relative w-[132px] h-[108px] lg:w-[254px] lg:h-[254px] group">
+            <div className="relative w-[80px] h-[108px] lg:w-[254px] lg:h-[254px] group">
               {project.children.map((child, idx) => (
                 <div
                   key={child.id}

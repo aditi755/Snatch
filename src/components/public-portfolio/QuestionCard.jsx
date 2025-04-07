@@ -64,7 +64,7 @@ const QuestionCard = ({ question, answer, coverImage, cardType }) => {
 
   return (
     <div
-      className="relative flex border rounded-3xl w-[165px] h-[228px] lg:w-[360px] lg:h-[500px] overflow-hidden cursor-pointer"
+      className="relative flex border rounded-3xl w-[300px] h-[510px] lg:w-[360px] lg:h-[500px] overflow-hidden cursor-pointer"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
