@@ -52,7 +52,7 @@ export function SelectedProjectsProvider({ children }) {
     fetchDraftData();
   }, [userId]);
 
-  // Debounced function to save draft to MongoDB
+  // Debounced function to save draft to MongoDB  
   const saveDraftToDatabase = useCallback(
     debounce(async (state) => {
       try {

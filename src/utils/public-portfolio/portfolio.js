@@ -35,6 +35,77 @@ export const useFetchPortfolio = (ownerId) => {
   return formData;
 };
 
+export const useFetchPublicPosts = (ownerId) => {
+  const [posts, setPosts] = useState({ instagram: [], uploaded: [] });
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const pathnameParts = window.location.pathname.split("/");
+        const username =
+          pathnameParts[pathnameParts.length - 1] || pathnameParts[pathnameParts.length - 2];
+
+        const url = ownerId
+          ? `/api/public-portfolio/posts?userId=${ownerId}`
+          : `/api/public-portfolio/posts?username=${username}`;
+
+        const response = await fetch(url);
+        const result = await response.json();
+
+        if (result.success) {
+          setPosts({
+            instagram: result.instagram || [],
+            uploaded: result.uploaded || [],
+          });
+        } else {
+          console.error("Error fetching posts:", result.error);
+        }
+      } catch (error) {
+        console.error("Error fetching public posts:", error);
+      }
+    };
+
+    fetchPosts();
+  }, [ownerId]);
+
+  return posts;
+};
+
+
+export const useInstagramData = () => {
+  const [data, setData] = useState({ followers: 0, posts: 0, reach: 0 });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/instagram-stats");
+        if (!response.ok) {
+          throw new Error("Failed to fetch Instagram data");
+        }
+        const result = await response.json();
+        setData({
+          followers: result.followers_count || 0,
+          posts: result.media_count || 0,
+          reach: result.reach || 0,
+        });
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchData();
+  }, []);
+
+  return { data, loading, error };
+};
+
+
+
+
 // 2️⃣ Check Screen Size
 export const useCheckScreenSize = () => {
   const [isMobile, setIsMobile] = useState(false);

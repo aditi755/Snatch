@@ -1,3 +1,4 @@
+//app/api/public-portfolio/[userinfo]/route.js
 import { NextResponse } from "next/server";
 import connectDb from "@/db/mongoose";
 import OnboardingData from "@/models/onboarding.model";

@@ -45,7 +45,9 @@ export async function POST(req) {
 
     // Retrieve the userId from authentication
     const { userId } = getAuth(req);
+ 
 
+    //GET USERNAME FROM FRONTEND TOO FOR STORING IN DB
     if (!userId) {
       return NextResponse.json(
         { success: false, error: "User ID is required." },
