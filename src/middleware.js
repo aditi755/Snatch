@@ -11,7 +11,9 @@ const isPublicRoute = createRouteMatcher([
   "/privacy-policy",
   "/terms-and-services",
   "/public-portfolio(.*)",
-  "/api/public-portfolio/userinfo"
+  "/api/public-portfolio/userinfo",
+  "/api/public-portfolio/posts",
+  "/api/public-portfolio/questions",
 ]);
 
 export default clerkMiddleware(async (authFn, request) => {
