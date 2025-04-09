@@ -33,9 +33,9 @@ const Audience = () => {
       <div className="overflow-x-auto mx-12 w-full max-w-[40vw] bg-white no-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <div ref={scrollRef} className="flex gap-6 w-max min-w-full">
           {[
-            { title: "Gender", component: <PieChart /> },
-            { title: "Country", component: <SimpleWorldMap /> },
-            { title: "Age Range", component: <AgeRangeChart /> },
+            { title: "Gender", component: <PieChart apiEndpoint={'/api/profile/genderDemographics'}/> },
+            { title: "Country", component: <SimpleWorldMap apiEndpoint={'/api/profile/countryDemographics'}/> },
+            { title: "Age Range", component: <AgeRangeChart apiEndpoint={'/api/profile/allDemographics'}/> },
           ].map((item, index) => (
             <div
               key={index}

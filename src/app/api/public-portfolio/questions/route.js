@@ -31,7 +31,7 @@ export async function GET(req) {
 
     const userId = onboardingData.userId;
 
-    // Step 2: Fetch questionnaire by userId
+    // Step 2: Fetch questionnaire by userId  obly fetch that isdraft is false and complete question and answer is filled
     const questionnaires = await Questionnaire.find({ userId });
 
     if (!questionnaires || questionnaires.length === 0) {

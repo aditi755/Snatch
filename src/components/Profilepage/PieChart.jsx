@@ -4,14 +4,14 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const DoughnutChart = () => {
+const DoughnutChart = ({apiEndpoint}) => {
   const [chartData, setChartData] = useState(null);
   const [totalFollowers, setTotalFollowers] = useState(0);
   const [displayText, setDisplayText] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/profile/genderDemographics"); // Update with your actual API route
+        const response = await fetch(apiEndpoint); // Update with your actual API route
         const data = await response.json();
         
         if (!data.demographics) throw new Error("Invalid API Response");

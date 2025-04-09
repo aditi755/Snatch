@@ -23,14 +23,6 @@ import {  useFetchPortfolio, useCheckScreenSize, Loader} from "@/utils/public-po
   );
 }
 
-// function PortfolioContent({ ownerId }) {
-// <main className="min-h-screen bg-red-500 flex items-center justify-center p-10">
-// <ProfileOverview />
-// <div className="text-black text-lg">bdbfedvbdvd</div>
-// </main>
-// }
-
-
 export default function PublicPortfolioPage({ ownerId }) {
   useEffect(() => {
     console.log("Attempting to capture profile visit...");

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { clsx } from "clsx";
 
-const Questionnaire = () => {
+const Questionnaire = ({name}) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -34,9 +34,9 @@ const Questionnaire = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="lg:mt-10 pb-40 ml-10 ">
-          <h3 className="lg:text-6xl text-2xl font-qimano text-electric-blue mb-4">About Radhika</h3>  
-          <div className="mt-5 lg:mt-10 pb-5 lg:pb-40 overflow-x-auto">
+    <div className="lg:mt-10 pb-10 ml-10 ">
+          <h3 className="lg:text-6xl text-2xl font-qimano text-electric-blue mb-4">About {name}</h3>  
+          <div className="mt-5 lg:mt-10 pb-5 lg:pb-0 overflow-x-auto">
         <div className="flex gap-4 w-max rounded-3xl overflow-hidden lg:max-w-[1600px]">
             {data.flatMap((item) =>
             item.sections.flatMap((section) =>
@@ -91,20 +91,31 @@ const QuestionCard = ({ question, answer, coverImage, cardType }) => {
           width={10}
           className="w-20 h-17 mt-1"
         /> 
-        <p className={clsx("text-center font-qimano", cardType.text)}>
+        <p className={clsx("text-center lg:text-xl font-qimano", cardType.text)}>
           {question}
         </p>
 
         {hovered && (
           <p
             className={clsx(
-              "text-xs text-center font-apfel-grotezk-regular mt-4",
+              "text-xs lg:text-xl text-center font-apfel-grotezk-regular mt-4",
               cardType.text
             )}
           >
             {answer}
           </p>
         )}
+     
+       <p className="mt-2 font-apfel-grotezk-regular text-xs  text-center ">
+        {cardType.bg === "bg-lime-yellow"
+          ? "About"
+          : cardType.bg === "bg-graphite"
+          ? "Audience"
+          : cardType.bg === "bg-electric-blue"
+          ? "Brand"
+          : ""}
+      </p>
+
       </div>
     </div>
   );

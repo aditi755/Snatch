@@ -10,6 +10,7 @@ import Image from "next/image"
 import PortfolioPublic from "./PortfolioPublic";
 import QuestionCard from "./QuestionCard";
 import Questionnaire from "./QuestionCard";
+import AudienceCard from "./AudienceCard";
 
 const ProfileOverview = ({ownerId}) => {
   const [isMounted, setIsMounted] = useState(false)
@@ -261,9 +262,59 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
         <PortfolioPublic />
        
         <div className=" w-full mx-auto lg:max-w-[1600px] max-w-[500px]">
-        <Questionnaire />
+        <Questionnaire name={formData?.firstName
+          ? formData.firstName.charAt(0).toUpperCase() + formData.firstName.slice(1)
+            : ""}/>
         </div>
-      
+
+        {/* social links */}
+       <div className="text-graphite mt-4 text-nowrap text-sm lg:text-xl flex ">
+        <span>My social media</span>
+        <span className="flex items-center w-[75%]">
+        <span className="border-b-[0.5px] border-gray-400 mx-2 w-full "></span>
+        </span>
+       
+        <span className="flex gap-2">
+        <span className="w-10 h-7 bg-gray-100 rounded flex items-center justify-center">
+          <Image
+            src="/assets/images/instagram.svg"
+            alt="Instagram"
+            width={20}
+            height={20}
+
+          />
+        </span>
+        <span className="w-10 h-7 bg-gray-100 rounded flex items-center justify-center">
+          <Image
+            src="/assets/images/instagram.svg"
+            alt="Instagram"
+            width={20}
+            height={20}
+          />
+        </span>
+        <span className="w-10 h-7 bg-gray-100 rounded flex items-center justify-center">
+          <Image
+            src="/assets/images/instagram.svg"
+            alt="Instagram"
+            width={20}
+            height={20}
+          />
+        </span>
+        <span className="w-10 h-7 bg-gray-100 rounded flex items-center justify-center">
+          <Image
+            src="/assets/images/instagram.svg"
+            alt="Instagram"
+            width={20}
+            height={20}
+          />
+        </span>
+        </span>
+       </div>
+
+        <div className="w-full mx-auto lg:max-w-[1300px] max-w-[500px] ">
+        <AudienceCard />
+        </div>
+
       </div>
     </motion.div>
   </div>

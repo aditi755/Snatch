@@ -7,13 +7,13 @@ countries.registerLocale(en); // Register English locale
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
-const SimpleWorldMap = () => {
+const SimpleWorldMap = ({apiEndpoint}) => {
   const [highlightedCountries, setHighlightedCountries] = useState([]);
   const [topCountries, setTopCountries] = useState([]);
   useEffect(() => {
     const fetchCountryData = async () => {
       try {
-        const response = await fetch("/api/profile/countryDemographics");
+        const response = await fetch(apiEndpoint);
         const data = await response.json();
         if (data.success) {
           // Convert country codes to full country names and store with percentage

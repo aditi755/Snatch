@@ -15,7 +15,7 @@ import {
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const AgeRangeChart = () => {
+const AgeRangeChart = ({apiEndpoint}) => {
   const [ageData, setAgeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedGender, setSelectedGender] = useState('all'); // Default is 'all'
@@ -24,13 +24,20 @@ const AgeRangeChart = () => {
 
   const fetchAgeData = async (selectedGender) => {
     setLoading(true);
-    const endpoint =
-      selectedGender === "all"
-        ? "/api/profile/allDemographics"
-        : selectedGender === "men"
-        ? "/api/profile/maleDemographics"
-        : "/api/profile/femaleDemographics";
-
+    // const endpoint =
+    //   selectedGender === "all"
+    //     ? "/api/profile/allDemographics"
+    //     : selectedGender === "men"
+    //     ? "/api/profile/maleDemographics"
+    //     : "/api/profile/femaleDemographics";
+    const getGenderedEndpoint = () => {
+      if (selectedGender === 'all') return apiEndpoint;
+      if (selectedGender === 'men') return apiEndpoint.replace('allDemographics', 'maleDemographics');
+      if (selectedGender === 'women') return apiEndpoint.replace('allDemographics', 'femaleDemographics');
+    };
+  
+    const endpoint = getGenderedEndpoint();
+  
     try {
       const response = await fetch(endpoint);
       const data = await response.json();

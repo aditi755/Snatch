@@ -14,6 +14,12 @@ const isPublicRoute = createRouteMatcher([
   "/api/public-portfolio/userinfo",
   "/api/public-portfolio/posts",
   "/api/public-portfolio/questions",
+  "/api/public-portfolio/audience/allDemographics",
+  "/api/public-portfolio/audience/cityDemographics",
+  "/api/public-portfolio/audience/countryDemographics",
+  "/api/public-portfolio/audience/femaleDemographics",
+  "/api/public-portfolio/audience/genderDemographics",
+  "/api/public-portfolio/audience/maleDemographics",
 ]);
 
 export default clerkMiddleware(async (authFn, request) => {
