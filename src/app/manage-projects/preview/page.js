@@ -431,7 +431,7 @@ console.log("preview activeimageid", activeProject,  activeImageId);
     ? selectionState.formData.find(item => item.key === activeProject?.mediaId)?.titleName || "Title of the project"
     : "Loading..."}</p>
 
-            <div className="flex gap-1 flex-wrap max-w-[380px]">
+            <div className="flex gap-1 flex-wrap max-w-xl">
 
           {Array.isArray(selectionState?.formData) &&
             selectionState.formData.find((item) => item.key === activeImageId)?.industries?.length > 0 ? (
