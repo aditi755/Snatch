@@ -105,23 +105,29 @@ export default function AddDetails() {
 
   useEffect(() => {
   let selectedImageId = activeImageId ?? projects?.[0]?.mediaId; 
+  console.log("formData:", selectionState?.formData);
+
+  const formDataArray = Array.isArray(selectionState?.formData)
+  ? selectionState.formData
+  : [];
+
   let savedData =
-    selectionState?.formData?.find((item) => item.key === selectedImageId) || {
-      key: selectedImageId,
-      eventName: "",
-      eventLocation: "",
-      eventYear: "",
-      companyName: "",
-      companyLocation: "",
-      companyLogo: "",
-      companyLogoFileName: "",
-      description: "",
-      eventTypes: [],
-      industries: [],
-      titleName: "",
-      isDraft: true,
-      isBrandCollaboration: true, 
-    };
+  formDataArray.find((item) => item.key === selectedImageId) || {
+    key: selectedImageId,
+    eventName: "",
+    eventLocation: "",
+    eventYear: "",
+    companyName: "",
+    companyLocation: "",
+    companyLogo: "",
+    companyLogoFileName: "",
+    description: "",
+    eventTypes: [],
+    industries: [],
+    titleName: "",
+    isDraft: true,
+    isBrandCollaboration: true, 
+  };
 
   setCurrentFormData(savedData);
 }, [activeImageId, selectionState.formData, projects]);
@@ -218,9 +224,6 @@ export default function AddDetails() {
   }
 
   const getProjectStatus = (project) => {
-    // const formEntry = selectionState?.formData?.find(item => item.key === project.mediaId);
-    // const isComplete = formEntry && requiredFields.every(field => !!formEntry[field]);
-    // return isComplete ? "Done" : "Editing";
     if (activeProject && project.mediaId === activeProject.mediaId) {
       return "Editing";
     }

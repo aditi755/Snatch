@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react"
 import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion"
-//import { BadgeCheck, Info, Heart } from "lucide-react"
 import { FormProvider } from "@/app/onboarding/context";
 import { useFetchPortfolio, useInstagramData, useCheckScreenSize } from "@/utils/public-portfolio/portfolio";
 import Header from "./Header";
