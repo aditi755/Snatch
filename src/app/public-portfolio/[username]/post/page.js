@@ -36,7 +36,9 @@ export default function PostDetailsPage() {
     fetchPostData();
   }, [postId]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <div className="w-[100vw] text-center h-[60vh] flex items-center justify-center">
+<p className="text-2xl text-electric-blue animate-pulse ">Loading...</p>;
+  </div> 
 
   return <PostCard post={post} />;
 }

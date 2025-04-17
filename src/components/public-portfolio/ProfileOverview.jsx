@@ -176,7 +176,7 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
         </div>
         <div className="absolute  lg:translate-x-1/2 rounded-xl w-64 h-80 overflow-visible ">
           <Image
-            src={formData?.profilePicture}
+            src={formData?.profilePicture || "/assets/images/profile_defaultOnborad.svg"}
             alt={`${formData?.firstName} ${formData?.lastName}`}
             width={256}
             height={320}

@@ -1,25 +1,34 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import Image from "next/image";
-import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { useEffect, useState } from "react";
 import posthog from "posthog-js";
-import PortfolioStatsCard from "@/components/PortfolioStatsCard";
 import { FormProvider } from "@/app/onboarding/context";
 import ProfileOverview from "@/components/public-portfolio/ProfileOverview";
-import {  useFetchPortfolio, useCheckScreenSize, Loader} from "@/utils/public-portfolio/portfolio";
+import LoadingTransition from "@/components/public-portfolio/LoadingTransition";
+import { useFetchPortfolio } from "@/utils/public-portfolio/portfolio";
 
+function PortfolioContent({ ownerId }) {
+  const [isLoading, setIsLoading] = useState(true);
+  const portfolioData = useFetchPortfolio(ownerId);
 
- function PortfolioContent({ ownerId }) {  
+  useEffect(() => {
+    // When portfolio data is available, set loading to false
+    if (portfolioData) {
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 1000); // Add a minimum loading time of 1 second
+      return () => clearTimeout(timer);
+    }
+  }, [portfolioData]);
+
+  if (isLoading) {
+    return <LoadingTransition />;
+  }
 
   return (
-    
-    <div className=" h-[200vh] py-[1%] px-[1%] relative">
-  {/* Sticky header that animates */}
-  <ProfileOverview ownerId={ownerId}
-  />
-</div>
-
+    <div className="h-[200vh] py-[1%] px-[1%] relative">
+      <ProfileOverview ownerId={ownerId} />
+    </div>
   );
 }
 
