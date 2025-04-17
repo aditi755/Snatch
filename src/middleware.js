@@ -20,7 +20,6 @@ const isPublicRoute = createRouteMatcher([
   "/api/public-portfolio/audience/femaleDemographics",
   "/api/public-portfolio/audience/genderDemographics",
   "/api/public-portfolio/audience/maleDemographics",
-  "/public-portfolio/snatchsocial/post(.*)",
   "/api/public-portfolio/preview",
 ]);
 
