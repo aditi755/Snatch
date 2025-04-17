@@ -71,12 +71,6 @@ finalSubmit();
   : selectionState.uploadedFiles;
 
   console.log("CURRENT PROJECTS", projects)
-
-  // const activeProject =
-  // activeImageId !== null
-  //   ? projects.find((project) => project.mediaId === activeImageId)
-  //   : projects[0];
-//error activeproject undefined maybe mediais is number in uploadedfile
    
 const activeProject =
   activeImageId !== null
@@ -162,55 +156,6 @@ console.log("preview activeimageid", activeProject,  activeImageId);
       <div className="flex justify-center 7xl:min-w-[93%] mx-auto">
         
       <div className="flex flex-row font-apfel-grotezk-regular">
-      {/* <div className="w-[278px] bg-white text-black p-3 rounded-lg">
-          <div className="flex justify-between items-center border-b border-light-grey">
-            <button
-              className={`relative px-4 py-2 text-lg font-medium ${
-                activeTab === "instagram" ? "text-electric-blue" : "text-light-grey"
-              }`}
-              onClick={() => setActiveTab("instagram")}
-            >
-              <div className="flex justify-center items-center">
-              <Image src="/assets/images/instagram.svg" alt="instagram" width={10} height={10} className="w-10 h-4" />
-              IG
-              </div>
-              
-              {activeTab === "instagram" && (
-                <span className="absolute bottom-[-1px] left-0 w-full h-[2px] bg-electric-blue"></span>
-              )}
-            </button>
-            <button
-              className={`relative px-4 py-2 text-lg font-medium ${
-                activeTab === "uploaded" ? "text-electric-blue" : "text-light-grey"
-              }`}
-              onClick={() => setActiveTab("uploaded")}
-            >
-             <div className="flex justify-center items-center">
-              <Image src="/assets/images/upload-icon.svg" alt="instagram" width={10} height={10} className="w-10 h-4" />
-              Uploaded
-              </div>
-              {activeTab === "uploaded" && (
-                <span className="absolute bottom-[-1px] left-0 w-full h-[2px] bg-electric-blue"></span>
-              )}
-            </button>
-          </div>
-
-          <div className="mt-4 h-full  " style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }} >
-            <p className="text-md font-semibold">Selected Projects</p>
-            <p className="text-light-grey text-sm">
-              {activeTab === "instagram"
-                ? selectionState.instagramSelected.length
-                : selectionState.uploadedFiles.length}{" "}
-            </p>
-            <ProjectsGrid
-              projects={projects}
-              activeTab={activeTab}
-              onProjectClick={handleProjectClick}
-              showStatus={true}
-            />
-          </div>
-        </div>       */}
-
 <div className="w-[278px] bg-white text-black p-3 rounded-lg 5xl:h-[700px]">
           <div className="flex justify-between items-center border-b w-[260px]  border-light-grey">
             <button
@@ -452,12 +397,13 @@ console.log("preview activeimageid", activeProject,  activeImageId);
 
           <div className="w-full border-b-[0.5px] border-gray-300 mt-4"></div>
 
-          <div  className={`flex items-center space-x-4 ${
-    selectionState?.formData?.find(item => item.key === activeImageId)
-      ?.isBrandCollaboration
-      ? "mt-[3rem]"
-      : "mt-[0]"
-  }`}>
+          <div className={`flex items-center space-x-4 ${
+  Array.isArray(selectionState?.formData) &&
+  selectionState.formData.find(item => item.key === activeImageId)?.isBrandCollaboration
+    ? "mt-[3rem]"
+    : "mt-[0]"
+}`}>
+
   {/* Logo */}
   <div className="flex items-center">
 
@@ -468,84 +414,82 @@ console.log("preview activeimageid", activeProject,  activeImageId);
       )}
   </div> 
 
-{selectionState?.formData?.find(item => item.key === activeImageId)?.isBrandCollaboration && (
-  <div className="brand-collaboration-section flex gap-3">
-    {/* Company Logo */}
-    {selectionState?.formData?.find(item => item.key === activeImageId)?.companyLogo ? (
-      // Display the company logo if available
-      <Image
-        src={selectionState.formData.find(item => item.key === activeImageId).companyLogo}
-        width={50}
-        height={50}
-        alt="Company Logo"
-        className="h-12 w-12 bg-cover rounded-full"
-      />
-    ) : (
-      // Display the default image if no company logo is selected
-      <Image
-        src="/assets/images/logo.svg"
-        width={50}
-        height={50}
-        alt="CAI Logo"
-        className="h-12 w-12 object-contain rounded-full"
-      />
-    )}
+  {Array.isArray(selectionState?.formData) && (() => {
+  const selectedItem = selectionState.formData.find(item => item.key === activeImageId);
+  if (!selectedItem?.isBrandCollaboration) return null;
 
-    {/* Divider */}
-    <div className="h-12 border-l border-gray-400"></div>
-
-    {/* Text Details */}
-    <div className="text-gray-500 text-sm space-y-1">
-    <p>
-  {selectionState?.formData?.find(item => item.key === activeImageId) && (
-    <>
-      • <span className="text-graphite">
-        {selectionState?.formData?.find(item => item.key === activeImageId)?.companyName || "Name of company"}
-      </span>{" "}
-      • {selectionState?.formData?.find(item => item.key === activeImageId)?.companyLocation || "Location of company"}
-    </>
-  )}
-</p>
-
-<p>
-  {selectionState?.formData?.find(item => item.key === activeImageId) && (
-    <>
-      • {selectionState?.formData?.find(item => item.key === activeImageId)?.companyLocation || "Location of company"}
-      {selectionState?.formData?.find(item => item.key === activeImageId)?.eventTypes?.length > 0 && (
-        <>
-         {"   • "}
-          {selectionState?.formData?.find(item => item.key === activeImageId)?.eventTypes?.map((eventType, index) => (
-            <span key={index} className="px-1 text-sm">
-              {eventType}
-            </span>
-          ))}
-        </>
+  return (
+    <div className="brand-collaboration-section flex gap-3">
+      {/* Company Logo */}
+      {selectedItem.companyLogo ? (
+        <Image
+          src={selectedItem.companyLogo}
+          width={50}
+          height={50}
+          alt="Company Logo"
+          className="h-12 w-12 bg-cover rounded-full"
+        />
+      ) : (
+        <Image
+          src="/assets/images/logo.svg"
+          width={50}
+          height={50}
+          alt="CAI Logo"
+          className="h-12 w-12 object-contain rounded-full"
+        />
       )}
-    </>
-  )}
-</p>
 
+      {/* Divider */}
+      <div className="h-12 border-l border-gray-400"></div>
+
+      {/* Text Details */}
+      <div className="text-gray-500 text-sm space-y-1">
+        <p>
+          • <span className="text-graphite">
+            {selectedItem.companyName || "Name of company"}
+          </span>{" "}
+          • {selectedItem.companyLocation || "Location of company"}
+        </p>
+
+        <p>
+          • {selectedItem.companyLocation || "Location of company"}
+          {selectedItem.eventTypes?.length > 0 && (
+            <>
+              {" • "}
+              {selectedItem.eventTypes.map((eventType, index) => (
+                <span key={index} className="px-1 text-sm">
+                  {eventType}
+                </span>
+              ))}
+            </>
+          )}
+        </p>
+      </div>
     </div>
-  </div>
-)}
+  );
+})()}
+
 
           </div>
           </div>
 
-          <p className={`${isBrandCollaboration ? 'text-graphite mr-3  mt-5' : 'text-graphite mr-3 mt-0'}`}> {selectionState?.formData?.find(item => item.key === activeImageId)?.description || "Description of the project"}</p>
+          {Array.isArray(selectionState?.formData) && (() => {
+  const selectedItem = selectionState.formData.find(item => item.key === activeImageId);
 
-          <div  className={`w-full border-b-[0.5px] border-gray-300 ${selectionState?.formData?.find(item => item.key === activeImageId)?.isBrandCollaboration ? "mt-8" : "mt-40"}`}></div>
+  return (
+    <>
+      <p className={`${selectedItem?.isBrandCollaboration ? 'text-graphite mr-3 mt-5' : 'text-graphite mr-3 mt-0'}`}>
+        {selectedItem?.description || "Description of the project"}
+      </p>
+
+      <div className={`w-full border-b-[0.5px] border-gray-300 ${selectedItem?.isBrandCollaboration ? "mt-8" : "mt-40"}`}></div>
+    </>
+  );
+})()}
+
 
           
 <div className="mt-5 ml-20 flex gap-20 justify-center items-center text-black w-[300px]">     
-{/* {insights &&
-    insights.map((item) => (
-      <div key={item.name} className="flex-col text-center">
-        <p className="text-[19px]">{item.values[0]?.value || 0}</p>
-        <p className="text-[12px] text-gray-500">{item.title}</p>
-      </div>
-    ))} */}
-
 {insights &&
   insights.map((item) => (
     <div key={item.name} className="flex-col text-center">
