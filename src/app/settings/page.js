@@ -1,25 +1,24 @@
 "use client";
+
 import { useState, useEffect } from "react";
-import { UserButton } from "@clerk/nextjs";
-import { Carousel } from "react-responsive-carousel";
-import Image from "next/image";
+import Header from "@/components/settings/Header";
+import Menu from "@/components/settings/Menu";
+import SettingsLinks from "@/components/settings/SettingsLinks"; // ← import it here
+
 export default function Page() {
   const [isConnected, setIsConnected] = useState(false);
   const [loading, setLoading] = useState(false);
- useEffect(() => {
+
+  useEffect(() => {
     const checkConnection = async () => {
       try {
         const response = await fetch("/api/auth/check-instagram-connection");
         const data = await response.json();
-
-        if (data.connected) {
-          setIsConnected(true);
-        }
+        if (data.connected) setIsConnected(true);
       } catch (error) {
         console.error("Error checking Instagram connection:", error);
       }
     };
-
     checkConnection();
   }, []);
 
@@ -28,11 +27,8 @@ export default function Page() {
     try {
       const response = await fetch("/api/auth/instagram");
       const data = await response.json();
-
-      console.log("data url", data.url)
-
       if (data.url) {
-        window.location.href = data.url; // Redirect to Instagram OAuth via fb
+        window.location.href = data.url;
       } else {
         alert("Failed to get Instagram login URL");
       }
@@ -45,90 +41,57 @@ export default function Page() {
   };
 
   return (
-    <div>
-    <div className="flex justify-between items-center p-4 bg-gray-100">
-      <h1 className="text-xl font-bold">signout</h1>
+    <div className="min-h-screen bg-[#f5f5f5] flex flex-col">
+      {/* Sticky Header */}
+      <div className="sticky top-0 z-50">
+        <Header />
+      </div>
 
-      <UserButton afterSignedOutUrl="/" />
+      {/* Main content */}
+      <main className="flex-grow overflow-y-auto">
+        <div className="max-w-xl mx-auto px-4 pt-20 pb-24 text-center">
+        <h1 className="font-qimano font-normal text-[50px] leading-[90%] text-center align-middle">
+  Settings
+</h1>
 
-    </div>
-      <button
-        onClick={!isConnected ? handleLogin : null}
-        disabled={loading || isConnected}
-        className={`w-[230px] h-[47px] mt-5 ${
-          isConnected
-            ? "bg-green-600 text-white cursor-not-allowed"
-            : "bg-electric-blue text-white"
-        } border border-light-grey rounded-md text-center font-medium ${
-          !isConnected && "hover:bg-electric-blue hover:text-white"
-        }`}
-      >
-        {loading
-          ? "Redirecting..."
-          : isConnected
-          ? "Your account is connected"
-          : "Login to Instagram"}
-      </button>
 
-      <button className="px-4 py-2 bg-electric-blue text-white rounded-lg ml-10" onClick={handleLogin}>Refresh Instagram login</button>
 
+          <div className="text-left border-b border-gray-300 text-sm text-gray-700 pb-2 mb-6 font-medium">
+            Link social media
+          </div>
+
+          <p className="text-lg font-medium">
+            Connect With Instagram To Add Your Projects
+          </p>
+          <p className="text-sm text-gray-600 mt-2">
+            Linking your Instagram account allows you to directly add your creations to your profile kit on Snatch.
+          </p>
+
+          <button
+            onClick={!isConnected ? handleLogin : null}
+            disabled={loading || isConnected}
+            className={`w-[230px] h-[47px] mt-5 ${
+              isConnected
+                ? "bg-[#0044FF] text-white cursor-not-allowed"
+                : "bg-[#0044FF] text-white hover:bg-blue-600"
+            } border border-light-grey rounded-md text-sm font-medium transition`}
+          >
+            {loading
+              ? "Redirecting..."
+              : isConnected
+              ? "Your account is connected"
+              : "Login to Facebook"}
+          </button>
+
+          {/* Settings Links */}
+          <SettingsLinks />
+        </div>
+      </main>
+
+      {/* Bottom Menu */}
+      <div className="fixed bottom-4 left-0 right-0 flex justify-center z-40">
+        <Menu />
+      </div>
     </div>
   );
 }
-
-
-// const [finalizedImages, setFinalizedImages] = useState([]);
-// const [finalizedFormData, setFinalizedFormData] = useState([]);
-// const [formData, setFormData] = useState(null);
-// const key = "18030304070228137";
-
-// useEffect(() => {
-//   const fetchFinalizedImages = async () => {
-//     try {
-//       const response = await fetch(`/api/projects/all-projects?key=${key}`);
-//       const data = await response.json();
-
-//       if (data.success) {
-//         setFinalizedImages(data.finalizedImages);
-//         setFinalizedFormData(data.finalizedFormData);
-//       } else {
-//         console.error("Error:", data.error);
-//       }
-//     } catch (error) {
-//       console.error("Error fetching finalized images:", error);
-//     }
-//   };
-
-//   fetchFinalizedImages();
-// }, []);
-
-//   // Function to fetch form data by key
-//   const fetchFormDataByKey = async (key) => {
-//     try {
-//       const response = await fetch(`/api/projects/all-projects?key=${key}`);
-//       const data = await response.json();
-//       console.log("data fin settings", data);
-
-//       if (data.success) {
-//         console.log("✅ Form Data:", data.formData);
-//         return data.formData;
-//       } else {
-//         console.error("Error:", data.error);
-//       }
-//     } catch (error) {
-//       console.error("Error fetching form data:", error);
-//     }
-//   };
-
-//   // Fetch data when key changes
-//   useEffect(() => {
-//     const getData = async () => {
-//       const data = await fetchFormDataByKey(key);
-//       setFormData(data);
-//     };
-
-//     if (key) getData();
-//   }, [key]); // Runs when key changes
-
-
-
