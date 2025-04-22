@@ -115,81 +115,37 @@ export async function DELETE(req) {
     const { userId } = getAuth(req);
 
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "User ID is required." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "User ID is required." }, { status: 400 });
     }
 
-    const { section, index, questionTitle } = await req.json();
-    console.log("section:", section, "index:", index, "questionTitle:", questionTitle);
-
-    if (!section || (typeof index !== "number" && !questionTitle)) {
-      return NextResponse.json(
-        { error: "Provide either index or question title to delete." },
-        { status: 400 }
-      );
+    const { section, questionId } = await req.json();
+    if (!section || !questionId) {
+      return NextResponse.json({ error: "Section and questionId are required." }, { status: 400 });
     }
 
-    // Find the document for the given userId
     const questionnaire = await Questionnaire.findOne({ userId });
-
     if (!questionnaire) {
-      return NextResponse.json(
-        { error: "Questionnaire not found." },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Questionnaire not found." }, { status: 404 });
     }
 
-    // Find the section
     const sectionData = questionnaire.sections.find((s) => s.section === section);
-
     if (!sectionData) {
-      return NextResponse.json(
-        { error: "Section not found." },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Section not found." }, { status: 404 });
     }
 
-    let questionIndex = -1;
-
-    // Find index by question title if provided
-    if (questionTitle) {
-      questionIndex = sectionData.questions.findIndex(q => q.question === questionTitle);
-      if (questionIndex === -1) {
-        return NextResponse.json(
-          { error: "Question not found." },
-          { status: 404 }
-        );
-      }
-    } else {
-      questionIndex = index;
+    const questionIndex = sectionData.questions.findIndex(q => q._id.toString() === questionId);
+    if (questionIndex === -1) {
+      return NextResponse.json({ error: "Question not found." }, { status: 404 });
     }
 
-    // Validate index
-    if (questionIndex < 0 || questionIndex >= sectionData.questions.length) {
-      return NextResponse.json(
-        { error: "Invalid index." },
-        { status: 400 }
-      );
-    }
-
-    // Remove the question at the found index
+    // Remove the question
     sectionData.questions.splice(questionIndex, 1);
-
-    // Save the updated document
     await questionnaire.save();
 
-    return NextResponse.json(
-      { message: "Question deleted successfully!" },
-      { status: 200 }
-    );
+    return NextResponse.json({ message: "Question deleted successfully!" }, { status: 200 });
   } catch (error) {
     console.error("Error deleting question:", error);
-    return NextResponse.json(
-      { error: "Failed to delete question" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to delete question" }, { status: 500 });
   }
 }
 

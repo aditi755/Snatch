@@ -24,12 +24,6 @@ const AgeRangeChart = ({apiEndpoint}) => {
 
   const fetchAgeData = async (selectedGender) => {
     setLoading(true);
-    // const endpoint =
-    //   selectedGender === "all"
-    //     ? "/api/profile/allDemographics"
-    //     : selectedGender === "men"
-    //     ? "/api/profile/maleDemographics"
-    //     : "/api/profile/femaleDemographics";
     const getGenderedEndpoint = () => {
       if (selectedGender === 'all') return apiEndpoint;
       if (selectedGender === 'men') return apiEndpoint.replace('allDemographics', 'maleDemographics');
@@ -68,7 +62,7 @@ const AgeRangeChart = ({apiEndpoint}) => {
     fetchAgeData(selectedGender);
   }, [selectedGender]); // Re-fetch when gender changes
 
-  if (loading) return <p className="text-center text-gray-600">Loading...</p>;
+  if (loading) return <p className="text-center font-apfel-grotesk-regular text-gray-600 w-[250px] h-[300px] lg:h-[0px] lg:w-[510px] ">Loading...</p>;
 
   // Prepare Data for Chart
   const chartData = {
@@ -138,7 +132,7 @@ const AgeRangeChart = ({apiEndpoint}) => {
 
       {/* Bar Chart */}
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', height: '300px' }}>
-        <div style={{ width: '60%', height: '100%', marginLeft: '0px', fontFamily: 'Open Sans' }}>
+        <div style={{ width: '80%', height: '100%', marginLeft: '0px', fontFamily: 'Open Sans' }}>
           <Bar data={chartData} options={options} />
         </div>
 

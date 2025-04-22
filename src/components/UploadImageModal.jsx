@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { fetchProfileData } from "@/utils/postQuestions";
+import { saveQuestionsToDB } from "@/utils/postQuestions";
+
 import Image from "next/image";
 import clsx from "clsx";
 
@@ -14,7 +16,7 @@ const imageNameMapping = {
   "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740397248/10_o9u87n.jpg": "Minimalist Desktop"
 };
 
-export default function UploadImageModal({ isOpen, onClose, onImageSelect, type, questionIndex }) {
+export default function UploadImageModal({ isOpen, onClose, onImageSelect, type, questionIndex, currentQuestion }) {
 
   const imagesByType =  [
       "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740396552/7_r6djcr.jpg",
@@ -137,14 +139,30 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
     onClose(); // Calls the parent function
   };
 
-  // Add new confirmation handler
-  const handleConfirmUpload = () => {
+  const handleConfirmUpload = async () => {
     if (tempSelectedImage) {
-      onImageSelect({
-        url: tempSelectedImage.url,
-        name: tempSelectedImage.name || imageNameMapping[tempSelectedImage.url] || 'Selected Image'
-      }); // Send both URL and name to parent
-      onClose();
+      try {
+        // Prepare the question data
+        const updatedQuestion = {
+          ...currentQuestion,
+          coverImage: tempSelectedImage.url,
+          coverImageName: tempSelectedImage.name || imageNameMapping[tempSelectedImage.url] || 'Selected Image'
+        };
+
+        // Save to database
+        await saveQuestionsToDB(type, [updatedQuestion]);
+
+        // Update UI
+        onImageSelect({
+          url: tempSelectedImage.url,
+          name: tempSelectedImage.name || imageNameMapping[tempSelectedImage.url] || 'Selected Image'
+        });
+        
+        onClose();
+      } catch (error) {
+        console.error("Failed to save image:", error);
+        alert("Failed to save image. Please try again.");
+      }
     }
   };
 

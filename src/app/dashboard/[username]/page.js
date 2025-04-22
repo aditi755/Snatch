@@ -1,3 +1,4 @@
+//app/dashboard/[username]/page.js
 "use client";
 
 import { useEffect, useState } from "react";
@@ -6,6 +7,7 @@ import LocationWrapper from "@/components/LocationWrapper";
 import { usePathname } from "next/navigation";
 
 const DashboardPage = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [analytics, setAnalytics] = useState({
     totalVisitors: 0,
     totalAvgTimeSpent: 0,
@@ -15,27 +17,35 @@ const DashboardPage = () => {
   });
 
   const [selectedLocationType, setSelectedLocationType] = useState("country");
-  const pathname = usePathname(); // Get the current URL path
-  const username = pathname.split("/").pop(); // Extract username from the path
-  useEffect(() => {
-    if (!username) return; // Wait until username is available
+  const pathname = usePathname();
+  const username = pathname.split("/").pop();
 
-    const fetchAnalytics = async () => {
+  useEffect(() => {
+    const loadDashboardData = async () => {
       try {
-        const response = await fetch(
-          `/api/analytics?username=${username}`
-        );
+        const response = await fetch(`/api/analytics?username=${username}`);
         const data = await response.json();
+        
+        // Minimum delay to ensure smooth transition
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
         setAnalytics(data);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching analytics:", error);
+        setIsLoading(false);
       }
     };
 
-    fetchAnalytics();
+    if (username) {
+      loadDashboardData();
+    }
   }, [username]);
 
-  // Dynamically pass correct location data based on selection
+  if (isLoading) {
+    return <div className="h-screen bg-smoke flex justify-center items-center font-qimano text-3xl text-electric-blue">Loading...</div>;
+  }
+
   const getTopLocations = () => {
     switch (selectedLocationType) {
       case "state":
@@ -116,5 +126,4 @@ export default DashboardPage;
 //     ],
 //     "totalAvgTimeSpent": "4.32"
 //   }
-  
-  
+

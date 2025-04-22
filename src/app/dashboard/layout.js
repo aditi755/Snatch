@@ -12,6 +12,7 @@ import StatsCard from "@/components/StatsCard";
 export default function OnboardingLayout({ children }) {
 
   const router = useRouter();
+
   
   const handleNextClick = () => {
     router.push("/dashboard");
