@@ -181,9 +181,10 @@ const About = () => {
               )}
             </div>
           ))}
-          <div className="flex mt-2 cursor-pointer" onClick={() => addQuestion("about")}>
+
+          <div className="flex -mt-4 cursor-pointer" onClick={() => addQuestion("about")}>
             <Image src="/assets/images/plus.svg" width={25} height={25} alt="plus icon" className="mr-1" />
-            <p className="font-qimano text-graphite mt-1">Add a new question</p>
+            <p className="font-qimano text-graphite ">Add a new question</p>
             <div className="flex-1 ml-2 mt-3.5 border-t border-gray-200"></div>
           </div>
         </div>
@@ -232,9 +233,9 @@ const About = () => {
               )}
             </div>
           ))}
-          <div className="flex mt-2 cursor-pointer" onClick={() => addQuestion("audience")}>
+          <div className="flex -mt-4 cursor-pointer" onClick={() => addQuestion("audience")}>
             <Image src="/assets/images/plus.svg" width={25} height={25} alt="plus icon" className="mr-1" />
-            <p className="font-qimano text-graphite mt-1">Add a new question</p>
+            <p className="font-qimano text-graphite">Add a new question</p>
             <div className="flex-1 ml-2 mt-3.5 border-t border-gray-200"></div>
           </div>
         </div>
@@ -281,9 +282,9 @@ const About = () => {
               )}
             </div>
           ))}
-          <div className="flex mt-2 cursor-pointer" onClick={() => addQuestion("brand")}>
+          <div className="flex -mt-4 cursor-pointer" onClick={() => addQuestion("brand")}>
             <Image src="/assets/images/plus.svg" width={25} height={25} alt="plus icon" className="mr-1" />
-            <p className="font-qimano text-graphite mt-1">Add a new question</p>
+            <p className="font-qimano text-graphite">Add a new question</p>
             <div className="flex-1 ml-2 mt-3.5 border-t border-gray-200"></div>
           </div>
         </div>

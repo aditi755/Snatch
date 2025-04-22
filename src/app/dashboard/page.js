@@ -13,25 +13,7 @@ export default function DashboardRedirect() {
   useEffect(() => {
     const initializeDashboard = async () => {
       try {
-        if (!formData?.username) {
-          router.push("/onboarding");
-          return;
-        }
-
-        // Fetch initial dashboard data
-        const [analyticsResponse, profileResponse] = await Promise.all([
-          fetch(`/api/analytics?username=${formData.username}`),
-          fetch(`/api/profile?username=${formData.username}`)
-        ]);
-
-        if (!analyticsResponse.ok || !profileResponse.ok) {
-          throw new Error('Failed to load dashboard data');
-        }
-
-        // Minimum delay to show loading animation
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
-        setIsLoading(false);
+        //here maybe we can add that dashboard inactive if nothing is there 
         router.push(`/dashboard/${formData.username}`);
 
       } catch (error) {
@@ -43,5 +25,5 @@ export default function DashboardRedirect() {
     initializeDashboard();
   }, [formData, router]);
 
-  return isLoading ? <div className="h-screen bg-smoke flex justify-center items-center font-qimano">Loading...</div> : null;
+  return isLoading ? <div className="h-screen bg-smoke flex justify-center items-center font-qimano text-3xl text-electric-blue">Loading...</div> : null;
 }

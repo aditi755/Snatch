@@ -27,7 +27,7 @@ const DashboardPage = () => {
         const data = await response.json();
         
         // Minimum delay to ensure smooth transition
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        //await new Promise(resolve => setTimeout(resolve, 1500));
         
         setAnalytics(data);
         setIsLoading(false);

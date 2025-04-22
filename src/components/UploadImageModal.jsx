@@ -237,6 +237,12 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
                 {/* Scrollable Image Row with Navigation */}
                 <div className="relative flex-1">
                 {/* Left Scroll Button */}
+                <button
+                onClick={() => handleScroll("left")}
+                className="absolute w-[45px] h-[43px] left-3 top-1/2 transform -translate-y-1/2 bg-[#212121]/60 text-white rounded-full shadow-md hover:bg-[#212121]/80 transition duration-200 z-10"
+              >
+                &larr;
+              </button>
 
                 <div
                   ref={scrollRef}
