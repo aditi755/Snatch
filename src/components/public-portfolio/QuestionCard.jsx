@@ -62,7 +62,7 @@ const Questionnaire = ({name}) => {
       ref={scrollRef}
       className="mt-5 lg:mt-10 pb-5 lg:pb-0 overflow-x-auto scrollbar-hide"    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
     >
-      <div className="flex gap-4 w-max rounded-3xl overflow-hidden lg:max-w-[1800px] px-2">
+      <div className="flex gap-4 w-max rounded-3xl overflow-hidden  px-2">
         {data.flatMap((item) =>
           item.sections.flatMap((section) =>
             section.questions.map((q, i) => (
@@ -100,7 +100,7 @@ const QuestionCard = ({ question, answer, coverImage, cardType }) => {
 
   return (
     <div
-      className="relative flex border rounded-3xl w-[300px] h-[510px] lg:w-[560px] lg:h-[500px] overflow-x-auto cursor-pointer"
+      className="relative flex border rounded-3xl w-[300px] h-[510px] lg:w-[360px] lg:h-[500px] overflow-x-auto cursor-pointer"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
