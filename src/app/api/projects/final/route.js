@@ -30,6 +30,14 @@ export async function POST(req) {
       );
     }
 
+    console.log("Checking for key presence in formData:");
+      project.formData.forEach((item, idx) => {
+        if (!item.key) {
+          console.warn(`❌ formData[${idx}] is missing a key!`, item);
+        }
+      });
+
+
     // Function to update isDraft for the correct activeImageId in formData and instagramSelected
     const updateIsDraftForActiveImageId = (items, idKey) => {
       return items.map((item) => {
@@ -50,6 +58,14 @@ export async function POST(req) {
       return item; 
      })
     }
+
+    console.log("Checking for key presence in formData:");
+    project.formData.forEach((item, idx) => {
+      if (!item.key) {
+        console.warn(`❌ formData[${idx}] is missing a key!`, item);
+      }
+    });
+
 
     // Update formData and instagramSelected where activeImageId matches
     project.formData = updateIsDraftForActiveImageId(project.formData, activeImageId);
