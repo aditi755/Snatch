@@ -39,25 +39,38 @@ export async function POST(req) {
 
 
     // Function to update isDraft for the correct activeImageId in formData and instagramSelected
-    const updateIsDraftForActiveImageId = (items, idKey) => {
-      return items.map((item) => {
-        if (item.key === activeImageId) {
-          console.log("accessing ITEM", item.key, activeImageId);
-          return { ...item, isDraft: false }; 
-        }
-        return item; 
-      });
-    };
+    // const updateIsDraftForActiveImageId = (items, idKey) => {
+    //   return items.map((item) => {
+    //     if (item.key === activeImageId) {
+    //       console.log("accessing ITEM", item.key, activeImageId);
+    //       return { ...item, isDraft: false }; 
+    //     }
+    //     return item; 
+    //   });
+    // };
 
-    const updateInstagramSelectedforActiveImageId = (items, idKey) => {
-     return items.map((item, key) => {
-      if (item.mediaId === activeImageId) {
-        console.log("accessing ITEM", item.mediaId, activeImageId)
-        return { ...item, isDraft: false };
-      }
-      return item; 
-     })
-    }
+    const updateIsDraftForActiveImageId = (items) => {
+      return items
+        .filter((item) => item && item.key && item.key.trim() !== "")
+        .map((item) => {
+          if (item.key === activeImageId) {
+            return { ...item, isDraft: false };
+          }
+          return item;
+        });
+    };
+    
+    const updateInstagramSelectedforActiveImageId = (items) => {
+      return items
+        .filter((item) => item && item.mediaId && item.mediaId.trim() !== "")
+        .map((item) => {
+          if (item.mediaId === activeImageId) {
+            return { ...item, isDraft: false };
+          }
+          return item;
+        });
+    };
+    
 
     console.log("Checking for key presence in formData:");
     project.formData.forEach((item, idx) => {

@@ -83,6 +83,9 @@ export default function Page() {
               : "Login to Facebook"}
           </button>
 
+          <button className="px-4 py-2 bg-electric-blue text-white rounded-lg ml-10" onClick={handleLogin}>Refresh Instagram login</button>
+
+
           {/* Settings Links */}
           <SettingsLinks />
         </div>
