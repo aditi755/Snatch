@@ -37,6 +37,8 @@ export async function POST(req) {
 
     const { _id, ...updateData } = await req.json(); // exclude _id
     //console.log("updateData", updateData); // log the updateData
+
+    //also nned to update user model for igusername = username edit it on furether edits by user as well
     const draft = await OnboardingData.findOneAndUpdate(
       { userId },
       { ...updateData },

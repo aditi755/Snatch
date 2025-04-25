@@ -75,7 +75,7 @@ export function SelectedProjectsProvider({ children }) {
       } finally {
         setIsSaving(false);
       }
-    }, 7000), // 5-second debounce
+    }, 2000, { leading: true }), // 2-second debounce
     [userId]
   );
 
@@ -84,77 +84,56 @@ export function SelectedProjectsProvider({ children }) {
     setIsBrandCollaboration(prev => !prev);
   }, []);
 
-
-// Update form data for Instagram media (adapted for formData array) without next key value
-const updateFormDataForMedia = (mediaId, newFormData, isBrandCollaboration) => {
-  const defaultFormData = {
-    key: "",
-    eventName: "",
-    eventLocation: "",
-    eventYear: "",
-    companyName: "",
-    companyLocation: "",
-    companyLogo: null,
-    companyLogoFileName: null,
-    description: "",
-    eventTypes: [],
-    industries: [],
-    titleName: "",
-    isDraft: true,
-    isBrandCollaboration: true,
-  };
+const updateFormDataForMedia = (mediaId, newFormData) => {
+  if (!mediaId) return;
 
   setSelectionState((prevState) => {
+    console.log("Updating formData for mediaId:", mediaId);
+    console.log("Previous state:", prevState);
+
     // Ensure formData is an array
-    const formData = Array.isArray(prevState.formData) ? prevState.formData : [];
+    const currentFormData = Array.isArray(prevState.formData) ? prevState.formData : [];
 
-    // Get the existing form data or create a new entry
-    const existingData = formData.find(item => item.key === mediaId) || { key: mediaId, ...defaultFormData };
+    // Check if entry already exists
+    const existingIndex = currentFormData.findIndex(item => item.key === mediaId);
+    
+    // Create updated form data array
+    let newFormDataArray;
+    if (existingIndex >= 0) {
+      // Update existing entry
+      newFormDataArray = currentFormData.map((item, index) => 
+        index === existingIndex 
+          ? { ...item, ...newFormData, key: mediaId }
+          : item
+      );
+    } else {
+      // Add new entry
+      newFormDataArray = [
+        ...currentFormData,
+        { ...newFormData, key: mediaId }
+      ];
+    }
 
-    console.log("Existing and new data:", existingData, newFormData);
-
-    // Merge existing and new data
-    const updatedFormData = Object.keys(defaultFormData).reduce((acc, key) => {
-      if (Array.isArray(existingData[key])) {
-        // Merge array fields and remove duplicates
-        acc[key] = [...new Set([...(existingData[key] || []), ...(newFormData[key] || [])])];
-      } else {
-        // Replace value instead of concatenating (Fixes repeated characters issue)
-        acc[key] = newFormData[key] !== undefined ? newFormData[key] : existingData[key];
-      }
-      return acc;
-    }, {});
-
-    // Update the state with new form data
     const newState = {
       ...prevState,
-      formData: [
-        ...formData.filter(item => item.key !== mediaId),  // Remove any existing entry with the same mediaId
-        {
-          key: mediaId,
-          ...updatedFormData,
-        },
-      ],
+      formData: newFormDataArray
     };
 
+    // Save to localStorage and database
     const timestamp = new Date().toISOString();
+    const stateToSave = {
+      ...newState,
+      updatedAt: timestamp
+    };
 
-    // Save to localStorage
-    localStorage.setItem(
-      `selectionState_${userId}`,
-      JSON.stringify({
-        ...newState,
-        updatedAt: timestamp,
-      })
-    );
+    localStorage.setItem(`selectionState_${userId}`, JSON.stringify(stateToSave));
+    saveDraftToDatabase(stateToSave);
 
-    // Auto-save to MongoDB
-    saveDraftToDatabase({ ...newState, updatedAt: timestamp });
 
+    console.log("Updated state:", newState);
     return newState;
   });
 };
-
 
 // Add Instagram selection without map key
 const addInstagramSelection = (mediaLink, mediaId, name, children = []) => {
