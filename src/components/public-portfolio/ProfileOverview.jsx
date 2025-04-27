@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion"
+import { useRouter } from "next/navigation"
 import { FormProvider } from "@/app/onboarding/context";
 import { useFetchPortfolio, useInstagramData, useCheckScreenSize } from "@/utils/public-portfolio/portfolio";
 import Header from "./Header";
@@ -19,6 +20,7 @@ const ProfileOverview = ({ownerId}) => {
   const pressKitRef = useRef(null)
   const formData = useFetchPortfolio(ownerId);
   const { data, loading, error } = useInstagramData();
+  const router = useRouter()
 
   // Ensure component is mounted before using motion values
   useEffect(() => {
@@ -55,6 +57,25 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
   // Always define useTransform, but use static values for mobile
   const visibility = useTransform(scrollY, [150, 151], isMobile ? ["visible", "visible"] : ["visible", "hidden"]);
   const opacity = useTransform(scrollY, [0, 150], isMobile ? [1, 1] : [1, 0]);
+
+  function formatNumber(value) {
+    const num = Number(value); // parse string/number safely
+  
+    if (isNaN(num)) return '0'; // if not a number, fallback to '0'
+  
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+    }
+    if (num >= 1000) {
+      return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+    }
+    return num.toString();
+  }
+  
+  
+  const handleRequest = () => {
+    router.push("/request-popup")
+  }
 
   return (
     <div className="flex flex-col w-full p-1 rounded-xl" ref={containerRef}>
@@ -125,7 +146,7 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
           {/*1 Left Side - Pricing and Services */}
           <div className="w-[340px] pt-20 ml-10 hidden lg:block">
             <div className="flex gap-3  items-center mb-4">
-              <h2 className=" font-medium font-qimano text-3xl">Rs 5k - 25k</h2>
+              <h2 className=" font-medium font-qimano text-3xl">Rs {formatNumber(formData?.reels)} - {formatNumber(formData?.story)}</h2>
               <p className=" text-gray-500 font-apfel-grotezk-regular text-lg ">Value per content piece</p>
             </div>
 
@@ -155,7 +176,7 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
 
 
             {/* CTA Button */}
-            <button className="bg-lime-yellow text-graphite font-semibold py-2 px-4 rounded mt-6 w-[328px] max-w-[328px] font-apfel-grotezk-regular">
+            <button className="bg-lime-yellow text-graphite font-semibold py-2 px-4 rounded mt-6 w-[328px] max-w-[328px] font-apfel-grotezk-regular" onClick={handleRequest}>
               Send request
             </button>
           </div>
@@ -237,7 +258,7 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
 
 
             {/* CTA Button */}
-            <button className="bg-lime-yellow text-graphite font-semibold py-2 px-4 rounded mt-6 w-[328px] max-w-[328px] font-apfel-grotezk-regular">
+            <button className="bg-lime-yellow text-graphite font-semibold py-2 px-4 rounded mt-6 w-[328px] max-w-[328px] font-apfel-grotezk-regular" onClick={handleRequest}>
               Send request
             </button>
           </div>

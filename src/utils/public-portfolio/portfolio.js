@@ -72,6 +72,47 @@ export const useFetchPublicPosts = (ownerId) => {
 };
 
 
+// export const useInstagramData = () => {
+//   const [data, setData] = useState({ followers: 0, posts: 0, reach: 0 });
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+
+//   const pathnameParts = window.location.pathname.split("/");
+//   const username =
+//   pathnameParts[pathnameParts.length - 1] || pathnameParts[pathnameParts.length - 2];
+
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const response = await fetch("/api/instagram-stats");
+//         if (!response.ok) {
+//           throw new Error("Failed to fetch Instagram data from public protfolo");
+//         }
+//         const result = await response.json();
+//         setData({
+//           followers: result.followers_count || 0,
+//           posts: result.media_count || 0,
+//           reach: result.reach || 0,
+//         });
+//       } catch (err) {
+//         setError(err.message);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+    
+//     fetchData();
+//   }, []);
+
+//   return { data, loading, error };
+// };
+
+
+
+
+// 2️⃣ Check Screen Size
+
 export const useInstagramData = () => {
   const [data, setData] = useState({ followers: 0, posts: 0, reach: 0 });
   const [loading, setLoading] = useState(true);
@@ -80,10 +121,23 @@ export const useInstagramData = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/instagram-stats");
-        if (!response.ok) {
-          throw new Error("Failed to fetch Instagram data");
+        const pathnameParts = window.location.pathname.split("/");
+        const username =
+          pathnameParts[pathnameParts.length - 1] || pathnameParts[pathnameParts.length - 2];
+
+        if (!username) {
+          throw new Error("Username not found in URL");
         }
+
+        const response = await fetch(
+          `/api/public-portfolio/instagram-stats?username=${encodeURIComponent(username)}`
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to fetch Instagram data.");
+        }
+
         const result = await response.json();
         setData({
           followers: result.followers_count || 0,
@@ -91,22 +145,18 @@ export const useInstagramData = () => {
           reach: result.reach || 0,
         });
       } catch (err) {
-        setError(err.message);
+        setError(err.message || "An unexpected error occurred");
       } finally {
         setLoading(false);
       }
     };
-    
+
     fetchData();
   }, []);
 
   return { data, loading, error };
 };
 
-
-
-
-// 2️⃣ Check Screen Size
 export const useCheckScreenSize = () => {
   const [isMobile, setIsMobile] = useState(false);
 
