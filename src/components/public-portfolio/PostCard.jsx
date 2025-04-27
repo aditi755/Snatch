@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 export default function PostCard({ post, postId, username }) {
   const [insights, setInsights] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [carouselIndex, setCarouselIndex] = useState(0);
 
   useEffect(() => {
     console.log("PostCard mount with props:", { username, postId });
@@ -78,30 +79,64 @@ export default function PostCard({ post, postId, username }) {
         <div className="relative w-full md:w-[35%] md:px-8 md:py-5 aspect-[4/5]">
           <div className="relative w-full h-full">
             {post.media?.type === "CAROUSEL" && post.media.files?.length > 0 ? (
-              <div className="w-full h-full overflow-hidden rounded-3xl">
-                <div className="flex overflow-x-auto gap-2 h-full">
-                  {post.media.files.map((file, index) =>
-                    file.type === "IMAGE" ? (
-                      <Image
+              <div className="relative w-full h-full">
+                <div className="w-full h-full overflow-hidden rounded-3xl">
+                  <div className="flex overflow-x-hidden h-full">
+                    {post.media.files.map((file, index) => (
+                      <div
                         key={index}
-                        src={file.url}
-                        alt={`Carousel image ${index + 1}`}
-                        width={400}
-                        height={500}
-                        className="object-cover rounded-3xl shrink-0 w-full h-auto"
-                      />
-                    ) : file.type === "VIDEO" ? (
-                      <video
-                        key={index}
-                        controls
-                        className="rounded-3xl shrink-0 w-full h-full object-cover"
+                        className={`absolute inset-0 transition-transform duration-500 h-full w-full ${
+                          (carouselIndex || 0) === index
+                            ? "translate-x-0 opacity-100"
+                            : "translate-x-50 opacity-0"
+                        }`}
                       >
-                        <source src={file.url} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                    ) : null
-                  )}
+                        {file.type === "IMAGE" ? (
+                          <Image
+                            src={file.url}
+                            alt={`Carousel image ${index + 1}`}
+                            fill
+                            className="object-cover rounded-3xl"
+                          />
+                        ) : file.type === "VIDEO" ? (
+                          <video
+                            controls
+                            className="w-full h-full object-cover rounded-3xl"
+                          >
+                            <source src={file.url} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
+                        ) : null}
+                      </div>
+                    ))}
+                  </div>
                 </div>
+
+                {/* Navigation Arrows */}
+                {post.media.files.length > 1 && (
+                  <>
+                    <button
+                      className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-8 h-8 flex justify-center items-center z-10"
+                      onClick={() => {
+                        setCarouselIndex((prev) =>
+                          prev === 0 ? post.media.files.length - 1 : prev - 1
+                        );
+                      }}
+                    >
+                      ❮
+                    </button>
+                    <button
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-8 h-8 flex justify-center items-center z-10"
+                      onClick={() => {
+                        setCarouselIndex((prev) =>
+                          prev === post.media.files.length - 1 ? 0 : prev + 1
+                        );
+                      }}
+                    >
+                      ❯
+                    </button>
+                  </>
+                )}
               </div>
             ) : post.media?.type === "VIDEO" ? (
               <video controls className="w-full h-full object-cover rounded-3xl">
@@ -197,34 +232,21 @@ export default function PostCard({ post, postId, username }) {
           <div className={`w-full h-px bg-[#cbcbcb] my-6 ${hasCompanyInfo ? 'mt-5' : 'mt-44'}`}></div>
 
           {/* Engagement Metrics */}
-          {/* <div className="flex justify-between mt-[1%] font-qimano">
+          <div className="flex justify-between mt-[1%] font-qimano">
             {[
-              { label: "Views", count: "6,638" },
-              { label: "Likes", count: "147" },
-              { label: "Shares", count: "16" },
-              { label: "Comments", count: "19" }
-            ].map(({ label, count }, idx) => (
+              { label: "Views", key: "impressions" }, // or "reach" depending what you fetch
+              { label: "Likes", key: "likes" },
+              { label: "Shares", key: "shares" },
+              { label: "Comments", key: "comments" },
+            ].map(({ label, key }, idx) => (
               <div className="text-center" key={idx}>
-                <div className="text-2xl font-semibold text-[#212121]">{count}</div>
+                <div className="text-2xl font-semibold text-[#212121]">
+                  {insights[key] ?? 0}
+                </div>
                 <div className="text-sm text-[#cbcbcb]">{label}</div>
               </div>
             ))}
-          </div> */}
-              <div className="flex justify-between mt-[1%] font-qimano">
-      {[
-        { label: "Views", key: "impressions" }, // or "reach" depending what you fetch
-        { label: "Likes", key: "likes" },
-        { label: "Shares", key: "shares" },
-        { label: "Comments", key: "comments" },
-      ].map(({ label, key }, idx) => (
-        <div className="text-center" key={idx}>
-          <div className="text-2xl font-semibold text-[#212121]">
-            {insights[key] ?? 0}
           </div>
-          <div className="text-sm text-[#cbcbcb]">{label}</div>
-        </div>
-      ))}
-    </div>
 
         </div>
       </div>

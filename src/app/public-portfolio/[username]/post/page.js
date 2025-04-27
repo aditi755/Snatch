@@ -10,8 +10,8 @@ export default function PostDetailsPage() {
   const searchParams = useSearchParams();
   const params = useParams();
   const postId = searchParams.get("postId");
-  const username = params.username; // Get the username from the URL parameters
-  //const username = searchParams.get("username");
+  const username = params.username;
+
   useEffect(() => {
 
     if (!postId) {
