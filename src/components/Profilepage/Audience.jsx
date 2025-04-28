@@ -4,10 +4,17 @@ import React, { useRef } from "react";
 import PieChart from "./PieChart";
 import SimpleWorldMap from "./Map";
 import AgeRangeChart from "./AgeRangeChart";
-
+import generateAudienceInsights from "@/utils/generateAudienceInsights";
+import { useEffect, useState } from "react";
 const Audience = () => {
   const scrollRef = useRef(null);
-
+  const [insights, setInsights] = useState("");
+  const [demographicData, setDemographicData] = useState({
+    genderData: {},
+    ageData: [],
+    countryData: []
+  });
+  
   const scroll = (direction) => {
     if (scrollRef.current) {
       // Calculate card width including gap (285px + 24px gap)
@@ -21,8 +28,53 @@ const Audience = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchAllDemographics = async () => {
+      try {
+        // Fetch all demographic data
+        const [genderRes, ageRes, countryRes] = await Promise.all([
+          fetch('/api/profile/genderDemographics'),
+          fetch('/api/profile/allDemographics'),
+          fetch('/api/profile/countryDemographics')
+        ]);
+
+        const [genderData, ageData, countryData] = await Promise.all([
+          genderRes.json(),
+          ageRes.json(),
+          countryRes.json()
+        ]);
+
+        const combinedData = {
+          genderData: genderData.demographics,
+          ageData: ageData.ageDistribution,
+          countryData: countryData.countryDistribution
+        };
+
+        setDemographicData(combinedData);
+
+        // Generate insights
+        const generatedInsights = await generateAudienceInsights(combinedData);
+        setInsights(generatedInsights);
+      } catch (error) {
+        console.error("Error fetching demographics:", error);
+      }
+    };
+
+    fetchAllDemographics();
+  }, []);
+
+
   return ( 
-    <div className="relative mt-5 w-[85%] ">
+    <div className="relative mt-5 w-[100%]">
+         {/* AI Generated Insights */}
+     {insights && (
+        <div className=" mx-auto">
+          <div className="text-gray-700 whitespace-pre-line">
+            {insights}
+          </div>
+        </div>
+      )}
+
       {/* Left Scroll Button */}
       <button
         onClick={() => scroll("left")}
@@ -32,7 +84,7 @@ const Audience = () => {
       </button>
 
       {/* Scrollable Content */}
-      <div className="overflow-x-hidden mx-12">
+      <div className="overflow-x-hidden mx-12 ">
         <div 
           ref={scrollRef}
           className="flex gap-6 overflow-x-scroll snap-x snap-mandatory"
@@ -65,6 +117,7 @@ const Audience = () => {
       >
         ▶
       </button>
+
     </div>
   );
 };

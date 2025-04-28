@@ -53,9 +53,10 @@ const Questionnaire = ({name}) => {
   <div className="relative">
     <button
       onClick={() => scroll("left")}
-      className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 rounded-xl p-2 shadow-md hover:bg-white transition-all"
+      className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 rounded-2xl p-2 shadow-md max-w-32 hover:bg-white transition-all"
     >
-      <Image src="/assets/images/previous.svg" alt="icon" height={10} width={10} className="w-10 h-10"/>
+ <Image src="/assets/images/Lefthand.svg" alt="left-arrow" width={10} height={10} className="w-10 h-10"/>
+  <p className="text-electric-blue -mt-2 text-sm">Prev</p>
     </button>
 
     <div
@@ -81,10 +82,12 @@ const Questionnaire = ({name}) => {
 
     <button
       onClick={() => scroll("right")}
-      className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 rounded-xl p-2 shadow-md text-electric-blue hover:bg-white transition-all"
+      className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 rounded-2xl p-2 shadow-md text-electric-blue hover:bg-white transition-all"
     >
       {/* Replace with your right arrow icon */}
       <Image src="/assets/images/next.svg" alt="icon" height={10} width={10} className="w-10 h-10"/>
+
+      <p className="text-electric-blue -mt-2 text-sm">Next</p>
     </button>
   </div>
 </div>

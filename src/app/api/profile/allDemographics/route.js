@@ -32,7 +32,7 @@ export async function GET(req) {
   
       const demographicsResult = await demographicsResponse.json();
 
-      console.log("demographicsresult", demographicsResponse)
+      // console.log("demographicsresult", demographicsResponse)
   
       if (!demographicsResult?.data?.[0]?.total_value?.breakdowns?.[0]?.results) {
         return NextResponse.json({ error: "Invalid API response" }, { status: 500 });
@@ -61,7 +61,7 @@ export async function GET(req) {
         percentage: ((ageGroups[age] / totalFollowers) * 100).toFixed(2),
       }));
 
-      console.log("formateedAgeData", formattedAgeData)
+      //console.log("formateedAgeData", formattedAgeData)
   
       return NextResponse.json({
         success: true,

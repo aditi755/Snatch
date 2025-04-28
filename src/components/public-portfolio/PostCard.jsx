@@ -1,11 +1,13 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-
-export default function PostCard({ post, postId, username }) {
+import PostNavigation from "./PostNavigation";
+import { useRouter } from "next/navigation";
+export default function PostCard({ post, postId, username, allPosts }) {
   const [insights, setInsights] = useState(null);
   const [loading, setLoading] = useState(true);
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
     console.log("PostCard mount with props:", { username, postId });
@@ -49,6 +51,37 @@ export default function PostCard({ post, postId, username }) {
 
     fetchInsights();
   }, [username, postId]);
+
+   // Add navigation handling
+   const handleNavigation = (direction) => {
+    if (!allPosts || allPosts.length === 0) return;
+
+    const currentIndex = allPosts.findIndex(p => p.mediaId === postId);
+    let nextIndex;
+
+    if (direction === 'next') {
+      nextIndex = currentIndex === allPosts.length - 1 ? 0 : currentIndex + 1;
+    } else {
+      nextIndex = currentIndex === 0 ? allPosts.length - 1 : currentIndex - 1;
+    }
+
+    const nextPost = allPosts[nextIndex];
+    router.push(`/public-portfolio/${username}/post/?postId=${nextPost.mediaId}`);
+  };
+
+  // Add keyboard navigation
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === 'ArrowLeft') {
+        handleNavigation('prev');
+      } else if (event.key === 'ArrowRight') {
+        handleNavigation('next');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [postId, allPosts]);
 
   if (loading) {
     return <div>Loading insights...</div>; // or you can make a skeleton loader
@@ -250,6 +283,12 @@ export default function PostCard({ post, postId, username }) {
 
         </div>
       </div>
+
+        {/* Add navigation buttons */}
+        <PostNavigation 
+        onPrev={() => handleNavigation('prev')}
+        onNext={() => handleNavigation('next')}
+      />
     </div>
   );
 }
