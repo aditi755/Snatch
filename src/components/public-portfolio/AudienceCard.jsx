@@ -13,7 +13,7 @@ const AudienceCard = () => {
     ageData: [],
     countryData: []
   });
-  
+
   useEffect(() => {
     const fetchAllDemographics = async (username) => {
       try {
@@ -71,13 +71,19 @@ const AudienceCard = () => {
    
    {/* show ai generated insights here */}
 
-      {insights && (
-              <div className="mx-auto">
-                <div className="text-gray-700 whitespace-pre-line text-center text-lg font-qimano mt-2 ">
-                  {insights}
-                </div>
+          {insights ? (
+            <div className="mx-auto">
+              <div className="text-gray-700 whitespace-pre-line text-center text-lg font-qimano mt-2 ">
+                {insights}
               </div>
-            )}
+            </div>
+          ) : (
+            <div className="mx-auto space-y-2">
+              <div className="h-4 w-full animate-pulse rounded bg-gray-200" />
+              <div className="h-4 w-5/6 animate-pulse rounded bg-gray-200" />
+              <div className="h-4 w-4/6 animate-pulse rounded bg-gray-200" />
+            </div>
+          )}
 
     <div className='flex flex-col lg:flex-row gap-4 mt-5 lg:mt-1 w-full justify-center items-center lg:p-20'>
     {genderEndpoint && <PieChart apiEndpoint={genderEndpoint} />}

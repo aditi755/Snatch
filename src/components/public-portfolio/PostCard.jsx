@@ -193,10 +193,16 @@ export default function PostCard({ post, postId, username, allPosts }) {
 
         {/* Right: Content */}
         <div className="flex-1 py-6 px-4 md:pr-8 flex flex-col">
+
+          <div className="flex items-center justify-between mb-4">
           {/* Title */}
           <h2 className="text-graphite font-qimano text-2xl font-medium leading-tight mb-6">
-            {title}
+                  {title}
           </h2>
+
+          <button className="text-graphite font-qimano text-sm font-medium leading-tight mb-6" onClick={() => router.push(`/public-portfolio/${username}`)}>Go to portfolio</button>
+          </div>
+     
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-8 max-w-3xl">

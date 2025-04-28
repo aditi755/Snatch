@@ -67,13 +67,19 @@ const Audience = () => {
   return ( 
     <div className="relative mt-5 w-[100%]">
          {/* AI Generated Insights */}
-     {insights && (
-        <div className=" mx-auto">
-          <div className="text-gray-700 whitespace-pre-line">
-            {insights}
-          </div>
-        </div>
-      )}
+         {insights ? (
+  <div className="mx-auto">
+    <div className="text-gray-700 whitespace-pre-line mb-2">
+      {insights}
+    </div>
+  </div>
+) : (
+  <div className="mx-auto space-y-2 mb-2">
+    <div className="h-4 w-full animate-pulse rounded bg-gray-200" />
+    <div className="h-4 w-5/6 animate-pulse rounded bg-gray-200" />
+    <div className="h-4 w-4/6 animate-pulse rounded bg-gray-200" />
+  </div>
+)}
 
       {/* Left Scroll Button */}
       <button
