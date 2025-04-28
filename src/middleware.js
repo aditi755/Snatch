@@ -23,6 +23,7 @@ const isPublicRoute = createRouteMatcher([
   "/api/public-portfolio/preview",
   "/api/public-portfolio/media-insights",
   "/api/public-portfolio/instagram-stats",
+  "/request-popup"
 ]);
 
 export default clerkMiddleware(async (authFn, request) => {
