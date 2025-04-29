@@ -115,7 +115,7 @@ const DashboardPage = () => {
       </div>
 
       {/* Location Analytics */}
-      <div className="absolute top-[38%] w-full">
+      <div className="absolute top-[23%] w-full">
         <LocationWrapper
           topLocations={getTopLocations()}
           setSelectedLocationType={setSelectedLocationType}
@@ -177,7 +177,7 @@ const DashboardPage = () => {
       {/* Overlay if Instagram not connected */}
       {!isInstagramLinked && (
         <div
-          className="absolute inset-0 z-50 bg-black bg-opacity-60 flex flex-col items-center justify-center text-center px-6"
+          className="absolute inset-0 z-50 bg-black bg-opacity-90 flex flex-col items-center justify-center text-center px-6"
           style={{ height: "680px" }}
         >
           <h2 className="text-3xl md:text-4xl text-[#e7e300] font-qimano mb-4">
