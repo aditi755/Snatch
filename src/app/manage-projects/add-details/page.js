@@ -103,17 +103,27 @@ export default function AddDetails() {
 
   // Auto-select first project's formData when no project is selected
 
-  useEffect(() => {
-  let selectedImageId = activeImageId ?? projects?.[0]?.mediaId; 
-  console.log("formData:", selectionState?.formData);
+useEffect(() => {
+  // Set activeImageId to first project's mediaId on initial load
+  if (!activeImageId && projects?.length > 0) {
+    const firstProjectId = projects[0].mediaId;
+    setActiveImageId(firstProjectId);
+    console.log("Setting initial activeImageId:", firstProjectId);
+  }
+}, [projects]);
 
+// Separate useEffect for handling form data updates
+useEffect(() => {
+  if (!activeImageId) return;
+
+  console.log("Loading form data for mediaId:", activeImageId);
+  
   const formDataArray = Array.isArray(selectionState?.formData)
-  ? selectionState.formData
-  : [];
+    ? selectionState.formData
+    : [];
 
-  let savedData =
-  formDataArray.find((item) => item.key === selectedImageId) || {
-    key: selectedImageId,
+  let savedData = formDataArray.find((item) => item.key === activeImageId) || {
+    key: activeImageId,
     eventName: "",
     eventLocation: "",
     eventYear: "",
@@ -126,22 +136,17 @@ export default function AddDetails() {
     industries: [],
     titleName: "",
     isDraft: true,
-    isBrandCollaboration: true, 
+    isBrandCollaboration: true,
   };
 
+  // Update currentFormData
   setCurrentFormData(savedData);
-}, [activeImageId, selectionState.formData, projects]);
 
-
-  useEffect(() => {
-    if (activeProject) {
-      const fetchData = async () => {
-        const response = await fetchMediaInsights(activeProject.mediaId);
-        setInsights(response?.insights?.data || []);
-      };
-      fetchData();
-    }
-  }, [activeProject]);
+  // Ensure form data exists in context for this mediaId
+  if (!formDataArray.some(item => item.key === activeImageId)) {
+    updateFormDataForMedia(activeImageId, savedData);
+  }
+}, [activeImageId, selectionState?.formData]);
 
   if (!isHydrated) {
     return null;
@@ -164,14 +169,44 @@ export default function AddDetails() {
     });
   };
 
-  const handleRemoveValue = (fieldName, value, mediaId) => {
-    setCurrentFormData((prevData) => {
-      const updatedValues = (prevData[fieldName] || []).filter((item) => item !== value);
-      const updatedEntry = { ...prevData, [fieldName]: updatedValues };
-      updateFormDataForMedia(mediaId, updatedEntry);
-      return updatedEntry;
-    });
-  };
+
+const handleRemoveValue = (fieldName, value, mediaId) => {
+  console.log('--- Remove Value Debug Start ---');
+  console.log('Attempting to remove:', { fieldName, value, mediaId });
+  
+  setCurrentFormData((prevData) => {
+    console.log('Previous Data:', prevData);
+    
+    // Ensure prevData is an array and get the current entry
+    const currentEntry = Array.isArray(prevData) ? prevData[0] : prevData;
+    console.log('Current Entry:', currentEntry);
+    
+    // Get the current field values as array
+    const currentValues = Array.isArray(currentEntry[fieldName]) ? currentEntry[fieldName] : [];
+    console.log('Current Values:', currentValues);
+    
+    // Filter out the value
+    const updatedValues = currentValues.filter(item => item !== value);
+    console.log('Updated Values after filter:', updatedValues);
+    
+    // Create updated entry
+    const updatedEntry = {
+      ...currentEntry,
+      [fieldName]: updatedValues
+    };
+    console.log('Updated Entry:', updatedEntry);
+
+    // Update context
+    console.log('Updating context with mediaId:', mediaId);
+    updateFormDataForMedia(mediaId, updatedEntry);
+
+    console.log('Returning new state:', [updatedEntry]);
+    console.log('--- Remove Value Debug End ---');
+    
+    // Return as array
+    return [updatedEntry];
+  });
+};
 
   const handleInputChange = (e, mediaId) => {
     const { name, value } = e.target;

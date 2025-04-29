@@ -46,14 +46,14 @@ export default function OnboardingLayout({ children }) {
 
         </div>
 
-        <div className="absolute top-[87%] left-[37%]  w-[530px] h-[79px] flex justify-center items-center gap-3  bg-white font-apfel-grotezk-regular rounded-xl shadow-md z-20">
+        <div className="absolute top-[87%] left-[37%]  w-[450px] h-[79px] flex justify-center items-center gap-3  bg-white font-apfel-grotezk-regular rounded-xl shadow-md z-20">
           <button onClick={handleProfileClick} className="w-[80px] h-[50px] bg-gray-100 text-electric-blue  rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
             Profile
           </button>
  
-          <button onClick={handleNextClick} className="w-[80px] h-[50px] bg-gray-100 text-electric-blue  rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
+          {/* <button onClick={handleNextClick} className="w-[80px] h-[50px] bg-gray-100 text-electric-blue  rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
             Explore
-          </button>
+          </button> */}
 
           <button onClick={handleNextClick} className="w-[90px] h-[50px] bg-gray-100 text-electric-blue  rounded-md text-center font-medium hover:bg-electric-blue hover:text-white">
             Dashboard

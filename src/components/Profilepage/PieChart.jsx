@@ -112,7 +112,7 @@ const DoughnutChart = ({apiEndpoint}) => {
 
 
         {/* Gender Percentages Below the Chart */}
-        <div className="mt-4 flex gap-3 text-black">
+        <div className="mt-2 flex gap-3 text-black">
           <div className="flex items-center gap-2" style={{fontFamily: "Open Sans"}}>
             <span
               className="w-8 h-2 "

@@ -29,7 +29,9 @@ const MultiSelectInput = ({ label, data, selectedValues, onAddValue, onRemoveVal
     }
   };
 
-  const handleRemoveChip = (value) => {
+  const handleRemoveChip = (e,value) => {
+    e.stopPropagation(); // Prevent 
+    console.log("Removing value:", value); // Debugging line
     onRemoveValue(value);
   };
 
@@ -52,8 +54,8 @@ const MultiSelectInput = ({ label, data, selectedValues, onAddValue, onRemoveVal
             <span>{value}</span>
             <button
               type="button"
-              className="ml-2 text-xs text-gray-500 hover:text-gray-800"
-              onClick={() => handleRemoveChip(value)}
+              className="ml-2 text-xs text-gray-500 hover:text-red-500"
+              onClick={(e) => handleRemoveChip(e,value)}
             >
               ✕
             </button>

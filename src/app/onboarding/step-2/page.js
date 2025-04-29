@@ -34,6 +34,21 @@ export default function Step2() {
     checkFormCompletion();
   }, [formData]);
 
+  const handleAddValue = (field, value) => {
+    if (!formData[field]?.includes(value)) {
+      updateFormData({
+        [field]: [...(formData[field] || []), value],
+      });
+    }
+  };
+  
+  const handleRemoveValue = (field, value) => {
+    updateFormData({
+      [field]: formData[field].filter((item) => item !== value),
+    });
+  };
+  
+
   // Handle form submission
   const handleSubmit = async () => {
     if (!isFormComplete) return;
@@ -126,14 +141,14 @@ export default function Step2() {
 
         <div className="bg-transparent w-full h-24"></div>
       </form>
-      <button
+      {/* <button
         type="button"
         className={`mt-6 px-4 py-2 rounded ${isFormComplete ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
         onClick={handleSubmit}
         disabled={!isFormComplete}
       >
         Complete Onboarding
-      </button>
+      </button> */}
     </div>
   );
 }

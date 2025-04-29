@@ -3,7 +3,7 @@ import React from "react";
 import PostCard from "@/components/public-portfolio/PostCard";
 import Link from "next/link";
 import Image from "next/image";
-
+import { PostsProvider } from "@/context/PostContext";
 export default async function PostLayout({ children, params }) {
     const { username } = params;
     let userPosts = [];
@@ -53,8 +53,15 @@ export default async function PostLayout({ children, params }) {
     return (
       <div>
         {/* Specific post */}
-        {children}
-  
+        {/* {children} */}
+        <div className="posts-container">
+          {/* Use a Context Provider instead of cloneElement */}
+          <PostsProvider value={{ allPosts: userPosts, username }}>
+            {children}
+          </PostsProvider>
+        </div>
+
+
         {/* More posts */}
         <div className="max-w-5xl  mx-auto mt-12 px-4">
           <h3 className="text-lg font-apfel-grotesk-mittel font-medium mb-4">More from @{username}</h3>

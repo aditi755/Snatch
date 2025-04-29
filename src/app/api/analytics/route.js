@@ -2,30 +2,45 @@ import { NextResponse } from "next/server";
 
 export async function GET(req) {
   const POSTHOG_PROJECT_ID = 56106;
-  const POSTHOG_API_KEY =
-    "phx_LkVB5sPexsjvftPb6pmpSKtHSBr5jnTILr1oPpSeCr4c6Ll";
+  const POSTHOG_API_KEY = "phx_LkVB5sPexsjvftPb6pmpSKtHSBr5jnTILr1oPpSeCr4c6Ll";
 
   if (!POSTHOG_API_KEY) {
     return NextResponse.json({ error: "Missing API key" }, { status: 500 });
   }
 
-  // ✅ Extract username from query params
   const { searchParams } = new URL(req.url);
   const username = searchParams.get("username");
 
   if (!username) {
-    return NextResponse.json(
-      { error: "Username is required" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Username is required" }, { status: 400 });
   }
 
   try {
+    // Get events from last 30 days only
     let allEvents = [];
-    let nextUrl = `https://eu.i.posthog.com/api/projects/${POSTHOG_PROJECT_ID}/events/?after=2025-01-01`;
+    const filters = encodeURIComponent(JSON.stringify([
+      {
+        key: "$current_url",
+        value: `/public-portfolio/${username}`,
+        operator: "icontains",
+        type: "event",
+      }
+    ]));
+    
+    // Use current year as base date to ensure we catch all events
+    const currentYear = new Date().getFullYear();
+    let nextUrl = `https://eu.i.posthog.com/api/projects/${POSTHOG_PROJECT_ID}/events/?after=${currentYear}-01-01&limit=100&properties=${filters}`;
+    
+    let pageCounter = 0;
+    const MAX_PAGES = 5;
 
-    // ✅ Fetch all events with pagination
-    while (nextUrl) {
+    // Add debug logging
+    console.log(`Fetching analytics for username: ${username}`);
+
+    while (nextUrl && pageCounter < MAX_PAGES) {
+      pageCounter++;
+      console.log(`Fetching page ${pageCounter}`);
+      
       const response = await fetch(nextUrl, {
         method: "GET",
         headers: {
@@ -39,133 +54,72 @@ export async function GET(req) {
       }
 
       const data = await response.json();
-      allEvents = [...allEvents, ...data.results];
-      nextUrl = data.next || null;
-    }
+      const events = data.results || [];
 
-    // ✅ Filter events for /public-portfolio/{username}
-    const portfolioEvents = allEvents.filter(
-      (event) =>
-        event.properties?.$current_url?.includes(
-          `/public-portfolio/${username}`
-        ) ||
-        event.properties?.$session_entry_url?.includes(
-          `/public-portfolio/${username}`
-        )
-    );
 
-    // ✅ Track unique visitors for /public-portfolio/{username}
+    // Process data
     let visitorSet = new Set();
     let countryCount = {};
     let stateCount = {};
     let cityCount = {};
+    let totalDuration = 0;
+    let sessionCount = 0;
+    const sessionDurations = {};
 
-    portfolioEvents.forEach((event) => {
-      const visitorId = event.distinct_id;
-      const country = event.properties?.$geoip_country_name || "Unknown";
-      const state = event.properties?.$geoip_subdivision_1_name || "Unknown";
-      const city = event.properties?.$geoip_city_name || "Unknown";
-
+    // Single pass through events
+    events.forEach(event => {
       // Track unique visitors
-      if (visitorId) {
-        visitorSet.add(visitorId);
-      }
+      visitorSet.add(event.distinct_id);
 
-      // Count countries
-      if (country !== "Unknown") {
-        countryCount[country] = (countryCount[country] || 0) + 1;
-      }
+      // Track location data
+      const country = event.properties?.$geoip_country_name;
+      const state = event.properties?.$geoip_subdivision_1_name;
+      const city = event.properties?.$geoip_city_name;
 
-      // Count states
-      if (state !== "Unknown") {
-        stateCount[state] = (stateCount[state] || 0) + 1;
-      }
+      if (country) countryCount[country] = (countryCount[country] || 0) + 1;
+      if (state) stateCount[state] = (stateCount[state] || 0) + 1;
+      if (city) cityCount[city] = (cityCount[city] || 0) + 1;
 
-      // Count cities
-      if (city !== "Unknown") {
-        cityCount[city] = (cityCount[city] || 0) + 1;
-      }
-    });
-
-    // ✅ Total visitors for /public-portfolio/{username}
-    const totalVisitors = visitorSet.size;
-
-    // ✅ Process top 3 countries by percentage
-    const sortedCountries = Object.entries(countryCount)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 3)
-      .map(([country, count]) => ({
-        location: country,
-        percentage: ((count / portfolioEvents.length) * 100).toFixed(2),
-      }));
-
-    // ✅ Process top 3 states by percentage
-    const sortedStates = Object.entries(stateCount)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 3)
-      .map(([state, count]) => ({
-        location: state,
-        percentage: ((count / portfolioEvents.length) * 100).toFixed(2),
-      }));
-
-    // ✅ Process top 3 cities by percentage
-    const sortedCities = Object.entries(cityCount)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 3)
-      .map(([city, count]) => ({
-        location: city,
-        percentage: ((count / portfolioEvents.length) * 100).toFixed(2),
-      }));
-
-    // ✅ Track unique sessions and calculate time spent for /public-portfolio/{username}
-    let sessionDurations = {};
-    portfolioEvents.forEach((event) => {
+      // Track session duration
       const sessionId = event.properties?.$session_id;
-      const timestamp = new Date(event.timestamp).getTime();
-
       if (sessionId) {
+        const timestamp = new Date(event.timestamp).getTime();
         if (!sessionDurations[sessionId]) {
-          sessionDurations[sessionId] = {
-            entryTime: timestamp,
-            exitTime: timestamp,
-          };
+          sessionDurations[sessionId] = { start: timestamp, end: timestamp };
         } else {
-          sessionDurations[sessionId].entryTime = Math.min(
-            sessionDurations[sessionId].entryTime,
-            timestamp
-          );
-          sessionDurations[sessionId].exitTime = Math.max(
-            sessionDurations[sessionId].exitTime,
-            timestamp
-          );
+          sessionDurations[sessionId].start = Math.min(sessionDurations[sessionId].start, timestamp);
+          sessionDurations[sessionId].end = Math.max(sessionDurations[sessionId].end, timestamp);
         }
       }
     });
 
-    // ✅ Calculate total session durations for /public-portfolio/{username}
-    let totalDuration = 0;
-    let sessionCount = 0;
-
-    Object.values(sessionDurations).forEach(({ entryTime, exitTime }) => {
-      const duration = (exitTime - entryTime) / 1000 / 60; // convert ms to minutes
-      if (duration > 0) {
+    // Calculate average session duration
+    Object.values(sessionDurations).forEach(({ start, end }) => {
+      const duration = (end - start) / 1000 / 60; // minutes
+      if (duration > 0 && duration < 180) { // Ignore sessions > 3 hours
         totalDuration += duration;
-        sessionCount += 1;
+        sessionCount++;
       }
     });
 
-    // ✅ Average time spent for /public-portfolio/{username}
-    const totalAvgTimeSpent =
-      sessionCount > 0 ? (totalDuration / sessionCount).toFixed(2) : "0";
+    // Process top locations
+    const getTopLocations = (data, total) => 
+      Object.entries(data)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .map(([location, count]) => ({
+          location,
+          percentage: ((count / total) * 100).toFixed(2)
+        }));
 
-    // ✅ Return aggregated data
     return NextResponse.json({
-      totalVisitors,
-      topCountries: sortedCountries,
-      topStates: sortedStates,
-      topCities: sortedCities,
-      totalAvgTimeSpent,
+      totalVisitors: visitorSet.size,
+      topCountries: getTopLocations(countryCount, events.length),
+      topStates: getTopLocations(stateCount, events.length),
+      topCities: getTopLocations(cityCount, events.length),
+      totalAvgTimeSpent: sessionCount ? (totalDuration / sessionCount).toFixed(2) : "0"
     });
+  }
   } catch (error) {
     console.error("Error:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });

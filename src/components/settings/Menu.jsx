@@ -2,14 +2,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 
+
 export default function Menu() {
   const [open, setOpen] = useState(false);
+
 
   return (
     <div className="fixed bottom-5 w-full flex justify-center items-center z-50">
       {/* Common Wrapper */}
       <div className="flex items-center gap-4 bg-white px-4 py-2 rounded-xl shadow-lg">
-        
+       
         {/* Individual Wrapper for Hamburger Icon */}
         <button
           className="bg-[#F7F7F7] p-4 rounded-xl shadow-md"
@@ -24,11 +26,13 @@ export default function Menu() {
           />
         </button>
 
+
         {/* Individual Wrapper for SNATCH logo */}
         <div className="bg-[#F7F7F7] px-4 py-3 rounded-xl shadow-md flex items-center justify-center">
           <span className="text-[#0044FF] font-bold text-lg tracking-wide">SNATCH</span>
         </div>
       </div>
+
 
       {/* Dropdown Menu */}
       {open && (

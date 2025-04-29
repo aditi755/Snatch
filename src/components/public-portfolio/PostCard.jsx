@@ -1,18 +1,108 @@
 "use client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import PostNavigation from "./PostNavigation";
+import { useRouter } from "next/navigation";
+export default function PostCard({ post, postId, username, allPosts }) {
+  const [insights, setInsights] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [carouselIndex, setCarouselIndex] = useState(0);
+  const router = useRouter();
 
-export default function PostCard({ post }) {
+  useEffect(() => {
+    console.log("PostCard mount with props:", { username, postId });
+    
+    if (!username || !postId) {
+      console.error("Missing required props:", { username, postId });
+      setError("Missing username or postId");
+      setLoading(false);
+      return;
+    }
+
+    const fetchInsights = async () => {
+      try {
+        const url = `/api/public-portfolio/media-insights?username=${encodeURIComponent(username)}&postId=${encodeURIComponent(postId)}`;
+        console.log("Fetching insights from:", url);
+
+        const res = await fetch(url);
+        const data = await res.json();
+
+        console.log("Insights API response:", data);
+
+        if (data.success) {
+          const insightsArray = data.insights.data;
+          const insightsMap = {};
+
+          insightsArray.forEach(item => {
+            insightsMap[item.name] = item.values?.[0]?.value || 0;
+          });
+
+          setInsights(insightsMap);
+        } else {
+          throw new Error(data.error || 'Failed to fetch insights');
+        }
+      } catch (error) {
+        console.error("Error fetching insights:", error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInsights();
+  }, [username, postId]);
+
+   // Add navigation handling
+   const handleNavigation = (direction) => {
+    if (!allPosts || allPosts.length === 0) return;
+
+    const currentIndex = allPosts.findIndex(p => p.mediaId === postId);
+    let nextIndex;
+
+    if (direction === 'next') {
+      nextIndex = currentIndex === allPosts.length - 1 ? 0 : currentIndex + 1;
+    } else {
+      nextIndex = currentIndex === 0 ? allPosts.length - 1 : currentIndex - 1;
+    }
+
+    const nextPost = allPosts[nextIndex];
+    router.push(`/public-portfolio/${username}/post/?postId=${nextPost.mediaId}`);
+  };
+
+  // Add keyboard navigation
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === 'ArrowLeft') {
+        handleNavigation('prev');
+      } else if (event.key === 'ArrowRight') {
+        handleNavigation('next');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [postId, allPosts]);
+
+  if (loading) {
+    return <div>Loading insights...</div>; // or you can make a skeleton loader
+  }
+
+  if (!insights) {
+    return <div>No insights available</div>;
+  }
+
   if (!post) return <p>No post found.</p>;
 
   const imageUrl = post.media?.files?.[0]?.url;
   const title = post.post?.titleName || "Untitled";
   const description = post.post?.description || "No description available.";
   const industries = post.post?.industries || [];
-  const companyName = post.post?.companyName || "Unknown Company";
-  const companyLocation = post.post?.companyLocation || "Unknown Location";
-  const eventYear = post.post?.eventYear || "Year not specified";
-  const eventLocation = post.post?.eventLocation || "Unknown Location";
-  const eventName = post.post?.eventName || "Unnamed Event";
+  const companyName = post.post?.companyName;
+  const companyLocation = post.post?.companyLocation;
+  const companyLogo = post.post?.companyLogo;
+  const eventTypes = post.post?.eventTypes || [];
+
+  const hasCompanyInfo = companyName && (companyLocation || eventTypes.length > 0 || companyLogo);
 
   return (
     <div className="max-w-6xl mx-auto p-4 font-sans bg-white mt-10">
@@ -22,30 +112,64 @@ export default function PostCard({ post }) {
         <div className="relative w-full md:w-[35%] md:px-8 md:py-5 aspect-[4/5]">
           <div className="relative w-full h-full">
             {post.media?.type === "CAROUSEL" && post.media.files?.length > 0 ? (
-              <div className="w-full h-full overflow-hidden rounded-3xl">
-                <div className="flex overflow-x-auto gap-2 h-full">
-                  {post.media.files.map((file, index) =>
-                    file.type === "IMAGE" ? (
-                      <Image
+              <div className="relative w-full h-full">
+                <div className="w-full h-full overflow-hidden rounded-3xl">
+                  <div className="flex overflow-x-hidden h-full">
+                    {post.media.files.map((file, index) => (
+                      <div
                         key={index}
-                        src={file.url}
-                        alt={`Carousel image ${index + 1}`}
-                        width={400}
-                        height={500}
-                        className="object-cover rounded-3xl shrink-0 w-full h-auto"
-                      />
-                    ) : file.type === "VIDEO" ? (
-                      <video
-                        key={index}
-                        controls
-                        className="rounded-3xl shrink-0 w-full h-full object-cover"
+                        className={`absolute inset-0 transition-transform duration-500 h-full w-full ${
+                          (carouselIndex || 0) === index
+                            ? "translate-x-0 opacity-100"
+                            : "translate-x-50 opacity-0"
+                        }`}
                       >
-                        <source src={file.url} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                    ) : null
-                  )}
+                        {file.type === "IMAGE" ? (
+                          <Image
+                            src={file.url}
+                            alt={`Carousel image ${index + 1}`}
+                            fill
+                            className="object-cover rounded-3xl"
+                          />
+                        ) : file.type === "VIDEO" ? (
+                          <video
+                            controls
+                            className="w-full h-full object-cover rounded-3xl"
+                          >
+                            <source src={file.url} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
+                        ) : null}
+                      </div>
+                    ))}
+                  </div>
                 </div>
+
+                {/* Navigation Arrows */}
+                {post.media.files.length > 1 && (
+                  <>
+                    <button
+                      className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-8 h-8 flex justify-center items-center z-10"
+                      onClick={() => {
+                        setCarouselIndex((prev) =>
+                          prev === 0 ? post.media.files.length - 1 : prev - 1
+                        );
+                      }}
+                    >
+                      ❮
+                    </button>
+                    <button
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-8 h-8 flex justify-center items-center z-10"
+                      onClick={() => {
+                        setCarouselIndex((prev) =>
+                          prev === post.media.files.length - 1 ? 0 : prev + 1
+                        );
+                      }}
+                    >
+                      ❯
+                    </button>
+                  </>
+                )}
               </div>
             ) : post.media?.type === "VIDEO" ? (
               <video controls className="w-full h-full object-cover rounded-3xl">
@@ -69,9 +193,16 @@ export default function PostCard({ post }) {
 
         {/* Right: Content */}
         <div className="flex-1 py-6 px-4 md:pr-8 flex flex-col">
+
+          <div className="flex items-center justify-between mb-4">
+          {/* Title */}
           <h2 className="text-graphite font-qimano text-2xl font-medium leading-tight mb-6">
-            {title}
+                  {title}
           </h2>
+
+          <button className="text-graphite font-qimano text-sm font-medium leading-tight mb-6" onClick={() => router.push(`/public-portfolio/${username}`)}>Go to portfolio</button>
+          </div>
+     
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-8 max-w-3xl">
@@ -86,50 +217,84 @@ export default function PostCard({ post }) {
             )}
           </div>
 
-          <div className="w-full h-px bg-[#cbcbcb] my-3"></div>
-
-          {/* Profile Section */}
-          <div className="flex items-center gap-4 mt-3">
-            <div className="w-16 h-16 rounded-full bg-[#212121] flex items-center justify-center text-white text-xs">
-              {companyName.slice(0, 7).toUpperCase()}
-            </div>
-            <div className="border-l border-[#cbcbcb] pl-4">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="font-medium">{companyName}</span>
-                <span className="text-[#cbcbcb]">•</span>
-                <span className="text-[#212121]">{companyLocation}</span>
+          {/* Company Info Section - Only render if company info exists */}
+          {hasCompanyInfo && (
+            <>
+              <div className="w-full h-px bg-[#cbcbcb] my-3"></div>
+              <div className="flex items-center gap-4 mt-3">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center text-white text-xs">
+                  {companyLogo ? (
+                    <Image
+                      src={companyLogo}
+                      alt="Company Logo"
+                      width={64}
+                      height={64}
+                      className="rounded-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-white text-xs">{companyName.slice(0, 7).toUpperCase()}</span>
+                  )}
+                </div>
+                <div className="border-l border-[#cbcbcb] pl-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-medium">{companyName}</span>
+                    {companyLocation && (
+                      <>
+                        <span className="text-[#cbcbcb]">•</span>
+                        <span className="text-[#212121]">{companyLocation}</span>
+                      </>
+                    )}
+                  </div>
+                  {eventTypes.length > 0 && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-[#212121] flex flex-wrap items-center gap-1">
+                        {eventTypes.map((type, index) => (
+                          <div key={index}>
+                            <span>{type}</span>
+                            {index !== eventTypes.length - 1 && (
+                              <span className="text-[#cbcbcb]">•</span>
+                            )}
+                          </div>
+                        ))}
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-[#212121]">{eventYear}</span>
-                <span className="text-[#cbcbcb]">•</span>
-                <span className="text-[#212121]">{eventLocation}</span>
-                <span className="text-[#cbcbcb]">•</span>
-                <span className="text-[#212121]">{eventName}</span>
-              </div>
-            </div>
-          </div>
+            </>
+          )}
 
           {/* Description */}
+          <div className={`${hasCompanyInfo ? 'w-0' : 'w-full h-px bg-[#cbcbcb] my-3'}`}></div>
           <p className="text-graphite font-apfel-grotezk-regular font-medium mt-5">{description}</p>
 
-          <div className="w-full h-px bg-[#cbcbcb] my-6"></div>
+          <div className={`w-full h-px bg-[#cbcbcb] my-6 ${hasCompanyInfo ? 'mt-5' : 'mt-44'}`}></div>
 
           {/* Engagement Metrics */}
           <div className="flex justify-between mt-[1%] font-qimano">
             {[
-              { label: "Views", count: "6,638" },
-              { label: "Likes", count: "147" },
-              { label: "Shares", count: "16" },
-              { label: "Comments", count: "19" }
-            ].map(({ label, count }, idx) => (
+              { label: "Views", key: "impressions" }, // or "reach" depending what you fetch
+              { label: "Likes", key: "likes" },
+              { label: "Shares", key: "shares" },
+              { label: "Comments", key: "comments" },
+            ].map(({ label, key }, idx) => (
               <div className="text-center" key={idx}>
-                <div className="text-2xl font-semibold text-[#212121]">{count}</div>
+                <div className="text-2xl font-semibold text-[#212121]">
+                  {insights[key] ?? 0}
+                </div>
                 <div className="text-sm text-[#cbcbcb]">{label}</div>
               </div>
             ))}
           </div>
+
         </div>
       </div>
+
+        {/* Add navigation buttons */}
+        <PostNavigation 
+        onPrev={() => handleNavigation('prev')}
+        onNext={() => handleNavigation('next')}
+      />
     </div>
   );
 }

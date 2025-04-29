@@ -1,13 +1,16 @@
 "use client";
 
+
 import { useState, useEffect } from "react";
 import Header from "@/components/settings/Header";
 import Menu from "@/components/settings/Menu";
 import SettingsLinks from "@/components/settings/SettingsLinks"; // ← import it here
 
+
 export default function Page() {
   const [isConnected, setIsConnected] = useState(false);
   const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     const checkConnection = async () => {
@@ -21,6 +24,7 @@ export default function Page() {
     };
     checkConnection();
   }, []);
+
 
   const handleLogin = async () => {
     setLoading(true);
@@ -40,12 +44,14 @@ export default function Page() {
     }
   };
 
+
   return (
     <div className="min-h-screen bg-[#f5f5f5] flex flex-col">
       {/* Sticky Header */}
       <div className="sticky top-0 z-50">
         <Header />
       </div>
+
 
       {/* Main content */}
       <main className="flex-grow overflow-y-auto">
@@ -56,9 +62,13 @@ export default function Page() {
 
 
 
+
+
+
           <div className="text-left border-b border-gray-300 text-sm text-gray-700 pb-2 mb-6 font-medium">
             Link social media
           </div>
+
 
           <p className="text-lg font-medium">
             Connect With Instagram To Add Your Projects
@@ -66,6 +76,7 @@ export default function Page() {
           <p className="text-sm text-gray-600 mt-2">
             Linking your Instagram account allows you to directly add your creations to your profile kit on Snatch.
           </p>
+
 
           <button
             onClick={!isConnected ? handleLogin : null}
@@ -83,10 +94,17 @@ export default function Page() {
               : "Login to Facebook"}
           </button>
 
+
+          <button className="px-4 py-2 bg-electric-blue text-white rounded-lg ml-10" onClick={handleLogin}>Refresh Instagram login</button>
+
+
+
+
           {/* Settings Links */}
           <SettingsLinks />
         </div>
       </main>
+
 
       {/* Bottom Menu */}
       <div className="fixed bottom-4 left-0 right-0 flex justify-center z-40">
