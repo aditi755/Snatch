@@ -15,7 +15,7 @@ export default function SettingsLinks() {
     {
       label: "Terms and Services",
       icon: "/assets/icons/settings/Terms.svg",
-      href: "/terms",
+      href: "/terms-and-services",
     },
     {
       label: "Cookies policy",
