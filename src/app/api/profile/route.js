@@ -115,81 +115,91 @@ export async function DELETE(req) {
     const { userId } = getAuth(req);
 
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "User ID is required." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "User ID is required." }, { status: 400 });
     }
 
-    const { section, index, questionTitle } = await req.json();
-    console.log("section:", section, "index:", index, "questionTitle:", questionTitle);
+    const { section, questionId } = await req.json();
+    console.log("Received delete payload:", { section, questionId });
 
-    if (!section || (typeof index !== "number" && !questionTitle)) {
-      return NextResponse.json(
-        { error: "Provide either index or question title to delete." },
-        { status: 400 }
-      );
+    if (!section || questionId === undefined) {
+      return NextResponse.json({ error: "Section and questionId are required." }, { status: 400 });
     }
 
-    // Find the document for the given userId
     const questionnaire = await Questionnaire.findOne({ userId });
-
     if (!questionnaire) {
-      return NextResponse.json(
-        { error: "Questionnaire not found." },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Questionnaire not found." }, { status: 404 });
     }
 
     // Find the section
     const sectionData = questionnaire.sections.find((s) => s.section === section);
-
     if (!sectionData) {
-      return NextResponse.json(
-        { error: "Section not found." },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Section not found." }, { status: 404 });
     }
 
-    let questionIndex = -1;
+    console.log("Current section questions:", sectionData.questions);
 
-    // Find index by question title if provided
-    if (questionTitle) {
-      questionIndex = sectionData.questions.findIndex(q => q.question === questionTitle);
-      if (questionIndex === -1) {
-        return NextResponse.json(
-          { error: "Question not found." },
-          { status: 404 }
-        );
+    // Handle both saved and unsaved questions
+    let questionIndex;
+    if (typeof questionId === 'number' || !isNaN(questionId)) {
+      // For unsaved questions, directly use the index
+      questionIndex = parseInt(questionId);
+      
+      // For unsaved questions, we want to allow deletion even if there's no answer
+      if (questionIndex >= 0) {
+        // Valid index, proceed with deletion
+        const removedQuestion = sectionData.questions[questionIndex] || { index: questionIndex };
+        
+        if (questionIndex < sectionData.questions.length) {
+          sectionData.questions.splice(questionIndex, 1);
+        }
+
+        // Save changes
+        const savedQuestionnaire = await questionnaire.save();
+        
+        return NextResponse.json({ 
+          message: "Question deleted successfully!",
+          deletedFromSection: section,
+          questionIndex,
+          deletedQuestion: removedQuestion,
+          remainingQuestions: savedQuestionnaire.sections.find(s => s.section === section).questions.length
+        }, { status: 200 });
       }
     } else {
-      questionIndex = index;
-    }
-
-    // Validate index
-    if (questionIndex < 0 || questionIndex >= sectionData.questions.length) {
-      return NextResponse.json(
-        { error: "Invalid index." },
-        { status: 400 }
+      // Try to match by ObjectId for saved questions
+      questionIndex = sectionData.questions.findIndex(q => 
+        q._id.toString() === questionId.toString()
       );
+      
+      if (questionIndex !== -1) {
+        const removedQuestion = sectionData.questions.splice(questionIndex, 1)[0];
+        const savedQuestionnaire = await questionnaire.save();
+        
+        return NextResponse.json({ 
+          message: "Question deleted successfully!",
+          deletedFromSection: section,
+          questionIndex,
+          deletedQuestion: removedQuestion,
+          remainingQuestions: savedQuestionnaire.sections.find(s => s.section === section).questions.length
+        }, { status: 200 });
+      }
     }
 
-    // Remove the question at the found index
-    sectionData.questions.splice(questionIndex, 1);
+    // If we reach here, no question was found to delete
+    return NextResponse.json({ 
+      error: "Question not found.",
+      debug: {
+        requestedId: questionId,
+        requestedIndex: typeof questionId === 'number' ? questionId : null,
+        totalQuestions: sectionData.questions.length,
+        availableIds: sectionData.questions.map(q => q._id.toString())
+      }
+    }, { status: 404 });
 
-    // Save the updated document
-    await questionnaire.save();
-
-    return NextResponse.json(
-      { message: "Question deleted successfully!" },
-      { status: 200 }
-    );
   } catch (error) {
     console.error("Error deleting question:", error);
-    return NextResponse.json(
-      { error: "Failed to delete question" },
-      { status: 500 }
-    );
+    return NextResponse.json({ 
+      error: "Failed to delete question",
+      details: error.message 
+    }, { status: 500 });
   }
 }
-

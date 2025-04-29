@@ -1,3 +1,4 @@
+// app/dashboard/[username]/page.js
 "use client";
 
 import { useEffect, useState } from "react";
@@ -5,34 +6,40 @@ import Image from "next/image";
 import DashboardCardwrapper from "@/components/DashboardCardwrapper";
 import LocationWrapper from "@/components/LocationWrapper";
 import { usePathname } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 
 const DashboardPage = () => {
-  const [analytics, setAnalytics] = useState({
-    totalVisitors: 0,
-    totalAvgTimeSpent: 0,
-    topCountries: [],
-    topStates: [],
-    topCities: [],
-  });
-
   const [selectedLocationType, setSelectedLocationType] = useState("country");
-  const [isInstagramLinked, setIsInstagramLinked] = useState(true); // Default true so it doesn't show flash
+  const [isInstagramLinked, setIsInstagramLinked] = useState(true); // default true to avoid flash
   const pathname = usePathname();
   const username = pathname.split("/").pop();
 
-  useEffect(() => {
-    if (!username) return;
-
-    const fetchAnalytics = async () => {
-      try {
-        const response = await fetch(`/api/analytics?username=${username}`);
-        const data = await response.json();
-        setAnalytics(data);
-      } catch (error) {
-        console.error("Error fetching analytics:", error);
+  // React Query to fetch analytics
+  const {
+    data: analytics = {
+      totalVisitors: 0,
+      totalAvgTimeSpent: 0,
+      topCountries: [],
+      topStates: [],
+      topCities: [],
+    },
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["analytics", username],
+    queryFn: async () => {
+      const res = await fetch(`/api/analytics?username=${username}`);
+      if (!res.ok) {
+        throw new Error("Failed to fetch analytics");
       }
-    };
+      return res.json();
+    },
+    enabled: !!username,
+    staleTime: 1000 * 60 * 5,
+  });
 
+  // Instagram connection check
+  useEffect(() => {
     const checkInstagramConnection = async () => {
       try {
         const response = await fetch("/api/auth/check-instagram-connection");
@@ -40,12 +47,13 @@ const DashboardPage = () => {
         setIsInstagramLinked(data.connected);
       } catch (error) {
         console.error("Error checking Instagram connection:", error);
-        setIsInstagramLinked(false); // fallback
+        setIsInstagramLinked(false);
       }
     };
 
-    fetchAnalytics();
-    checkInstagramConnection();
+    if (username) {
+      checkInstagramConnection();
+    }
   }, [username]);
 
   const handleLogin = async () => {
@@ -74,12 +82,31 @@ const DashboardPage = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="h-screen bg-smoke flex justify-center items-center font-qimano text-3xl text-electric-blue">
+        Loading...
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="h-screen bg-smoke flex justify-center items-center font-qimano text-3xl text-red-500">
+        Failed to load analytics.
+      </div>
+    );
+  }
+
   return (
     <div className="mt-2 relative flex flex-col p-3">
       {/* Top Analytics Cards */}
-      <div className="mb-60 flex gap-3">
-        <DashboardCardwrapper count={analytics.totalVisitors} label={"Profile Visits"} />
-        <DashboardCardwrapper count={8} label={"Request Received"} />
+      <div className="mb-[500px] flex gap-3">
+        <DashboardCardwrapper
+          count={analytics.totalVisitors}
+          label={"Profile Visits"}
+        />
+        <DashboardCardwrapper count={0} label={"Request Received"} />
         <DashboardCardwrapper
           count={Number(analytics?.totalAvgTimeSpent)?.toFixed(1) || "0.0"}
           label={"Avg Time Spent (Mins)"}
@@ -118,7 +145,6 @@ const DashboardPage = () => {
 
             {/* Right Images */}
             <div className="flex justify-center items-end relative bottom-8">
-              {/* Left image */}
               <div className="w-32 h-40 rounded-xl overflow-hidden shadow-md z-10 translate-y-4 -mr-4">
                 <Image
                   src="/assets/images/dashboard/influencer1.svg"
@@ -127,8 +153,6 @@ const DashboardPage = () => {
                   className="object-cover"
                 />
               </div>
-
-              {/* Center image */}
               <div className="w-32 h-44 rounded-xl overflow-hidden shadow-xl z-20 relative">
                 <Image
                   src="/assets/images/dashboard/influencer2.svg"
@@ -137,8 +161,6 @@ const DashboardPage = () => {
                   className="object-cover"
                 />
               </div>
-
-              {/* Right image */}
               <div className="w-32 h-40 rounded-xl overflow-hidden shadow-md z-10 translate-y-4 -ml-4">
                 <Image
                   src="/assets/images/dashboard/influencer3.svg"
@@ -154,8 +176,10 @@ const DashboardPage = () => {
 
       {/* Overlay if Instagram not connected */}
       {!isInstagramLinked && (
-        <div className="absolute inset-0 z-50 bg-black bg-opacity-60 flex flex-col items-center justify-center text-center px-6" 
-        style={{ height: '680px' }}>
+        <div
+          className="absolute inset-0 z-50 bg-black bg-opacity-60 flex flex-col items-center justify-center text-center px-6"
+          style={{ height: "680px" }}
+        >
           <h2 className="text-3xl md:text-4xl text-[#e7e300] font-qimano mb-4">
             Dashboard Inactive
           </h2>
@@ -176,3 +200,23 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
+// // {
+// //     "totalVisitors": 100,
+// //     "topCountries": [
+// //       { "location": "India", "percentage": "60.00" },
+// //       { "location": "US", "percentage": "25.00" },
+// //       { "location": "UK", "percentage": "10.00" }
+// //     ],
+// //     "topStates": [
+// //       { "location": "Delhi", "percentage": "40.00" },
+// //       { "location": "California", "percentage": "35.00" },
+// //       { "location": "Maharashtra", "percentage": "15.00" }
+// //     ],
+// //     "topCities": [
+// //       { "location": "Mumbai", "percentage": "30.00" },
+// //       { "location": "San Francisco", "percentage": "25.00" },
+// //       { "location": "New Delhi", "percentage": "20.00" }
+// //     ],
+// //     "totalAvgTimeSpent": "4.32"
+// //   }
+

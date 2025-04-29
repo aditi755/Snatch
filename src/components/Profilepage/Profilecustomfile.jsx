@@ -11,6 +11,7 @@ const Profilecustomfile = ({
   currentQuestionIndex,
   coverImage, // Passed from parent (About component)
   coverImageName, // Passed from parent (About component)
+  currentQuestion
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState({
@@ -44,7 +45,7 @@ const Profilecustomfile = ({
   };
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 w-32 md:w-[430px] lg:max-w-[500px]">
       <div
         className="mt-4 flex gap-8 cursor-pointer rounded-md border border-stroke px-5 py-3 text-dark-grey outline-none transition hover:border-primary active:border-primary"
         onClick={() => setIsModalOpen(true)}
@@ -63,6 +64,7 @@ const Profilecustomfile = ({
           onImageSelect={handleImageSelect}
           type={type}
           questionIndex={currentQuestionIndex}
+          currentQuestion={currentQuestion}
         />
       )}
     </div>

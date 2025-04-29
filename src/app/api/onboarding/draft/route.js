@@ -34,13 +34,17 @@ export async function POST(req) {
 
     await connectDb();
     const { userId } = getAuth(req);
-    const data = await req.json();
 
+    const { _id, ...updateData } = await req.json(); // exclude _id
+    //console.log("updateData", updateData); // log the updateData
+
+    //also nned to update user model for igusername = username edit it on furether edits by user as well
     const draft = await OnboardingData.findOneAndUpdate(
-      { userId, isDraft: true },
-      { ...data, isDraft: true },
+      { userId },
+      { ...updateData },
       { upsert: true, new: true }
     );
+
 
     return NextResponse.json({ 
       success: true, 
@@ -53,3 +57,12 @@ export async function POST(req) {
     }, { status: 500 });
   }
 }
+
+
+ //const data = await req.json();
+
+    // const draft = await OnboardingData.findOneAndUpdate(
+    //   { userId, isDraft: true },
+    //   { ...data, isDraft: true },
+    //   { upsert: true, new: true }
+    // );

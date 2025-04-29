@@ -48,9 +48,9 @@ export async function GET(req) {
     });
 
     const percentages = {
-      male: totalFollowers ? ((demographics.male / totalFollowers) * 100).toFixed(2) : "0.00",
-      female: totalFollowers ? ((demographics.female / totalFollowers) * 100).toFixed(2) : "0.00",
-      unknown: totalFollowers ? ((demographics.unknown / totalFollowers) * 100).toFixed(2) : "0.00",
+      male: totalFollowers ? ((demographics.male / totalFollowers) * 100).toFixed(1) : "0.00",
+      female: totalFollowers ? ((demographics.female / totalFollowers) * 100).toFixed(1) : "0.00",
+      unknown: totalFollowers ? ((demographics.unknown / totalFollowers) * 100).toFixed(1) : "0.00",
     };
 
     return NextResponse.json({ demographics: percentages }, { status: 200 });

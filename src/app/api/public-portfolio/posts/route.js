@@ -1,3 +1,4 @@
+// get only isdraft : false so completed posts come
 import { NextResponse } from "next/server";
 import connectDb from "@/db/mongoose";
 import ProjectDraft from "@/models/project.model";
@@ -43,13 +44,16 @@ export async function GET(req) {
       );
     }
 
-    const instagramProjects = project.instagramSelected || [];
-    const uploadedProjects = project.uploadedFiles || [];
+    // ✅ Filter out drafts
+    const instagramProjects = project.instagramSelected.filter(item => !item.isDraft);
+    const uploadedProjects = project.uploadedFiles.filter(item => !item.isDraft);
+    const formData = project.formData.filter(item => !item.isDraft); // In case you need it
 
     return NextResponse.json({
       success: true,
       instagram: instagramProjects,
       uploaded: uploadedProjects,
+      // formData: formData, // Optional: uncomment if needed
     });
 
   } catch (error) {
@@ -60,3 +64,4 @@ export async function GET(req) {
     );
   }
 }
+

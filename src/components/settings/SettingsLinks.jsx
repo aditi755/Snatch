@@ -1,10 +1,11 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
+import { useClerk } from "@clerk/nextjs";
 export default function SettingsLinks() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const router = useRouter();
+  const { signOut } = useClerk();
 
   const items = [
     {
@@ -37,8 +38,9 @@ export default function SettingsLinks() {
   const handleItemClick = (label, href) => {
     if (label === "Delete Account") {
       setShowDeleteModal(true);
-    } else if (label === "Logout") {
-      router.push("/logout");
+    }
+     else if (label === "Logout") {
+      signOut(() => router.push("/"));
     } else {
       router.push(href);
     }
