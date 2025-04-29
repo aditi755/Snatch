@@ -115,7 +115,7 @@ const DashboardPage = () => {
       </div>
 
       {/* Location Analytics */}
-      <div className="absolute top-[38%] w-full">
+      <div className="absolute top-[23%] w-full">
         <LocationWrapper
           topLocations={getTopLocations()}
           setSelectedLocationType={setSelectedLocationType}
