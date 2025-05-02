@@ -1,10 +1,12 @@
 "use client";
 import { useState } from "react";
 import SendRequestPopup from "@/components/SendRequestPopup";
+import { useSearchParams } from "next/navigation";
 
 const RequestPopup = () => {
   const [showPopup, setShowPopup] = useState(true);
-
+  const searchParams = useSearchParams();
+  const username = searchParams.get("username") || "unknown influencer";
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <button
@@ -14,7 +16,7 @@ const RequestPopup = () => {
         Show Popup
       </button>
 
-      {showPopup && <SendRequestPopup onClose={() => setShowPopup(false)} />}
+      {showPopup && <SendRequestPopup onClose={() => setShowPopup(false)} username={username} />}
     </div>
   );
 };

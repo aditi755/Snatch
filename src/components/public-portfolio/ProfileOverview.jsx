@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from "react"
 import { motion, useScroll, useTransform, useMotionTemplate, useMotionValue, useSpring } from "framer-motion"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
+
 import { FormProvider } from "@/app/onboarding/context";
 import { useFetchPortfolio, useInstagramData, useCheckScreenSize } from "@/utils/public-portfolio/portfolio";
 import Header from "./Header";
@@ -11,6 +12,7 @@ import PortfolioPublic from "./PortfolioPublic";
 import QuestionCard from "./QuestionCard";
 import Questionnaire from "./QuestionCard";
 import AudienceCard from "./AudienceCard";
+
 
 const useAnimatedNumber = (target) => {
   const motionValue = useMotionValue(0);
@@ -34,8 +36,8 @@ const ProfileOverview = ({ ownerId }) => {
   const pressKitRef = useRef(null);
   const formData = useFetchPortfolio(ownerId);
   const { data, loading, error } = useInstagramData(); // Instagram data
-  const router = useRouter();
-
+  const router = useRouter()
+  const pathname = usePathname(); // e.g., "/public-portfolio/snatchsocial"
   
   const isMobile = useCheckScreenSize();
 
@@ -73,6 +75,14 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
   // Always define useTransform, but use static values for mobile
   const visibility = useTransform(scrollY, [150, 151], isMobile ? ["visible", "visible"] : ["visible", "hidden"]);
   const opacity = useTransform(scrollY, [0, 150], isMobile ? [1, 1] : [1, 0]);
+  const story = Number(formData?.story) || 0;
+  const reel = Number(formData?.reels) || 0;
+  const post = Number(formData?.post) || 0;
+ 
+ // Average engagement
+ const average = Math.round((story + reel + post) / 3);
+ const lower = Math.round(average * 0.8);
+ const upper = Math.round(average * 1.2);
 
   function formatNumber(value) {
     const num = Number(value); // parse string/number safely
@@ -88,10 +98,13 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
     return num.toString();
   }
   
+  const priceRange = `₹ ${formatNumber(lower)} - ₹ ${formatNumber(upper)}`;
   
   const handleRequest = () => {
-    router.push("/request-popup")
-  }
+    const parts = pathname.split("/");
+    const influencerUsername = parts[2]; // assuming route is /public-portfolio/[username]
+    router.push(`/request-popup?username=${influencerUsername}`);
+  };
 
   return (
     <div className="flex flex-col w-full p-1 rounded-xl" ref={containerRef}>
@@ -160,9 +173,9 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
         <motion.div className="flex flex-col-reverse lg:flex-row justify-between w-80 lg:w-[1600px] lg:relative z-10 overflow-visible" style={{ opacity: isMobile? "1": contentOpacity }}>
 
           {/*1 Left Side - Pricing and Services */}
-          <div className="w-[340px] pt-20 ml-10 hidden lg:block">
+          <div className="w-[370px] pt-20 ml-10 hidden lg:block">
             <div className="flex gap-3  items-center mb-4">
-              <h2 className=" font-medium font-qimano text-3xl">Rs {formatNumber(formData?.reels)} - {formatNumber(formData?.story)}</h2>
+              <h2 className=" font-medium font-qimano text-3xl">{priceRange}</h2>
               <p className=" text-gray-500 font-apfel-grotezk-regular text-lg ">Value per content piece</p>
             </div>
 
@@ -282,11 +295,12 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
         </motion.div>
       </div>
     </motion.div>
-{/* left section price and comp (mobile) */}
+
+
 <div className="w-full max-w-sm px-4 pt-20 mx-auto block lg:hidden overflow-x-hidden">
   {/* Pricing */}
   <div className="flex flex-wrap gap-3 items-center mb-4">
-    <h2 className="font-medium font-qimano text-2xl sm:text-3xl">Rs 5k - 25k</h2>
+    <h2 className="font-medium font-qimano text-2xl sm:text-3xl">{priceRange}</h2>
     <p className="text-gray-500 font-apfel-grotezk-regular text-base sm:text-lg">
       Value per content piece
     </p>

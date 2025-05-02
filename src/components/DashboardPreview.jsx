@@ -3,12 +3,37 @@ import { useFormContext } from "@/app/onboarding/context";
 
 export default function Preview() {
  const { formData } = useFormContext(); 
+ const story = Number(formData.story) || 0;
+ const reel = Number(formData.reels) || 0;
+ const post = Number(formData.post) || 0;
+
+// Average engagement
+const average = Math.round((story + reel + post) / 3);
+const lower = Math.round(average * 0.8);
+const upper = Math.round(average * 1.2);
+
 
  let profileImageSrc = "/assets/images/profile_defaultOnborad.svg"; 
 
  if (formData.profilePicture) {
   profileImageSrc = formData.profilePicture;
 }   
+
+function formatNumber(value) {
+  const num = Number(value); // parse string/number safely
+
+  if (isNaN(num)) return '0'; // if not a number, fallback to '0'
+
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+  }
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+  }
+  return num.toString();
+}
+
+const priceRange = `₹ ${formatNumber(lower)} - ₹ ${formatNumber(upper)}`;
     
     return (
       <div className="h-auto max-h-auto ">
@@ -128,7 +153,11 @@ export default function Preview() {
       </div>
   
       <div className="text-dark-grey px-10 flex flex-col justify-center items-center mt-12">
-       <h3 className="text-3xl font-qimano text-graphite">₹ {formData.story} - ₹ {formData.reels}</h3>
+       <h3 className="text-3xl font-qimano text-graphite">
+        {/* ₹ {formatNumber(formData.story)} - ₹ {formatNumber(formData.reels)} */}
+        {priceRange}
+      </h3>
+
        <div>Value per content piece</div>
       </div>
 
