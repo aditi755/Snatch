@@ -4,6 +4,8 @@ import connectDB from "@/db/mongoose";
 import User from "@/models/user.model";
 import CollaborationRequest from "@/models/collaborationRequest.model";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req) {
   try {
     await connectDB();
