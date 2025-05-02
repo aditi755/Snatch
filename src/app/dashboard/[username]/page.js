@@ -1,4 +1,3 @@
-// app/dashboard/[username]/page.js
 "use client";
 
 import { useEffect, useState } from "react";
@@ -10,11 +9,10 @@ import { useQuery } from "@tanstack/react-query";
 
 const DashboardPage = () => {
   const [selectedLocationType, setSelectedLocationType] = useState("country");
-  const [isInstagramLinked, setIsInstagramLinked] = useState(true); // default true to avoid flash
+  const [isInstagramLinked, setIsInstagramLinked] = useState(true);
   const pathname = usePathname();
   const username = pathname.split("/").pop();
 
-  // React Query to fetch analytics
   const {
     data: analytics = {
       totalVisitors: 0,
@@ -38,7 +36,6 @@ const DashboardPage = () => {
     staleTime: 1000 * 60 * 5,
   });
 
-  // Instagram connection check
   useEffect(() => {
     const checkInstagramConnection = async () => {
       try {
@@ -100,18 +97,15 @@ const DashboardPage = () => {
 
   return (
     <div className="mt-2 relative p-3">
-      {/* Blur wrapper */}
+      {/* Blur wrapper when Instagram is not linked */}
       <div className={`${!isInstagramLinked ? "blur-sm pointer-events-none select-none" : ""}`}>
         {/* Top Analytics Cards */}
         <div className="mb-[500px] flex gap-3">
-          <DashboardCardwrapper
-            count={analytics.totalVisitors}
-            label={"Profile Visits"}
-          />
-          <DashboardCardwrapper count={0} label={"Request Received"} />
+          <DashboardCardwrapper count={analytics.totalVisitors} label="Profile Visits" />
+          <DashboardCardwrapper count={0} label="Request Received" />
           <DashboardCardwrapper
             count={Number(analytics?.totalAvgTimeSpent)?.toFixed(1) || "0.0"}
-            label={"Avg Time Spent (Mins)"}
+            label="Avg Time Spent (Mins)"
             className="flex-auto"
           />
         </div>
@@ -203,6 +197,7 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
+
 
 // // {
 // //     "totalVisitors": 100,
