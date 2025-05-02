@@ -59,7 +59,7 @@ export default function PostCard({ post, postId, username, allPosts }) {
     const currentIndex = allPosts.findIndex(p => p.mediaId === postId);
     let nextIndex;
 
-    if (direction === 'next') {
+    if (direction === 'next ') {
       nextIndex = currentIndex === allPosts.length - 1 ? 0 : currentIndex + 1;
     } else {
       nextIndex = currentIndex === 0 ? allPosts.length - 1 : currentIndex - 1;
@@ -203,7 +203,7 @@ export default function PostCard({ post, postId, username, allPosts }) {
           <button className="text-graphite font-qimano text-sm font-medium leading-tight mb-6" onClick={() => router.push(`/public-portfolio/${username}`)}>Go to portfolio</button>
           </div>
      
-
+        
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-8 max-w-3xl">
             {industries.length > 0 ? (
