@@ -11,7 +11,7 @@ const Header = ({ formData, data, headerOpacity }) => {
 
   const handleRequest = () => {
     const parts = pathname.split("/");
-    const influencerUsername = parts[2]; // assuming route is /public-portfolio/[username]
+    const influencerUsername = parts[1]; // assuming route is /public-portfolio/[username]
     router.push(`/request-popup?username=${influencerUsername}`);
   };
 

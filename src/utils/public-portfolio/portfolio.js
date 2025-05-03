@@ -9,8 +9,7 @@ export const useFetchPortfolio = (ownerId) => {
     const fetchData = async () => {
       try {
         const pathnameParts = window.location.pathname.split("/");
-        const username =
-          pathnameParts[pathnameParts.length - 1] || pathnameParts[pathnameParts.length - 2];
+        const username = pathnameParts[pathnameParts.length - 2]; // gets the part before "media-kit"
 
         const url = ownerId
           ? `/api/public-portfolio/userinfo?userId=${ownerId}`
@@ -42,9 +41,9 @@ export const useFetchPublicPosts = (ownerId) => {
     const fetchPosts = async () => {
       try {
         const pathnameParts = window.location.pathname.split("/");
-        const username =
-          pathnameParts[pathnameParts.length - 1] || pathnameParts[pathnameParts.length - 2];
+        const username = pathnameParts[pathnameParts.length - 2]; // gets the part before "media-kit"
 
+ 
         const url = ownerId
           ? `/api/public-portfolio/posts?userId=${ownerId}`
           : `/api/public-portfolio/posts?username=${username}`;
@@ -122,8 +121,7 @@ export const useInstagramData = () => {
     const fetchData = async () => {
       try {
         const pathnameParts = window.location.pathname.split("/");
-        const username =
-          pathnameParts[pathnameParts.length - 1] || pathnameParts[pathnameParts.length - 2];
+        const username = pathnameParts[pathnameParts.length - 2]; // gets the part before "media-kit"
 
         if (!username) {
           throw new Error("Username not found in URL");

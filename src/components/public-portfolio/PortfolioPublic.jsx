@@ -13,9 +13,8 @@ const PortfolioPublic = () => {
     const fetchProjects = async () => {
       try {
         const pathnameParts = window.location.pathname.split("/");
-        const username =
-          pathnameParts[pathnameParts.length - 1] ||
-          pathnameParts[pathnameParts.length - 2];
+        const username = pathnameParts[pathnameParts.length - 2]; // gets the part before "media-kit"
+
         setUsername(username);
 
         const url = `/api/public-portfolio/posts?username=${username}`;
@@ -89,7 +88,7 @@ const PortfolioPublic = () => {
   
               {project.mediaType === "CAROUSEL_ALBUM" && project.children ? (
                 <Link
-                  href={`/public-portfolio/${username}/post/?postId=${project.mediaId}`}
+                  href={`/${username}/media-kit/post/?postId=${project.mediaId}`}
                   className="block w-full h-full"
                 >
                   <div className="relative w-full h-full group">
@@ -155,7 +154,7 @@ const PortfolioPublic = () => {
               ) : project.mediaType.includes("VIDEO") ||
                 project.mediaType.endsWith(".mp4") ? (
                 <Link
-                  href={`/public-portfolio/${username}/post/?postId=${project.mediaId}`}
+                  href={`/${username}/media-kit/post/?postId=${project.mediaId}`}
                 >
                   <video
                     controls
@@ -167,7 +166,7 @@ const PortfolioPublic = () => {
                 </Link>
               ) : (
                 <Link
-                  href={`/public-portfolio/${username}/post/?postId=${project.mediaId}`}
+                  href={`/${username}/media-kit/post/?postId=${project.mediaId}`}
                 >
                   <Image
                     src={project.mediaUrl}

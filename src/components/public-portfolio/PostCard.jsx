@@ -66,7 +66,7 @@ export default function PostCard({ post, postId, username, allPosts }) {
     }
 
     const nextPost = allPosts[nextIndex];
-    router.push(`/public-portfolio/${username}/post/?postId=${nextPost.mediaId}`);
+    router.push(`/${username}/media-kit/post/?postId=${nextPost.mediaId}`);
   };
 
   // Add keyboard navigation
@@ -200,7 +200,7 @@ export default function PostCard({ post, postId, username, allPosts }) {
                   {title}
           </h2>
 
-          <button className="text-graphite font-qimano text-sm font-medium leading-tight mb-6" onClick={() => router.push(`/public-portfolio/${username}`)}>Go to portfolio</button>
+          <button className="text-graphite font-qimano text-sm font-medium leading-tight mb-6" onClick={() => router.push(`/${username}/media-kit`)}>Go to portfolio</button>
           </div>
      
         

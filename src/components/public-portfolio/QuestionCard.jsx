@@ -14,8 +14,7 @@ const Questionnaire = ({ name }) => {
     const fetchQuestions = async () => {
       try {
         const pathnameParts = window.location.pathname.split("/");
-        const username =
-          pathnameParts[pathnameParts.length - 1] || pathnameParts[pathnameParts.length - 2];
+        const username = pathnameParts[pathnameParts.length - 2]; // gets the part before "media-kit"
 
         const url = `/api/public-portfolio/questions?username=${username}`;
         const response = await fetch(url);

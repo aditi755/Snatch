@@ -113,8 +113,8 @@ const DashboardPage = () => {
         {/* Top Analytics Cards */}
         <div className="mb-[500px] flex gap-3">
           <DashboardCardwrapper count={analytics.totalVisitors} label="Profile Visits" />
-          <DashboardCardwrapper count={0} label="Request Received" />
-          <DashboardCardwrapper
+          <DashboardCardwrapper count={totalRequests} label="Request Received" />
+          <DashboardCardwrapper 
             count={Number(analytics?.totalAvgTimeSpent)?.toFixed(1) || "0.0"}
             label="Avg Time Spent (Mins)"
             className="flex-auto"

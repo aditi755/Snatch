@@ -45,9 +45,8 @@ const AudienceCard = () => {
     };
 
     const pathnameParts = window.location.pathname.split("/");
-    const username =
-      pathnameParts[pathnameParts.length - 1] ||
-      pathnameParts[pathnameParts.length - 2];
+    const username = pathnameParts[pathnameParts.length - 2]; // gets the part before "media-kit"
+
 
     if (username) {
       setGenderEndpoint(`/api/public-portfolio/audience/genderDemographics?username=${username}`);
