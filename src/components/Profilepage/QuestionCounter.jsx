@@ -4,7 +4,7 @@ const QuestionCounter = ({
   value,
   onQuestionChange,
   onAnswerChange,
-  maxLength = 100,
+  maxLength = 75,
   name,
   type,
   answerValue,
@@ -135,7 +135,7 @@ const QuestionCounter = ({
           value={answerValue}
           onChange={onAnswerChange}
           placeholder="Enter your response here..."
-          className="bg-transparent w-full px-0 py-2 rounded-md border-t-2 font-apfel-grotezk-regular border-gray-200 focus:outline-none text-gray-700 text-sm resize-none"
+          className="bg-transparent w-full px-0 py-2 rounded-md font-apfel-grotezk-regular border-gray-200 focus:outline-none text-gray-700 text-sm resize-none"
           rows={2}
         />
         <span className="absolute bottom-2 right-3 text-xs text-gray-500">
