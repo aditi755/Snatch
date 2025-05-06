@@ -1,9 +1,41 @@
 "use client";
 import Image from "next/image";
 
-const SendRequestPopup = ({ onClose }) => {
+const SendRequestPopup = ({ onClose, username }) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    const formData = {
+      brandName: e.target[0].value,
+      role: e.target[1].value,
+      email: e.target[2].value,
+      bio: e.target[3].value,
+      discussion: e.target[4].value,
+      influencerUsername: username, // coming from props
+    };
+  
+    try {
+      const res = await fetch("/api/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      const data = await res.json();
+      if (res.ok) {
+        alert("Request sent successfully!");
+      } else {
+        alert(data.error || "Failed to send request.");
+      }
+    } catch (err) {
+      alert("Something went wrong!");
+    }
+  };
+  
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50" onSubmit={handleSubmit}>
       <div className="bg-white rounded-xl p-6 w-[90%] max-w-xl shadow-xl relative border border-gray-200">
         {/* Close icon */}
         <button className="absolute top-4 right-4" onClick={onClose}>
@@ -26,7 +58,7 @@ const SendRequestPopup = ({ onClose }) => {
               height={30}
               className="rounded-full"
             />
-            Bhawana Singore
+            {username}
             <Image
               src="/assets/icons/verify.svg"
               alt="Verified"

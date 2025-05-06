@@ -57,7 +57,7 @@ export default function OnboardingLayout({ children }) {
       const username = parsedData?.username;
   
       if (username) {
-        router.push(`/public-portfolio/${username}`);
+        router.push(`/${username}/media-kit`); //changed
       } else {
         console.error("Username not found in formData!");
       }

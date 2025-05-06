@@ -1,22 +1,10 @@
-"use client";
-import { useState } from "react";
-import SendRequestPopup from "@/components/SendRequestPopup";
+// //app/request-popup/page.js
+import dynamic from "next/dynamic";
 
-const RequestPopup = () => {
-  const [showPopup, setShowPopup] = useState(true);
+const RequestPopupWrapper = dynamic(() => import("@/components/RequestPopupWrapper"), {
+  ssr: false,
+});
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <button
-        onClick={() => setShowPopup(true)}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
-      >
-        Show Popup
-      </button>
-
-      {showPopup && <SendRequestPopup onClose={() => setShowPopup(false)} />}
-    </div>
-  );
-};
-
-export default RequestPopup;
+export default function Page() {
+  return <RequestPopupWrapper />;
+}

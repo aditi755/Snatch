@@ -9,10 +9,12 @@ import { useQuery } from "@tanstack/react-query";
 
 const DashboardPage = () => {
   const [selectedLocationType, setSelectedLocationType] = useState("country");
-  const [isInstagramLinked, setIsInstagramLinked] = useState(true);
+  const [isInstagramLinked, setIsInstagramLinked] = useState(true); // default true to avoid flash
+  const [totalRequests, setTotalRequests] = useState(0); // state to hold total
   const pathname = usePathname();
   const username = pathname.split("/").pop();
 
+  // React Query to fetch analytics  only fetch if user is logged in 
   const {
     data: analytics = {
       totalVisitors: 0,
@@ -37,22 +39,31 @@ const DashboardPage = () => {
   });
 
   useEffect(() => {
-    const checkInstagramConnection = async () => {
+    const fetchInfluencerData = async () => {
       try {
-        const response = await fetch("/api/auth/check-instagram-connection");
-        const data = await response.json();
-        setIsInstagramLinked(data.connected);
+        // 1. Check if Instagram is linked
+        const instagramResponse = await fetch("/api/auth/check-instagram-connection");
+        const instagramData = await instagramResponse.json();
+        setIsInstagramLinked(instagramData.connected);
+  
+        // 2. Fetch total collaboration requests
+        const requestsResponse = await fetch(`/api/influencer-requests?username=${username}`);
+        const requestsData = await requestsResponse.json();
+  
+        if (requestsData.totalRequests !== undefined) {
+          setTotalRequests(requestsData.totalRequests); // assuming you defined setTotalRequests
+        }
       } catch (error) {
-        console.error("Error checking Instagram connection:", error);
+        console.error("Error fetching influencer data:", error);
         setIsInstagramLinked(false);
       }
     };
-
+  
     if (username) {
-      checkInstagramConnection();
+      fetchInfluencerData();
     }
   }, [username]);
-
+  
   const handleLogin = async () => {
     try {
       const response = await fetch("/api/auth/instagram");
@@ -102,8 +113,8 @@ const DashboardPage = () => {
         {/* Top Analytics Cards */}
         <div className="mb-[500px] flex gap-3">
           <DashboardCardwrapper count={analytics.totalVisitors} label="Profile Visits" />
-          <DashboardCardwrapper count={0} label="Request Received" />
-          <DashboardCardwrapper
+          <DashboardCardwrapper count={totalRequests} label="Request Received" />
+          <DashboardCardwrapper 
             count={Number(analytics?.totalAvgTimeSpent)?.toFixed(1) || "0.0"}
             label="Avg Time Spent (Mins)"
             className="flex-auto"
