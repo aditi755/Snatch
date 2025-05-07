@@ -3,7 +3,7 @@ import PieChart from "../Profilepage/PieChart";
 import SimpleWorldMap from "../Profilepage/Map";
 import AgeRangeChart from "../Profilepage/AgeRangeChart";
 import generateAudienceInsights from "@/utils/generateAudienceInsights";
-
+import { usePathname } from "next/navigation";
 const AudienceCard = () => {
   const [genderEndpoint, setGenderEndpoint] = useState("");
   const [ageEndpoint, setAgeEndpoint] = useState("");
@@ -14,6 +14,7 @@ const AudienceCard = () => {
     ageData: [],
     countryData: [],
   });
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchAllDemographics = async (username) => {
@@ -44,10 +45,9 @@ const AudienceCard = () => {
       }
     };
 
-    const pathnameParts = window.location.pathname.split("/");
-    const username = pathnameParts[pathnameParts.length - 2]; // gets the part before "media-kit"
-
-
+    const parts = pathname.split("/").filter(Boolean);
+    const username = parts[0];
+   
     if (username) {
       setGenderEndpoint(`/api/public-portfolio/audience/genderDemographics?username=${username}`);
       setAgeEndpoint(`/api/public-portfolio/audience/allDemographics?username=${username}`);

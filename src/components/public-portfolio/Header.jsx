@@ -1,18 +1,32 @@
 import { motion } from "framer-motion";
 import { useCheckScreenSize } from "@/utils/public-portfolio/portfolio";
 import { useRouter, usePathname } from "next/navigation";
-const Header = ({ formData, data, headerOpacity }) => {
+
+const Header = ({ formData, data, headerOpacity, isAdminView }) => {
   const router = useRouter();
-  const pathname = usePathname(); 
-  const isMobile = useCheckScreenSize(); // Detect mobile screen
-  
-  // Hide the header on mobile
+  const pathname = usePathname();
+  const isMobile = useCheckScreenSize();
+
   if (isMobile) return null;
 
   const handleRequest = () => {
     const parts = pathname.split("/");
-    const influencerUsername = parts[1]; // assuming route is /public-portfolio/[username]
+    const influencerUsername = parts[1];
     router.push(`/request-popup?username=${influencerUsername}`);
+  };
+
+  const handleCopyLink = async () => {
+    const parts = pathname.split("/");
+    const username = parts[1];
+    const portfolioUrl = `${window.location.origin}/${username}/media-kit`;
+    
+    try {
+      await navigator.clipboard.writeText(portfolioUrl);
+      alert("Portfolio link copied to clipboard!");
+    } catch (err) {
+      console.error("Failed to copy link:", err);
+      alert("Failed to copy link");
+    }
   };
 
   return (
@@ -25,8 +39,11 @@ const Header = ({ formData, data, headerOpacity }) => {
       }}
     >
       <div className="container mx-auto flex items-center justify-between">
-        <motion.button className="bg-lime-yellow text-graphite font-semibold py-2 px-6 w-[300px] max-w-[300px] rounded font-apfel-grotezk-regular" onClick={handleRequest}>
-          Send request
+        <motion.button 
+          className="bg-lime-yellow text-graphite font-semibold py-2 px-6 w-[300px] max-w-[300px] rounded font-apfel-grotezk-regular"
+          onClick={isAdminView ? handleCopyLink : handleRequest}
+        >
+          {isAdminView ? "Copy Portfolio Link" : "Send request"}
         </motion.button>
 
         <div className="flex items-center">

@@ -3,19 +3,18 @@
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { clsx } from "clsx";
-
+import { usePathname } from "next/navigation";
 const Questionnaire = ({ name }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef(null);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
-
+  const pathname = usePathname();
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const pathnameParts = window.location.pathname.split("/");
-        const username = pathnameParts[pathnameParts.length - 2]; // gets the part before "media-kit"
-
+        const parts = pathname.split("/").filter(Boolean);
+        const username = parts[0];
         const url = `/api/public-portfolio/questions?username=${username}`;
         const response = await fetch(url);
         const result = await response.json();

@@ -3,13 +3,11 @@
 import { useState, useEffect, useRef } from "react"
 import { motion, useScroll, useTransform, useMotionTemplate, useMotionValue, useSpring } from "framer-motion"
 import { useRouter, usePathname } from "next/navigation"
-
 import { FormProvider } from "@/app/onboarding/context";
 import { useFetchPortfolio, useInstagramData, useCheckScreenSize } from "@/utils/public-portfolio/portfolio";
 import Header from "./Header";
 import Image from "next/image" 
 import PortfolioPublic from "./PortfolioPublic";
-import QuestionCard from "./QuestionCard";
 import Questionnaire from "./QuestionCard";
 import AudienceCard from "./AudienceCard";
 
@@ -28,7 +26,8 @@ const useAnimatedNumber = (target) => {
   return rounded;
 };
 
-const ProfileOverview = ({ ownerId }) => {
+// Add isAdminView prop
+const ProfileOverview = ({ ownerId, isAdminView }) => {
   const [isMounted, setIsMounted] = useState(false);
   const { scrollYProgress } = useScroll();
   const scrollY = useTransform(scrollYProgress, [0, 1], [0, 1000]);
@@ -100,16 +99,36 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
   
   const priceRange = `₹ ${formatNumber(lower)} - ₹ ${formatNumber(upper)}`;
   
+  // Update the handleRequest function to handle both admin and public cases
   const handleRequest = () => {
-    const parts = pathname.split("/");
-    const influencerUsername = parts[1]; // assuming route is /public-portfolio/[username]
-    router.push(`/request-popup?username=${influencerUsername}`);
+  if (isAdminView) {
+  // For admin view - copy portfolio link
+  const parts = pathname.split("/");
+  const username = parts[1];
+  const portfolioUrl = `${window.location.origin}/${username}/media-kit`;
+  
+  try {
+  navigator.clipboard.writeText(portfolioUrl);
+  alert("Portfolio link copied to clipboard!");
+  } catch (err) {
+  console.error("Failed to copy link:", err);
+  alert("Failed to copy link");
+  }
+  } else {
+  // For public view - redirect to request popup
+  const parts = pathname.split("/");
+  const influencerUsername = parts[1];
+  router.push(`/request-popup?username=${influencerUsername}`);
+  }
   };
-
+  
+  // Update the button text based on isAdminView
+  const buttonText = isAdminView ? "Copy Portfolio Link" : "Send request";
+  
   return (
     <div className="flex flex-col w-full p-1 rounded-xl" ref={containerRef}>
     {/* Sticky Header (appears on scroll) */}
-    <Header formData={formData} data={data} headerOpacity={headerOpacity} />
+    <Header formData={formData} data={data} headerOpacity={headerOpacity} isAdminView={isAdminView} />
 
     {/* Main Content */}
     <motion.div
@@ -237,9 +256,13 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
 
 
             {/* CTA Button */}
-            <button className="bg-lime-yellow text-graphite font-semibold py-2 px-4 rounded mt-6 w-[328px] max-w-[328px] font-apfel-grotezk-regular" onClick={handleRequest}>
-              Send request
-            </button>
+        
+          <button 
+          className="bg-lime-yellow text-graphite font-semibold py-2 px-4 rounded mt-6 w-[328px] max-w-[328px] font-apfel-grotezk-regular" 
+          onClick={handleRequest}
+          >
+          {buttonText}
+          </button>
           </div>
 
           {/*2 Center - Profile Image desktop */}

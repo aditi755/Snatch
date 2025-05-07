@@ -60,7 +60,12 @@ export default function PostCard({ post, postId, username, allPosts }) {
     }
 
     const nextPost = allPosts[nextIndex];
-    router.push(`/${username}/media-kit/post/?postId=${nextPost.mediaId}`);
+    const pathname = window.location.pathname;
+    const isAdminView = pathname.includes('/adminview');
+    
+    // Construct the URL based on whether it's admin view or not
+    const baseUrl = `/${username}/media-kit${isAdminView ? '/adminview' : ''}/post`;
+    router.push(`${baseUrl}/?postId=${nextPost.mediaId}`);
   };
 
   useEffect(() => {
@@ -185,14 +190,20 @@ export default function PostCard({ post, postId, username, allPosts }) {
         {/* Content Section */}
         <div className="flex-1 py-6 px-4 md:pr-8 flex flex-col">
           <div className="flex items-center justify-between mb-4">
+            <h2 className="text-graphite font-qimano text-2xl font-medium leading-tight mb-6">
+              {title}
+            </h2>
 
-          {/* Title */}
-          <h2 className="text-graphite font-qimano text-2xl font-medium leading-tight mb-6">
-                  {title}
-          </h2>
-
-          <button className="text-graphite font-qimano text-sm font-medium leading-tight mb-6" onClick={() => router.push(`/${username}/media-kit`)}>Go to portfolio</button>
-
+            <button 
+              className="text-graphite font-qimano text-sm font-medium leading-tight mb-6" 
+              onClick={() => {
+                const pathname = window.location.pathname;
+                const isAdminView = pathname.includes('/adminview');
+                router.push(`/${username}/media-kit${isAdminView ? '/adminview' : ''}`);
+              }}
+            >
+              Go to portfolio
+            </button>
           </div>
 
           {/* Industries */}

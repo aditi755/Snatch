@@ -1,9 +1,10 @@
+
 // src/app/public-portfolio/[username]/post/page.js
 "use client";
 import { useEffect, useState } from "react";
 import { useSearchParams, useParams } from "next/navigation";
-import PostCard from "@/components/public-portfolio/PostCard";// Adjust path as needed
-import { usePostsContext } from "@/context/PostContext"; // Adjust path as needed
+import PostCard from "@/components/public-portfolio/PostCard";
+import { usePostsContext } from "@/context/PostContext";
 export default function PostDetailsPage() {
   const { allPosts, username: contextUsername } = usePostsContext(); // Get data from context
 

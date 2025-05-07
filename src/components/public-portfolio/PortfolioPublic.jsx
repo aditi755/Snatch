@@ -3,18 +3,18 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useFetchPublicPosts } from "@/utils/public-portfolio/portfolio";
-
+import { usePathname} from "next/navigation";
 const PortfolioPublic = () => {
   const [projects, setProjects] = useState([]);
   const [carouselIndexes, setCarouselIndexes] = useState({});
   const [username, setUsername] = useState("");
-
+  const pathname = usePathname();
+  const isAdminView = pathname.includes('/adminview');
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const pathnameParts = window.location.pathname.split("/");
-        const username = pathnameParts[pathnameParts.length - 2]; // gets the part before "media-kit"
-
+        const parts = pathname.split("/").filter(Boolean);
+        const username =  parts[0]
         setUsername(username);
 
         const url = `/api/public-portfolio/posts?username=${username}`;
@@ -84,11 +84,9 @@ const PortfolioPublic = () => {
     <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-4 lg:gap-8">
       {projects.map((project, index) => (
         <div key={index} className="relative w-full aspect-[4/5] p-1 sm:p-2">
-
-  
               {project.mediaType === "CAROUSEL_ALBUM" && project.children ? (
                 <Link
-                  href={`/${username}/media-kit/post/?postId=${project.mediaId}`}
+                  href={`/${username}/media-kit${isAdminView ? '/adminview' : ''}/post/?postId=${project.mediaId}`}
                   className="block w-full h-full"
                 >
                   <div className="relative w-full h-full group">
@@ -154,7 +152,7 @@ const PortfolioPublic = () => {
               ) : project.mediaType.includes("VIDEO") ||
                 project.mediaType.endsWith(".mp4") ? (
                 <Link
-                  href={`/${username}/media-kit/post/?postId=${project.mediaId}`}
+                  href={`/${username}/media-kit${isAdminView ? '/adminview' : ''}/post/?postId=${project.mediaId}`}
                 >
                   <video
                     controls
@@ -166,7 +164,7 @@ const PortfolioPublic = () => {
                 </Link>
               ) : (
                 <Link
-                  href={`/${username}/media-kit/post/?postId=${project.mediaId}`}
+                  href={`/${username}/media-kit${isAdminView ? '/adminview' : ''}/post/?postId=${project.mediaId}`}
                 >
                   <Image
                     src={project.mediaUrl}
