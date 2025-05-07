@@ -24,7 +24,8 @@ const isPublicRoute = createRouteMatcher([
   "/api/public-portfolio/instagram-stats",
   "/request-popup",
   "/api/send-email",
-  "/(.*)/media-kit(.*)",  // Add this to allow all media-kit routes
+  "/:username/media-kit",
+  "/:username/media-kit/post"
 ]);
 
 export default clerkMiddleware(async (authFn, request) => {
@@ -34,16 +35,21 @@ export default clerkMiddleware(async (authFn, request) => {
   console.log("User ID:", userId);
 
   const url = new URL(request.url); 
-
+  const isAdminRoute = url.pathname.includes('/adminview');
   const isDashboardRoute = url.pathname === "/dashboard";
+
+  // If it's an admin route and user is not authenticated, redirect to signup
+  if (isAdminRoute && !sessionId) {
+    const redirectUrl = new URL("/signup", request.url);
+    return NextResponse.redirect(redirectUrl);
+  }
 
   if (sessionId && (url.pathname === "/" )) {
     const redirectUrl = new URL("dashboard", request.url); 
     return NextResponse.redirect(redirectUrl);
   }
-  
 
-  // Allow authenticated users to access the onboarding route
+  // Allow authenticated users to access the dashboard route
   if (isDashboardRoute && sessionId) {
     return NextResponse.next();
   }

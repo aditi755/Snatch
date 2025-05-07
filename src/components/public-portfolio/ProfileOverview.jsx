@@ -413,48 +413,49 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
         </div>
 
         {/* social links */}
-       <div className="text-graphite mt-4 text-nowrap text-sm lg:text-xl flex ">
-        <span>My social media</span>
-        <span className="flex items-center w-[75%]">
-        <span className="border-b-[0.5px] border-gray-400 mx-2 w-full "></span>
-        </span>
-       
-        <span className="flex gap-2">
-        <span className="w-10 h-7 bg-gray-100 rounded flex items-center justify-center">
-          <Image
-            src="/assets/images/insta.svg"
-            alt="Instagram"
-            width={20}
-            height={20}
+        <div className="text-graphite mt-4 text-nowrap text-sm lg:text-xl flex">
+          <span>My social media</span>
+          <span className="flex items-center w-[75%]">
+            <span className="border-b-[0.5px] border-gray-400 mx-2 w-full"></span>
+          </span>
+          
+          <span className="flex gap-2">
+            {/* Instagram is always present */}
+            {formData?.instagram && (
+              <a 
+                href={`https://instagram.com/${formData.instagram}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-7 bg-gray-100 rounded flex items-center justify-center hover:bg-gray-200 transition-colors"
+              >
+                <Image
+                  src="/assets/images/insta.svg"
+                  alt="Instagram"
+                  width={20}
+                  height={20}
+                />
+              </a>
+            )}
 
-          />
-        </span>
-        <span className="w-10 h-7 bg-gray-100 rounded flex items-center justify-center">
-          <Image
-            src="/assets/images/X.svg"
-            alt="Instagram"
-            width={20}
-            height={20}
-          />
-        </span>
-        <span className="w-10 h-7 bg-gray-100 rounded flex items-center justify-center">
-          <Image
-            src="/assets/icons/facebook.svg"
-            alt="Instagram"
-            width={20}
-            height={20}
-          />
-        </span>
-        <span className="w-10 h-7 bg-gray-100 rounded flex items-center justify-center">
-          <Image
-            src="/assets/icons/linkedin.svg"
-            alt="Instagram"
-            width={20}
-            height={20}
-          />
-        </span>
-        </span>
-       </div>
+            {/* Dynamic social links */}
+            {formData?.links?.map((link, index) => (
+              <a
+                key={link._id || index}
+                href={link.url.replace(/[`"]/g, '')} // Remove backticks and quotes
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-7 bg-gray-100 rounded flex items-center justify-center hover:bg-gray-200 transition-colors"
+              >
+                <Image
+                  src={link.icon}
+                  alt="Social Media"
+                  width={20}
+                  height={20}
+                />
+              </a>
+            ))}
+          </span>
+        </div>
 
         <div className="w-full mx-auto lg:max-w-[1300px] max-w-[500px] ">
         <AudienceCard />
