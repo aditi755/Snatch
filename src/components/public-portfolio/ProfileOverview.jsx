@@ -47,10 +47,10 @@ const ProfileOverview = ({ ownerId, isAdminView }) => {
 
 
 // Always define motion values, but assign static values for mobile
-const defaultBg = "rgb(0, 0, 0)";
+const defaultBg = "rgb(75, 75, 75)";
 const defaultHeight = "560px";
 
-const headerBg = useTransform(scrollY, [0, 200], ["rgb(0, 0, 0)", "rgb(80, 80, 80)"]);
+const headerBg = useTransform(scrollY, [0, 200], ["rgb( 30,30,30)", "rgb(80, 80, 80)"]);
 const headerHeight = useTransform(scrollY, [0, 200], ["560px", "80px"]);
 
 // If on mobile, override motion values with static values
@@ -121,19 +121,18 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
   router.push(`/request-popup?username=${influencerUsername}`);
   }
   };
+
   
-  // Update the button text based on isAdminView
-  const buttonText = isAdminView ? "Copy Portfolio Link" : "Send request";
-  
+
   return (
-    <div className="flex flex-col w-full p-1 rounded-xl" ref={containerRef}>
+    <div className="flex flex-col w-full p-1 rounded-xl " ref={containerRef}>
     {/* Sticky Header (appears on scroll) */}
     <Header formData={formData} data={data} headerOpacity={headerOpacity} isAdminView={isAdminView} />
 
     {/* Main Content */}
     <motion.div
       className={`w-full text-white relative rounded-3xl z-10 ${
-        isMobile ? "h-[560px] bg-black" : ""
+        isMobile ? "h-[560px] bg-neutral-800" : ""
       }`}
       style={
         isMobile
@@ -146,7 +145,7 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
               zIndex: 10,
               overflow: "hidden",
               visibility: isMobile ? "visible" : visibility,
-              opacity: isMobile ? 1 : opacity,
+              opacity: isMobile ? 0.2 : opacity,
             }
       }
     >
@@ -188,17 +187,20 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
         </motion.div>
       </div>
 
-      <div className="container mx-auto px-10 relative lg:mt-10 flex justify-center overflow-visible">
+      <div className="container mx-auto px-6 relative lg:mt-10 flex justify-center overflow-visible">
         <motion.div className="flex flex-col-reverse lg:flex-row justify-between w-80 lg:w-[1600px] lg:relative z-10 overflow-visible" style={{ opacity: isMobile? "1": contentOpacity }}>
 
           {/*1 Left Side - Pricing and Services */}
           <div className="w-[370px] pt-20 ml-10 hidden lg:block">
             <div className="flex gap-3  items-center mb-4">
-              <h2 className=" font-medium font-qimano text-3xl">{priceRange}</h2>
+              <h2 className="font-qimano text-3xl font-medium">
+  <span className="font-md">₹</span> {formatNumber(lower)} - <span className="font-thin">₹</span> {formatNumber(upper)}
+</h2>
+
               <p className=" text-gray-500 font-apfel-grotezk-regular text-lg ">Value per content piece</p>
             </div>
 
-            <div className=" border-b-[1px] -mt-4 bg-lime-yellow ">
+            <div className="border-b-[2px] border-[#F7EA5F] ">
 
             </div>
 
@@ -210,34 +212,36 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
     formData.compensation.map((item, index) => (
       <div
         key={index}
-        className="inline-flex items-center font-qimano text-xl relative group"
+        className="inline-flex items-center font-qimano text-xl relative"
       >
-        <span className="transition-colors duration-300 group-hover:text-lime-yellow">
+        {/* Text (not triggering tooltip) */}
+        <span className="transition-colors duration-300">
           {item}
         </span>
 
-        {/* Info icon */}
-        <img
-          src="/assets/icons/i.svg"
-          alt="info"
-          className="w-4 h-4 ml-1 cursor-pointer transition-colors duration-300 group-hover:brightness-0 group-hover:invert"
-        />
+        {/* Info icon and tooltip trigger zone */}
+        <div className="relative group ml-1">
+          <img
+            src="/assets/icons/i.svg"
+            alt="info"
+            className="w-4 h-4 cursor-pointer transition-colors duration-300 group-hover:brightness-0 group-hover:invert"
+          />
 
-        {/* Tooltip on hover */}
-        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-lime-yellow text-black text-sm px-3 py-2 rounded-md shadow-md max-w-[200px] w-max whitespace-normal text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-  {item === "Sponsorships"
-    ? "Influencers are paid a fixed amount for each piece of content they create."
-    : item === "Gifting"
-    ? "This involves compensating influencers with products or services instead of money."
-    : item === "Affiliate"
-    ? "Influencers promote a product or service and receive a commission for every sale made through a unique affiliate link they share."
-    : item === "Hosted"
-    ? "Influencers are invited to events or trips, often in exchange for creating and sharing content related to the experience."
-    : item === "Collaboration"
-    ? "Influencers sometimes collaborate with brands to create a product."
-    : "More info coming soon."}
-</span>
-
+          {/* Tooltip */}
+          <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-lime-yellow text-black text-sm px-3 py-2 rounded-md shadow-md max-w-[200px] w-max whitespace-normal text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none">
+            {item === "Sponsorships"
+              ? "Influencers are paid a fixed amount for each piece of content they create."
+              : item === "Gifting"
+              ? "This involves compensating influencers with products or services instead of money."
+              : item === "Affiliate"
+              ? "Influencers promote a product or service and receive a commission for every sale made through a unique affiliate link they share."
+              : item === "Hosted"
+              ? "Influencers are invited to events or trips, often in exchange for creating and sharing content related to the experience."
+              : item === "Collaboration"
+              ? "Influencers sometimes collaborate with brands to create a product."
+              : "More info coming soon."}
+          </span>
+        </div>
 
         {/* Separator */}
         {index !== formData.compensation.length - 1 && (
@@ -255,14 +259,11 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
 
 
 
+
             {/* CTA Button */}
-        
-          <button 
-          className="bg-lime-yellow text-graphite font-semibold py-2 px-4 rounded mt-6 w-[328px] max-w-[328px] font-apfel-grotezk-regular" 
-          onClick={handleRequest}
-          >
-          {buttonText}
-          </button>
+            <button className="bg-lime-yellow text-graphite font-outline text-semibold py-2 px-4 rounded mt-6 w-[328px] max-w-[328px] font-apfel-grotezk-regular" onClick={handleRequest}>
+              Send request
+            </button>
           </div>
 
           {/*2 Center - Profile Image desktop */}
@@ -284,33 +285,33 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
           <Image
             src={formData?.profilePicture || "/assets/images/profile_defaultOnborad.svg"}
             alt={`${formData?.firstName} ${formData?.lastName}`}
-            width={256}
+            width={276}
             height={320}
-            className="object-cover lg:w-80 lg:h-96 w-56 h-80 relative z-[9999] rounded-xl"
+            className="object-cover lg:w-80 lg:h-96 w-56 h-80 relative z-[9999] rounded-xl right-4"
           />
         </div>
       </div>
           </motion.div>
 
          {/* 3 Right Side - Stats */}
-<div className="w-full lg:w-1/2 flex lg:flex-col items-end justify-center lg:justify-normal mr-20 gap-6 pt-4 z-20">
+<div className="w-full lg:w-1/2 flex lg:flex-col items-end justify-center lg:justify-normal mr-16 gap-6 pt-4 z-20 ">
   <div className="text-center">
     <h2 className="text-5xl font-medium font-qimano">
       <motion.span>{reach}</motion.span>
     </h2>
-    <p className="text-md text-white font-apfel-grotezk-regular">avg reach</p>
+    <p className="text-sm text-white font-apfel-grotezk-regular">avg reach</p>
   </div>
   <div className="text-center">
     <h2 className="text-5xl font-medium font-qimano">
       <motion.span>{followers}</motion.span>
     </h2>
-    <p className="text-md text-white font-apfel-grotezk-regular">followers</p>
+    <p className="text-sm text-white font-apfel-grotezk-regular">followers</p>
   </div>
   <div className="text-center">
     <h2 className="text-5xl font-medium font-qimano">
       <motion.span>{posts}</motion.span>
     </h2>
-    <p className="text-md text-white font-apfel-grotezk-regular">posts</p>
+    <p className="text-sm text-white font-apfel-grotezk-regular">posts</p>
   </div>
 </div>
 
@@ -342,28 +343,27 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
         {/* Compensation Item */}
         <span className="px-1">{item}</span>
 
-        {/* Info Icon */}
         <img
-          src="/assets/icons/i.svg"
-          alt="info"
-          className="w-4 h-4 ml-1 cursor-pointer transition duration-300 group-hover:brightness-0 group-hover:invert"
-          style={{ filter: "brightness(0)" }}
-        />
+    src="/assets/icons/i.svg"
+    alt="info"
+    className="w-4 h-4 ml-1 cursor-pointer transition duration-300 group-hover:brightness-0 group-hover:invert"
+    style={{ filter: "brightness(0)" }}
+  />
 
-        {/* Tooltip */}
-        <span className="absolute bottom-full left-1/9 -translate-x-1/6 mb-2 bg-lime-yellow text-black text-xs sm:text-sm px-3 py-2 rounded-md shadow-md max-w-[200px] w-max whitespace-normal text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-          {item === "Sponsorships"
-            ? "Influencers are paid a fixed amount for each piece of content they create."
-            : item === "Gifting"
-            ? "Compensating with products or services instead of money."
-            : item === "Affiliate"
-            ? "Earn a commission per sale through a unique link."
-            : item === "Hosted"
-            ? "Influencers attend events or trips to promote the brand."
-            : item === "Collaboration"
-            ? "Co-creating a product with the brand."
-            : "More info coming soon."}
-        </span>
+  {/* Tooltip */}
+  <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-lime-yellow text-black text-xs sm:text-sm px-3 py-2 rounded-md shadow-md max-w-[200px] w-max whitespace-normal text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+    {item === "Sponsorships"
+      ? "Influencers are paid a fixed amount for each piece of content they create."
+      : item === "Gifting"
+      ? "Compensating with products or services instead of money."
+      : item === "Affiliate"
+      ? "Earn a commission per sale through a unique link."
+      : item === "Hosted"
+      ? "Influencers attend events or trips to promote the brand."
+      : item === "Collaboration"
+      ? "Co-creating a product with the brand."
+      : "More info coming soon."}
+  </span>
 
         {/* Separator */}
         {index !== formData.compensation.length - 1 && (
@@ -399,12 +399,56 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
       ref={pressKitRef}
     >
       <div className="container mx-auto">
-        <h2 className="text-5xl lg:text-7xl  font-serif text-blue-600 text-center mb-8 text-electric-blue">
+        <h2 className="text-5xl lg:text-7xl  font-serif text-[#0044FF] text-center mb-8 text-electric-blue">
           Press Kit
         </h2>
 
         {/* Content Grid */}
         <PortfolioPublic />
+
+        {/* social links */}
+       <div className="text-graphite mt-4 text-nowrap text-sm lg:text-xl flex ">
+        <span>My social media</span>
+        <span className="flex items-center w-[75%]">
+        <span className="border-b-[0.5px] border-gray-400 mx-2 w-full "></span>
+        </span>
+       
+        <span className="flex gap-2">
+        <span className=" bg-gray-100 rounded flex items-center justify-center">
+          <Image
+            src="/assets/images/insta.svg"
+            alt="Instagram"
+            width={30}
+            height={25}
+
+          />
+        </span>
+        <span className=" bg-gray-100 rounded flex items-center justify-center">
+          <Image
+            src="/assets/images/X.svg"
+            alt="Instagram"
+            width={30}
+            height={20}
+          />
+        </span>
+        <span className=" bg-gray-100 rounded flex items-center justify-center">
+          <Image
+            src="/assets/icons/facebook.svg"
+            alt="Instagram"
+            width={30}
+            height={20}
+          />
+        </span>
+        <span className=" bg-gray-100 rounded flex items-center justify-center">
+          <Image
+            src="/assets/icons/linkedin.svg"
+            alt="Instagram"
+            width={30}
+            height={20}
+          />
+        </span>
+        </span>
+       </div>
        
         <div className=" w-full mx-auto lg:max-w-[1900px] max-w-[500px]">
         <Questionnaire name={formData?.firstName
@@ -412,50 +456,7 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
             : ""}/>
         </div>
 
-        {/* social links */}
-        <div className="text-graphite mt-4 text-nowrap text-sm lg:text-xl flex">
-          <span>My social media</span>
-          <span className="flex items-center w-[75%]">
-            <span className="border-b-[0.5px] border-gray-400 mx-2 w-full"></span>
-          </span>
-          
-          <span className="flex gap-2">
-            {/* Instagram is always present */}
-            {formData?.instagram && (
-              <a 
-                href={`https://instagram.com/${formData.instagram}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-7 bg-gray-100 rounded flex items-center justify-center hover:bg-gray-200 transition-colors"
-              >
-                <Image
-                  src="/assets/images/insta.svg"
-                  alt="Instagram"
-                  width={20}
-                  height={20}
-                />
-              </a>
-            )}
-
-            {/* Dynamic social links */}
-            {formData?.links?.map((link, index) => (
-              <a
-                key={link._id || index}
-                href={link.url.replace(/[`"]/g, '')} // Remove backticks and quotes
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-7 bg-gray-100 rounded flex items-center justify-center hover:bg-gray-200 transition-colors"
-              >
-                <Image
-                  src={link.icon}
-                  alt="Social Media"
-                  width={20}
-                  height={20}
-                />
-              </a>
-            ))}
-          </span>
-        </div>
+      
 
         <div className="w-full mx-auto lg:max-w-[1300px] max-w-[500px] ">
         <AudienceCard />
