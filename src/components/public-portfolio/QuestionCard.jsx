@@ -97,39 +97,61 @@ const Questionnaire = ({ name }) => {
       </div>
 
       {/* Desktop view: horizontal scroll */}
-      <div className="hidden lg:block relative">
-        <button
-          onClick={() => scroll("left")}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 rounded-2xl p-2 shadow-md hover:bg-white"
-        >
-          <Image src="/assets/images/Lefthand.svg" alt="left-arrow" width={40} height={40} />
-        </button>
+     <div className="hidden lg:block relative">
+  {/* Left Scroll Button */}
+  <button
+    onClick={() => scroll("left")}
+    className="absolute left-0 top-1/2 -translate-y-1/2 z-10 transition-transform hover:scale-110 w-14 h-14"
+    aria-label="Scroll Left"
+  >
+    <div className="w-full h-full">
+      <Image
+        src="/assets/images/Lefthand.svg"
+        alt="left-arrow"
+        width={56}
+        height={56}
+        className="w-full h-full object-contain"
+      />
+    </div>
+  </button>
 
-        <div
-          ref={scrollRef}
-          className="mt-5 lg:mt-10 pb-5 lg:pb-0 overflow-x-auto scrollbar-hide max-w-full"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
-          <div className="flex gap-4 w-full sm:w-max rounded-3xl overflow-hidden px-2">
-            {allCards.map((card) => (
-              <QuestionCard
-                key={card.key}
-                question={card.question}
-                answer={card.answer}
-                coverImage={card.coverImage}
-                cardType={card.cardType}
-              />
-            ))}
-          </div>
-        </div>
+  {/* Scrollable Cards */}
+  <div
+    ref={scrollRef}
+    className="mt-5 lg:mt-10 pb-5 lg:pb-0 overflow-x-auto scrollbar-hide max-w-full"
+    style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+  >
+    <div className="flex gap-4 w-full sm:w-max rounded-3xl overflow-hidden px-2">
+      {allCards.map((card) => (
+        <QuestionCard
+          key={card.key}
+          question={card.question}
+          answer={card.answer}
+          coverImage={card.coverImage}
+          cardType={card.cardType}
+        />
+      ))}
+    </div>
+  </div>
 
-        <button
-          onClick={() => scroll("right")}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 rounded-2xl p-2 shadow-md hover:bg-white"
-        >
-          <Image src="/assets/images/next.svg" alt="icon" height={40} width={30} />
-        </button>
-      </div>
+  {/* Right Scroll Button */}
+  <button
+    onClick={() => scroll("right")}
+    className="absolute right-0 top-1/2 -translate-y-1/2 z-10 transition-transform hover:scale-110 w-8 h-14"
+    aria-label="Scroll Right"
+  >
+    <div className="w-full h-full">
+      <Image
+        src="/assets/images/next.svg"
+        alt="right-arrow"
+        width={56}
+        height={56}
+        className="w-full h-full object-contain"
+      />
+    </div>
+  </button>
+</div>
+
     </div>
   );
 };
@@ -215,7 +237,7 @@ function getCardType(section) {
     case "audience":
       return {
         bg: "bg-graphite",
-        text: "text-lime-yellow",
+        text: "text-white",
         icon: "/assets/images/audienceIcon.svg",
       };
     default:

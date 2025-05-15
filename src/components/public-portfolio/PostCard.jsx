@@ -102,7 +102,7 @@ export default function PostCard({ post, postId, username, allPosts }) {
     <div className="max-w-6xl mx-auto p-4 font-sans bg-white mt-10">
       <div className="flex md:h-[70%] flex-col md:flex-row gap-8 bg-gray-100/40 rounded-lg overflow-hidden">
         {/* Media Section */}
-        <div className="relative w-full md:w-[35%] md:px-8 md:py-5 aspect-[4/5]">
+        <div className="relative w-full md:w-[35%] md:px-8 md:py-12 aspect-[4/5]">
           <div className="relative w-full h-full">
             {post.media?.type === "CAROUSEL" &&
             post.media.files?.length > 0 ? (
@@ -194,20 +194,28 @@ export default function PostCard({ post, postId, username, allPosts }) {
               {title}
             </h2>
 
-            <button 
-              className="text-graphite font-qimano text-sm font-medium leading-tight mb-6" 
-              onClick={() => {
-                const pathname = window.location.pathname;
-                const isAdminView = pathname.includes('/adminview');
-                router.push(`/${username}/media-kit${isAdminView ? '/adminview' : ''}`);
-              }}
-            >
-              Go to portfolio
-            </button>
+          {/* Title */}
+          <h2 className="text-graphite font-qimano text-2xl font-medium leading-tight mt-5">
+                  {title}
+          </h2>
+
+<button
+  className="w-6 h-6 mb-6"
+  onClick={() => router.push(`/${username}/media-kit`)}
+  aria-label="Go to Portfolio"
+>
+  <Image
+    src="/assets/icons/cross-mark.svg"
+    alt="Go to Portfolio"
+    width={24}
+    height={24}
+    className="w-full h-full object-contain"
+  />
+</button>
           </div>
 
           {/* Industries */}
-          <div className="flex flex-wrap gap-2 mb-8 max-w-3xl">
+          <div className="flex flex-wrap gap-2  max-w-3xl">
             {industries.length > 0 ? (
               industries.map((tag, idx) => (
                 <span
@@ -300,7 +308,7 @@ export default function PostCard({ post, postId, username, allPosts }) {
               { label: "Comments", key: "comments" },
             ].map(({ label, key }, idx) => (
               <div className="text-center" key={idx}>
-                <div className="text-2xl font-semibold text-[#212121]">
+                <div className="text-2xl font- text-[#212121]">
                   {insights[key] ?? 0}
                 </div>
                 <div className="text-sm text-[#cbcbcb]">{label}</div>
