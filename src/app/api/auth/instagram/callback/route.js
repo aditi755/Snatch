@@ -8,8 +8,8 @@ import connectDb from "@/db/mongoose";
 const CLIENT_ID = '1068594868074995';
 const CLIENT_SECRET = '7aa94560586507e6c840da8105090984';
 //const REDIRECT_URI = 'https://l6r9j4st-3000.inc1.devtunnels.ms/manage-projects/pick-projects'
-//const REDIRECT_URI = 'https://wf7s4f88-3000.inc1.devtunnels.ms/manage-projects/pick-projects';
-const REDIRECT_URI = 'https://snatch-pi.vercel.app/manage-projects/pick-projects';
+const REDIRECT_URI = 'https://wf7s4f88-3000.inc1.devtunnels.ms/manage-projects/pick-projects';
+//const REDIRECT_URI = 'https://snatch-pi.vercel.app/manage-projects/pick-projects';
 
 export const dynamic = 'force-dynamic';
 
@@ -53,9 +53,23 @@ export async function GET(req) {
 
     // Fetch user's Facebook Pages directly
     const pagesResponse = await fetch(
-      `https://graph.facebook.com/v21.0/me/accounts?access_token=${longLivedAccessToken}`
+      `https://graph.facebook.com/v21.0/me/accounts?fields=id,name,access_token,instagram_business_account&access_token=${longLivedAccessToken}`
     );
+    // Add this right after the pagesResponse fetch
+    console.log("Pages Response Status:", pagesResponse.status);
+    console.log("Pages Response Headers:", Object.fromEntries(pagesResponse.headers));
+
     const pagesData = await pagesResponse.json();
+
+    console.log("Raw Pages Data:", JSON.stringify(pagesData, null, 2));
+    // Add error checking
+if (pagesData.error) {
+  console.error("Facebook API Error:", pagesData.error);
+  return NextResponse.json(
+    { error: `Facebook API Error: ${pagesData.error.message}` },
+    { status: 500 }
+  );
+}
     console.log("Pages Data:", pagesData);
 
     if (!pagesResponse.ok || !pagesData.data || pagesData.data.length === 0) {
@@ -69,7 +83,7 @@ export async function GET(req) {
     let selectedPage = null;
     for (const page of pagesData.data) {
       const igAccountResponse = await fetch(
-        `https://graph.facebook.com/v21.0/${page.id}?fields=instagram_business_account&access_token=${longLivedAccessToken}`
+        `https://graph.facebook.com/v18.0/${page.id}?fields=instagram_business_account&access_token=${longLivedAccessToken}`
       );
       const igAccountData = await igAccountResponse.json();
       console.log(`Instagram account data for page ${page.id}:`, igAccountData);
@@ -105,7 +119,7 @@ export async function GET(req) {
     await user.save();
 
     const insightsResponse = await fetch(
-      `https://graph.facebook.com/v22.0/${selectedPage.instagramAccountId}/insights?` +
+      `https://graph.facebook.com/v21.0/${selectedPage.instagramAccountId}/insights?` +
       `metric=follower_demographics&` +
       `period=lifetime&` +
       `timeframe=this_week&` +
@@ -151,7 +165,7 @@ export async function GET(req) {
     }
 
     const mediaResponse = await fetch(
-      `https://graph.facebook.com/v22.0/${selectedPage.instagramAccountId}/media?` +
+      `https://graph.facebook.com/v21.0/${selectedPage.instagramAccountId}/media?` +
       `fields=id,caption,media_type,media_url,permalink,timestamp,like_count,comments_count,thumbnail_url,username&` +
       `access_token=${selectedPage.pageToken}`
     );
@@ -171,7 +185,7 @@ export async function GET(req) {
       mediaData.data.map(async (mediaItem) => {
         if (mediaItem.media_type === "CAROUSEL_ALBUM") {
           const carouselResponse = await fetch(
-            `https://graph.facebook.com/v22.0/${mediaItem.id}/children?` +
+            `https://graph.facebook.com/v21.0/${mediaItem.id}/children?` +
             `fields=id,media_type,media_url&access_token=${selectedPage.pageToken}`
           );
           const carouselData = await carouselResponse.json();

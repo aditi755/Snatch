@@ -262,7 +262,7 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
 
             {/* CTA Button */}
             <button className="bg-lime-yellow text-graphite font-outline text-semibold py-2 px-4 rounded mt-6 w-[328px] max-w-[328px] font-apfel-grotezk-regular" onClick={handleRequest}>
-              Send request
+              {isAdminView ? "Copy Portfolio Link" : "Send request"}
             </button>
           </div>
 
@@ -383,7 +383,7 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
     className="bg-lime-yellow text-graphite font-semibold py-2 px-4 rounded mt-6 w-full font-apfel-grotezk-regular"
     onClick={handleRequest}
   >
-    Send request
+    {isAdminView ? "Copy Portfolio Link" : "Send request"}
   </button>
 </div>
 
@@ -399,7 +399,7 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
       ref={pressKitRef}
     >
       <div className="container mx-auto">
-        <h2 className="text-5xl lg:text-7xl  font-serif text-[#0044FF] text-center mb-8 text-electric-blue">
+        <h2 className="text-5xl lg:text-7xl  font-qimano text-[#0044FF] text-center mb-8 text-electric-blue">
           Press Kit
         </h2>
 

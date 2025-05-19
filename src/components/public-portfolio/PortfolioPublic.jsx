@@ -13,7 +13,7 @@ const PortfolioPublic = () => {
     const fetchProjects = async () => {
       try {
         const pathnameParts = window.location.pathname.split("/");
-        const username = pathnameParts[pathnameParts.length - 2];
+        const username = pathnameParts[1]; 
         setUsername(username);
 
         const url = `/api/public-portfolio/posts?username=${username}`;

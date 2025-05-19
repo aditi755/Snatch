@@ -40,7 +40,7 @@ const Header = ({ formData, data, headerOpacity, isAdminView }) => {
 
       <div className="container mx-auto flex items-center justify-between">
         <motion.button className="bg-lime-yellow text-graphite font-outline py-2 px-6 w-[300px] max-w-[300px] rounded font-apfel-grotezk-regular" onClick={handleRequest}>
-          Send request
+          {isAdminView ? "Send Request" : "Copy Portfolio Link"}
         </motion.button>
 
         <div className="flex items-center">
