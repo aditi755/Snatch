@@ -69,7 +69,7 @@ export default async function PostLayout({ children, params }) {
               userPosts.map((post, index) => (
                 <Link
                   key={index}
-                  href={`/public-portfolio/${username}/post/?postId=${post.mediaId}`}
+                  href={`/${username}/media-kit/post/?postId=${post.mediaId}`}
                   className="block"
                 >
                   {post.mediaType === "CAROUSEL_ALBUM" && post.children ? (

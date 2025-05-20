@@ -62,20 +62,6 @@ export default function AddDetails() {
     requiredFields.push("companyName", "companyLocation");
   }
 
-
-  const handleToggle = () => {
-    const newIsBrandCollaboration = !isBrandCollaboration;
-    console.log("new isbrnadcollaboration", isBrandCollaboration, newIsBrandCollaboration);
-    setIsBrandCollaboration(newIsBrandCollaboration);
-
-    setCurrentFormData((prevData) => {
-      const updatedEntry = { ...prevData, isBrandCollaboration: newIsBrandCollaboration };
-      console.log("toggled entry", updatedEntry);
-      updateFormDataForMedia(activeImageId, updatedEntry);
-      return updatedEntry;
-    });
-  };
-
   useEffect(() => {
     setIsHydrated(true);
   }, []);
@@ -112,7 +98,9 @@ useEffect(() => {
   }
 }, [projects]);
 
-// Separate useEffect for handling form data updates
+
+
+// Modify the useEffect that handles form data loading:
 useEffect(() => {
   if (!activeImageId) return;
 
@@ -122,33 +110,63 @@ useEffect(() => {
     ? selectionState.formData
     : [];
 
-  let savedData = formDataArray.find((item) => item.key === activeImageId) || {
-    key: activeImageId,
-    eventName: "",
-    eventLocation: "",
-    eventYear: "",
-    companyName: "",
-    companyLocation: "",
-    companyLogo: "",
-    companyLogoFileName: "",
-    description: "",
-    eventTypes: [],
-    industries: [],
-    titleName: "",
-    isDraft: true,
-    isBrandCollaboration: true,
-  };
 
-  // Update currentFormData
-  setCurrentFormData(savedData);
-
-  // Ensure form data exists in context for this mediaId
-  if (!formDataArray.some(item => item.key === activeImageId)) {
-    updateFormDataForMedia(activeImageId, savedData);
+  // Check if form data exists for this mediaId
+  const existingFormData = formDataArray.find(
+    (item) => item.key === activeImageId.toString()
+  );
+  
+  if (existingFormData) {
+    // If form data exists, load it and ensure all required fields are present
+    setCurrentFormData({
+      ...existingFormData,
+      key: activeImageId.toString(),
+      eventName: existingFormData.eventName || "",
+      eventLocation: existingFormData.eventLocation || "",
+      eventYear: existingFormData.eventYear || "",
+      companyName: existingFormData.companyName || "",
+      companyLocation: existingFormData.companyLocation || "",
+      companyLogo: existingFormData.companyLogo || "",
+      companyLogoFileName: existingFormData.companyLogoFileName || "",
+      description: existingFormData.description || "",
+      eventTypes: existingFormData.eventTypes || [],
+      industries: existingFormData.industries || [],
+      titleName: existingFormData.titleName || "",
+      isDraft: existingFormData.isDraft !== undefined ? existingFormData.isDraft : true,
+      isBrandCollaboration: existingFormData.isBrandCollaboration !== undefined 
+        ? existingFormData.isBrandCollaboration 
+        : true,
+    });
+    console.log("Loaded existing form data:", existingFormData);
+  } else {
+    // Initialize with empty values if no existing data
+    setCurrentFormData({
+      key: activeImageId.toString(),
+      eventName: "",
+      eventLocation: "",
+      eventYear: "",
+      companyName: "",
+      companyLocation: "",
+      companyLogo: "",
+      companyLogoFileName: "",
+      description: "",
+      eventTypes: [],
+      industries: [],
+      titleName: "",
+      isDraft: true,
+      isBrandCollaboration: true,
+    });
   }
 }, [activeImageId, selectionState?.formData]);
 
-  if (!isHydrated) {
+// Add this effect to sync isBrandCollaboration with currentFormData 20 april
+useEffect(() => {
+  if (currentFormData?.isBrandCollaboration !== undefined) {
+    setIsBrandCollaboration(currentFormData.isBrandCollaboration);
+  }
+}, [currentFormData]);
+
+if (!isHydrated) {
     return null;
   }
 
@@ -160,64 +178,86 @@ useEffect(() => {
     setInsights(response?.insights?.data || []);
   };
 
-  const handleAddValue = (fieldName, value, mediaId) => {
-    setCurrentFormData((prevData) => {
-      const updatedEntry = { ...prevData, [fieldName]: [...(prevData[fieldName] || []), value] };
-      console.log("upadted enetry", updatedEntry);
-      updateFormDataForMedia(mediaId, updatedEntry);
-      return updatedEntry;
-    });
-  };
 
-
-const handleRemoveValue = (fieldName, value, mediaId) => {
-  console.log('--- Remove Value Debug Start ---');
-  console.log('Attempting to remove:', { fieldName, value, mediaId });
-  
+const handleInputChange = (e, mediaId) => {
+  const { name, value } = e.target;
+  const formDataKey = mediaId.toString();
   setCurrentFormData((prevData) => {
-    console.log('Previous Data:', prevData);
-    
-    // Ensure prevData is an array and get the current entry
-    const currentEntry = Array.isArray(prevData) ? prevData[0] : prevData;
-    console.log('Current Entry:', currentEntry);
-    
-    // Get the current field values as array
-    const currentValues = Array.isArray(currentEntry[fieldName]) ? currentEntry[fieldName] : [];
-    console.log('Current Values:', currentValues);
-    
-    // Filter out the value
-    const updatedValues = currentValues.filter(item => item !== value);
-    console.log('Updated Values after filter:', updatedValues);
-    
-    // Create updated entry
-    const updatedEntry = {
-      ...currentEntry,
-      [fieldName]: updatedValues
+    const updatedData = { 
+      ...prevData,
+      key: mediaId, // Ensure key is set
+      [name]: value 
     };
-    console.log('Updated Entry:', updatedEntry);
-
-    // Update context
-    console.log('Updating context with mediaId:', mediaId);
-    updateFormDataForMedia(mediaId, updatedEntry);
-
-    console.log('Returning new state:', [updatedEntry]);
-    console.log('--- Remove Value Debug End ---');
-    
-    // Return as array
-    return [updatedEntry];
+    // Only send to backend when user actually changes something
+    updateFormDataForMedia(formDataKey, updatedData);
+    return updatedData;
   });
 };
 
-  const handleInputChange = (e, mediaId) => {
-    const { name, value } = e.target;
-    setCurrentFormData((prevData) => {
-      const updatedData = { ...prevData, [name]: value };
-      console.log("upadted data", updatedData);
-      updateFormDataForMedia(mediaId, updatedData);
-      return updatedData;
-    });
-  };
- 
+const handleAddValue = (fieldName, value, mediaId) => {
+  const formDataKey = mediaId.toString(); //string convert for update 20 may
+  setCurrentFormData((prevData) => {
+    const updatedEntry = { 
+      ...prevData,
+      key: mediaId, // Ensure key is set
+      [fieldName]: [...(prevData[fieldName] || []), value] 
+    };
+    // Only send to backend when user actually adds a value
+    updateFormDataForMedia(formDataKey, updatedEntry);
+    return updatedEntry;
+  });
+};
+
+const handleRemoveValue = (fieldName, value, mediaId) => {
+   const formDataKey = mediaId.toString();
+  setCurrentFormData((prevData) => {
+    const currentEntry = Array.isArray(prevData) ? prevData[0] : prevData;
+    const currentValues = Array.isArray(currentEntry[fieldName]) ? currentEntry[fieldName] : [];
+    const updatedValues = currentValues.filter(item => item !== value);
+    
+    const updatedEntry = {
+      ...currentEntry,
+      key: mediaId, // Ensure key is set
+      [fieldName]: updatedValues
+    };
+    
+    // Only send to backend when user actually removes a value
+    updateFormDataForMedia(formDataKey, updatedEntry);
+    return updatedEntry;
+  });
+};
+
+
+  //20 may not create duplicate though but see preview disable 
+  const handleToggle = () => {
+  const newIsBrandCollaboration = !isBrandCollaboration;
+  setIsBrandCollaboration(newIsBrandCollaboration);
+
+  // Only update if we have an activeImageId and existing form data
+  if (activeImageId) {
+    const existingFormData = selectionState.formData.find(
+      (item) => item.key === activeImageId
+    );
+
+    // Only send API request if form data exists
+    if (existingFormData) {
+      const updatedEntry = {
+        ...existingFormData,
+        isBrandCollaboration: newIsBrandCollaboration
+      };
+      updateFormDataForMedia(activeImageId, updatedEntry);
+    }
+
+    // Update currentFormData
+    setCurrentFormData(prevData => ({
+      ...prevData,
+      isBrandCollaboration: newIsBrandCollaboration
+    }));
+  }
+};
+
+
+
   const handleSlide = (mediaId, direction, totalSlides) => {
     setCarouselIndexes((prev) => {
       const currentIndex = prev[mediaId] || 0;
@@ -238,7 +278,7 @@ const handleRemoveValue = (fieldName, value, mediaId) => {
     );
   };
 
-  const isFormComplete = () => {
+   const isFormComplete = () => {
     if (!activeImageId) return false; 
   
     // Find the correct form data using the activeImageId
@@ -253,7 +293,8 @@ const handleRemoveValue = (fieldName, value, mediaId) => {
     return areRequiredFieldsFilled;
   };
   
-  
+
+
   const handleBackClick = () => {
    router.push("/manage-projects/pick-projects");
   }
@@ -278,6 +319,8 @@ const handleRemoveValue = (fieldName, value, mediaId) => {
     ...project,
     status: getProjectStatus(project),
   }));
+
+
 
   
   return (

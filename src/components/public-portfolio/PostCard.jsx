@@ -17,35 +17,38 @@ export default function PostCard({ post, postId, username, allPosts }) {
     }
 
     const fetchInsights = async () => {
-      try {
-        const url = `/api/public-portfolio/media-insights?username=${encodeURIComponent(
-          username
-        )}&postId=${encodeURIComponent(postId)}`;
+      // Only fetch insights for Instagram posts
+      if (post.media.source === "instagram") {
+        try {
+          const url = `/api/public-portfolio/media-insights?username=${encodeURIComponent(
+            username
+          )}&postId=${encodeURIComponent(postId)}`;
 
-        const res = await fetch(url);
-        const data = await res.json();
+          const res = await fetch(url);
+          const data = await res.json();
 
-        if (data.success) {
-          const insightsArray = data.insights.data;
-          const insightsMap = {};
+          if (data.success) {
+            const insightsArray = data.insights.data;
+            const insightsMap = {};
 
-          insightsArray.forEach((item) => {
-            insightsMap[item.name] = item.values?.[0]?.value || 0;
-          });
+            insightsArray.forEach((item) => {
+              insightsMap[item.name] = item.values?.[0]?.value || 0;
+            });
 
-          setInsights(insightsMap);
-        } else {
-          throw new Error(data.error || "Failed to fetch insights");
+            setInsights(insightsMap);
+          } else {
+            throw new Error(data.error || "Failed to fetch insights");
+          }
+        } catch (error) {
+          console.error("Error fetching insights:", error);
+          setInsights(null);
         }
-      } catch (error) {
-        console.error("Error fetching insights:", error);
-      } finally {
-        setLoading(false);
       }
+      setLoading(false);
     };
 
     fetchInsights();
-  }, [username, postId]);
+  }, [username, postId, post.media.source]);
 
   const handleNavigation = (direction) => {
     if (!allPosts || allPosts.length === 0) return;
@@ -81,8 +84,7 @@ export default function PostCard({ post, postId, username, allPosts }) {
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [postId, allPosts]);
 
-  if (loading) return <div>Loading insights...</div>;
-  if (!insights) return <div>No insights available</div>;
+  if (loading) return <div>Loading...</div>;
   if (!post) return <p>No post found.</p>;
 
   const imageUrl = post.media?.files?.[0]?.url;
@@ -194,11 +196,6 @@ export default function PostCard({ post, postId, username, allPosts }) {
               {title}
             </h2>
 
-          {/* Title */}
-          <h2 className="text-graphite font-qimano text-2xl font-medium leading-tight mt-5">
-                  {title}
-          </h2>
-
 <button
   className="w-6 h-6 mb-6"
   onClick={() => router.push(`/${username}/media-kit`)}
@@ -293,28 +290,30 @@ export default function PostCard({ post, postId, username, allPosts }) {
             {description}
           </p>
 
-          <div
-            className={`w-full h-px bg-[#cbcbcb] my-6 ${
-              hasCompanyInfo ? "mt-5" : "mt-44"
-            }`}
-          ></div>
+          {/* Only show engagement metrics for Instagram posts */}
+          {post.media.source === "instagram" && (
+            <>
+              <div className={`w-full h-px bg-[#cbcbcb] my-6 ${
+                hasCompanyInfo ? "mt-5" : "mt-44"
+              }`}></div>
 
-          {/* Engagement Metrics */}
-          <div className="flex justify-between mt-[1%] font-qimano">
-            {[
-              { label: "Views", key: "impressions" },
-              { label: "Likes", key: "likes" },
-              { label: "Shares", key: "shares" },
-              { label: "Comments", key: "comments" },
-            ].map(({ label, key }, idx) => (
-              <div className="text-center" key={idx}>
-                <div className="text-2xl font- text-[#212121]">
-                  {insights[key] ?? 0}
-                </div>
-                <div className="text-sm text-[#cbcbcb]">{label}</div>
+              <div className="flex justify-between mt-[1%] font-qimano">
+                {[
+                  { label: "Views", key: "impressions" },
+                  { label: "Likes", key: "likes" },
+                  { label: "Shares", key: "shares" },
+                  { label: "Comments", key: "comments" },
+                ].map(({ label, key }, idx) => (
+                  <div className="text-center" key={idx}>
+                    <div className="text-2xl font- text-[#212121]">
+                      {insights?.[key] ?? 0}
+                    </div>
+                    <div className="text-sm text-[#cbcbcb]">{label}</div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          )}
         </div>
       </div>
 
