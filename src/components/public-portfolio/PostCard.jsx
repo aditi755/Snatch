@@ -338,7 +338,7 @@ export default function PostCard({ post, postId, username, allPosts }) {
             Prev
           </span>
         </button>
-
+<p>hello</p>
         {/* Next */}
         <button
           onClick={() => handleNavigation("next")}
