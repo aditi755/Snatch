@@ -63,18 +63,18 @@ export default async function PostLayout({ children, params }) {
 
 
         {/* More posts */}
-        <div className="max-w-5xl  mx-auto mt-12 px-4">
+        <div className="max-w-5xl  mx-auto mt-12 px-16">
           <h3 className="text-lg font-apfel-grotesk-mittel font-medium mb-4">More from @{username}</h3>
           <div className="flex gap-4 overflow-x-auto pb-2">
             {userPosts.length > 0 ? (
               userPosts.map((post, index) => (
                 <Link
                   key={index}
-                  href={`/public-portfolio/${username}/post/?postId=${post.mediaId}`}
+                  href={`/${username}/media-kit/post/?postId=${post.mediaId}`}
                   className="block"
                 >
                   {post.mediaType === "CAROUSEL_ALBUM" && post.children ? (
-                    <div className="relative w-[120px] h-[120px] lg:w-[180px] lg:h-[180px] group">
+                    <div className="relative w-[120px] h-[120px] lg:w-[90px] lg:h-[90px] group">
                       <Image
                         src={post.children[0].mediaUrl}
                         alt={`Project ${index}`}
@@ -86,7 +86,7 @@ export default async function PostLayout({ children, params }) {
                     <video
                       muted
                       playsInline
-                      className="w-[120px] h-[120px] lg:w-[180px] lg:h-[180px] object-cover rounded-md"
+                      className="w-[120px] h-[120px] lg:w-[90px] lg:h-[90px] object-cover rounded-md"
                       src={post.mediaUrl}
                     />
                   ) : (
@@ -95,7 +95,7 @@ export default async function PostLayout({ children, params }) {
                       height={180}
                       src={post.mediaUrl}
                       alt={`Project ${index}`}
-                      className="w-[120px] h-[120px] lg:w-[180px] lg:h-[180px] object-cover rounded-md"
+                      className="w-[120px] h-[120px] lg:w-[90px] lg:h-[90px] object-cover rounded-md"
                     />
                   )}
                 </Link>

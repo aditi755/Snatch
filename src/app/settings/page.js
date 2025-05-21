@@ -83,7 +83,7 @@ export default function Page() {
             disabled={loading || isConnected}
             className={`w-[230px] h-[47px] mt-5 ${
               isConnected
-                ? "bg-[#0044FF] text-white cursor-not-allowed"
+                ? "bg-electric-blue text-white cursor-not-allowed"
                 : "bg-[#0044FF] text-white hover:bg-blue-600"
             } border border-light-grey rounded-md text-sm font-medium transition`}
           >

@@ -4,7 +4,7 @@ const QuestionCounter = ({
   value,
   onQuestionChange,
   onAnswerChange,
-  maxLength = 100,
+  maxWords = 75,
   name,
   type,
   answerValue,
@@ -13,30 +13,30 @@ const QuestionCounter = ({
 }) => {
   const questionSets = {
     general: [
-      "What’s one thing your content always delivers—no exceptions?",
-      "What’s the wildest idea you’ve turned into content—and did it work?",
+      "What's one thing your content always delivers—no exceptions?",
+      "What's the wildest idea you've turned into content—and did it work?",
       "How do you stay real when the internet loves perfect?",
-      "What’s one lesson you’ve learned about keeping things relatable?",
-      "What’s your why—the thing that fuels your creativity?",
+      "What's one lesson you've learned about keeping things relatable?",
+      "What's your why—the thing that fuels your creativity?",
       "How do you stay ahead without losing yourself in trends?",
       "Other",
     ],
     audience: [
-      "What’s the one question your DMs never stop asking?",
-      "What’s one topic your followers can’t get enough of right now?",
-      "What’s one product your audience still thanks you for recommending?",
-      "How do you know when something’s actually connecting with your audience?",
-      "What’s one thing your audience has taught you about your influence?",
+      "What's the one question your DMs never stop asking?",
+      "What's one topic your followers can't get enough of right now?",
+      "What's one product your audience still thanks you for recommending?",
+      "How do you know when something's actually connecting with your audience?",
+      "What's one thing your audience has taught you about your influence?",
       "How do you hope your audience feels after every post?",
       "Other",
     ],
     brand: [
-      "What’s one thing that makes a brand an instant yes for you?",
-      "What’s the best feedback you’ve ever gotten from a collaboration?",
+      "What's one thing that makes a brand an instant yes for you?",
+      "What's the best feedback you've ever gotten from a collaboration?",
       "How do you make branded content feel anything but branded?",
-      "What’s one thing you won’t compromise on in a partnership?",
-      "What’s been your most unexpected collab—and why did it click?",
-      "What’s one thing brands might not know about working with you?",
+      "What's one thing you won't compromise on in a partnership?",
+      "What's been your most unexpected collab—and why did it click?",
+      "What's one thing brands might not know about working with you?",
       "Other",
     ],
   };
@@ -70,6 +70,25 @@ const QuestionCounter = ({
   const handleQuestionChange = (e) => {
     console.log("onQuestionChange fired!", e.target.value);
     onQuestionChange(e); // Pass event to parent
+  };
+
+  // Helper to count words
+  const countWords = (str) => {
+    if (!str) return 0;
+    return str.trim().split(/\s+/).filter(Boolean).length;
+  };
+
+  // Handler to enforce word limit
+  const handleAnswerChange = (e) => {
+    const words = countWords(e.target.value);
+    if (words <= maxWords) {
+      onAnswerChange(e);
+    } else {
+      // Only allow up to maxWords
+      const trimmed = e.target.value.trim().split(/\s+/).slice(0, maxWords).join(' ');
+      const fakeEvent = { ...e, target: { ...e.target, value: trimmed } };
+      onAnswerChange(fakeEvent);
+    }
   };
 
   return (
@@ -131,15 +150,14 @@ const QuestionCounter = ({
       <div className="relative mt-2">
         <textarea
           name={name}
-          maxLength={maxLength}
           value={answerValue}
-          onChange={onAnswerChange}
+          onChange={handleAnswerChange}
           placeholder="Enter your response here..."
-          className="bg-transparent w-full px-0 py-2 rounded-md border-t-2 font-apfel-grotezk-regular border-gray-200 focus:outline-none text-gray-700 text-sm resize-none"
+          className="bg-transparent w-full px-0 py-2 rounded-md font-apfel-grotezk-regular border-gray-200 focus:outline-none text-gray-700 text-sm resize-none"
           rows={2}
         />
         <span className="absolute bottom-2 right-3 text-xs text-gray-500">
-          {answerValue.length}/{maxLength}
+          {countWords(answerValue)}/{maxWords} words
         </span>
       </div>
     </div>

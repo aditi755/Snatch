@@ -1,4 +1,4 @@
-"use client";
+
 
 import React, { useState, useRef, useEffect } from "react";
 import { fetchProfileData } from "@/utils/postQuestions";
@@ -31,11 +31,14 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
   const [iconSrc, setIconSrc] = useState("");
   const [tempSelectedImage, setTempSelectedImage] = useState(null);
 
+
   const scrollRef = useRef(null);
+
 
   const fetchData = async () => {
     try {
       const { aboutQuestions, audienceQuestions, brandQuestions } = await fetchProfileData();
+
 
       let defaultImage = "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740397248/10_o9u87n.jpg";
       let currentImage = defaultImage;
@@ -70,6 +73,7 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
         }
       }
 
+
       setSelectedImage(currentImage);
       setQuestion(currentQuestion);
       setAnswer(currentAnswer);
@@ -78,6 +82,7 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
     }
   };
 
+
   useEffect(() => {
     if (isOpen) {
       fetchData();
@@ -85,11 +90,13 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
     }
   }, [isOpen]);
 
+
   const handleImageSelect = (image) => {
     const imageName = imageNameMapping[image] || "Selected Image";
     setTempSelectedImage({ url: image, name: imageName });
     setSelectedImage(image);
   };
+
 
   const handleScroll = (direction) => {
     if (scrollRef.current) {
@@ -101,11 +108,13 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
     }
   };
 
+
   const typeColors = {
     about: { bg: "bg-lime-yellow", text: "text-graphite" },
     audience: { bg: "bg-electric-blue", text: "text-white" },
     brand: { bg: "bg-graphite", text: "text-lime-yellow" },
   };
+
 
   const cardType = typeColors[type] || typeColors.about;
   const predefinedImages = imagesByType || [];
@@ -123,6 +132,7 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
       onClose();
     }
   };
+
 
   return (
     <>
@@ -180,17 +190,20 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
               <div className="relative col-span-2 sm:col-span-3">
                 {/* Scroll Buttons */}
                 <button
-                  onClick={() => handleScroll("left")}
-                  className="absolute w-[45px] h-[43px] left-[-183px] top-1/2 transform -translate-y-1/2 bg-[#212121]/60 p-3 rounded-full shadow-lg z-10"
-                >
-                  <Image
-                    src="/assets/images/forwardArrowBlack.svg"
-                    alt="Left Arrow"
-                    width={20}
-                    height={20}
-                    className="w-5 h-5 transform rotate-180"
-                  />
-                </button>
+  onClick={() => handleScroll("left")}
+  className="absolute w-[45px] h-[43px] left-[-183px] top-1/2 transform -translate-y-1/2 bg-[#212121]/60 p-3 rounded-full shadow-lg z-10"
+>
+  <Image
+    src="/assets/images/forwardArrowBlack.svg"
+    alt="Left Arrow"
+    width={20}
+    height={20}
+    className="w-5 h-5 transform rotate-180"
+  />
+</button>
+
+
+
 
                 <div
                   ref={scrollRef}
@@ -214,9 +227,10 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
                   ))}
                 </div>
 
+
                 <button
                   onClick={() => handleScroll("right")}
-                  className="absolute w-[45px] h-[43px] -right-6 top-1/2 transform -translate-y-1/2 bg-[#212121]/60 p-3 rounded-full shadow-lg z-10"
+                  className="absolute w-[45px] h-[43px]  -right-6  top-1/2 transform -translate-y-1/2 bg-[#212121]/60 p-3 rounded-full shadow-lg z-10"
                 >
                   <Image src="/assets/images/forwardArrowBlack.svg" alt="Right Arrow" width={20} height={20} className="w-5 h-5" />
                 </button>

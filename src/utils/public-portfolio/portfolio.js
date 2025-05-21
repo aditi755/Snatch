@@ -1,16 +1,28 @@
 // utils/helpers.js
 import { useState, useEffect } from "react";
 
-// 1️⃣ Fetch Portfolio Data
+
+const extractUsernameFromPath = (pathname) => {
+  // Remove leading and trailing slashes and split
+  const parts = pathname.split("/").filter(Boolean);
+  console.log("Current pathname: parts", parts);
+  // For admin view URL: ['snatchsocial', 'media-kit', 'adminview']
+  // For public view URL: ['snatchsocial', 'media-kit']
+
+  // Always return the first segment as it's the username in both cases
+  return parts[0] || null;
+};
+
+
+
+// Update useFetchPortfolio
 export const useFetchPortfolio = (ownerId) => {
   const [formData, setFormData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const pathnameParts = window.location.pathname.split("/");
-        const username =
-          pathnameParts[pathnameParts.length - 1] || pathnameParts[pathnameParts.length - 2];
+        const username = extractUsernameFromPath(window.location.pathname);
 
         const url = ownerId
           ? `/api/public-portfolio/userinfo?userId=${ownerId}`
@@ -35,15 +47,15 @@ export const useFetchPortfolio = (ownerId) => {
   return formData;
 };
 
+// Update useFetchPublicPosts
 export const useFetchPublicPosts = (ownerId) => {
   const [posts, setPosts] = useState({ instagram: [], uploaded: [] });
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const pathnameParts = window.location.pathname.split("/");
-        const username =
-          pathnameParts[pathnameParts.length - 1] || pathnameParts[pathnameParts.length - 2];
+        const pathname = window.location.pathname;  
+        const username = extractUsernameFromPath(pathname);
 
         const url = ownerId
           ? `/api/public-portfolio/posts?userId=${ownerId}`
@@ -71,48 +83,7 @@ export const useFetchPublicPosts = (ownerId) => {
   return posts;
 };
 
-
-// export const useInstagramData = () => {
-//   const [data, setData] = useState({ followers: 0, posts: 0, reach: 0 });
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   const pathnameParts = window.location.pathname.split("/");
-//   const username =
-//   pathnameParts[pathnameParts.length - 1] || pathnameParts[pathnameParts.length - 2];
-
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const response = await fetch("/api/instagram-stats");
-//         if (!response.ok) {
-//           throw new Error("Failed to fetch Instagram data from public protfolo");
-//         }
-//         const result = await response.json();
-//         setData({
-//           followers: result.followers_count || 0,
-//           posts: result.media_count || 0,
-//           reach: result.reach || 0,
-//         });
-//       } catch (err) {
-//         setError(err.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-    
-//     fetchData();
-//   }, []);
-
-//   return { data, loading, error };
-// };
-
-
-
-
-// 2️⃣ Check Screen Size
-
+// Update useInstagramData
 export const useInstagramData = () => {
   const [data, setData] = useState({ followers: 0, posts: 0, reach: 0 });
   const [loading, setLoading] = useState(true);
@@ -121,9 +92,7 @@ export const useInstagramData = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const pathnameParts = window.location.pathname.split("/");
-        const username =
-          pathnameParts[pathnameParts.length - 1] || pathnameParts[pathnameParts.length - 2];
+        const username = extractUsernameFromPath(window.location.pathname);
 
         if (!username) {
           throw new Error("Username not found in URL");

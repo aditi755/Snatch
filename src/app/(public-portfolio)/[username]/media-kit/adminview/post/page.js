@@ -1,9 +1,10 @@
+
 // src/app/public-portfolio/[username]/post/page.js
 "use client";
 import { useEffect, useState } from "react";
 import { useSearchParams, useParams } from "next/navigation";
-import PostCard from "@/components/public-portfolio/PostCard";// Adjust path as needed
-import { usePostsContext } from "@/context/PostContext"; // Adjust path as needed
+import PostCard from "@/components/public-portfolio/PostCard";
+import { usePostsContext } from "@/context/PostContext";
 export default function PostDetailsPage() {
   const { allPosts, username: contextUsername } = usePostsContext(); // Get data from context
 
@@ -14,33 +15,6 @@ export default function PostDetailsPage() {
   const postId = searchParams.get("postId");
   const username = params.username;
 
-  // useEffect(() => {
-
-  //   if (!postId) {
-  //     console.error("No postId provided in the URL.");
-  //     return;
-  //   }
-
-  //   const fetchPostData = async () => {
-  //     try {
-  //       const res = await fetch(`/api/public-portfolio/preview?postId=${postId}`);
-  //       const data = await res.json();
-
-  //       if (data.success) {
-  //         setPost(data);
-  //       } else {
-  //         console.error("Error fetching post:", data.error);
-  //       }
-  //     } catch (err) {
-  //       console.error("Fetch failed:", err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchPostData();
-  // }, [postId]);
-
 
   useEffect(() => {
     if (!postId || !username) {
@@ -50,7 +24,7 @@ export default function PostDetailsPage() {
 
     const fetchPostData = async () => {
       try {
-        const res = await fetch(`/api/public-portfolio/preview?postId=${postId}`);
+        const res = await fetch(`/api/public-portfolio/preview?postId=${postId}&username=${username}`);
         const data = await res.json();
 
         if (data.success) {

@@ -5,16 +5,10 @@ import connectDb from "@/db/mongoose";
 import OnboardingData from "@/models/onboarding.model";
 import User from "@/models/user.model";
 
-// Server action handler for final storage
 export async function handler({ userId, formData }) {
   try {
-    // Connect to the database
-    console.log("Server Action - Testing from", userId, formData);
     await connectDb();
 
-    console.log("Server Action - User ID:", userId, formData);
-
-    // Validate userId
     if (!userId) {
       return {
         success: false,
@@ -23,100 +17,71 @@ export async function handler({ userId, formData }) {
       };
     }
 
-    // Remove isDraft from formData to avoid overriding
-    const { isDraft, ...restFormData } = formData;
-    console.log("Form data after removing isDraft:", restFormData);
-
-    // Check if onboarding data already exists (draft or final)
+    // Safely extract and transform the form data
+    const { isDraft, _id, __v, createdAt, updatedAt, ...cleanFormData } = formData;
+    
+    // Check if onboarding data exists
     const existingOnboarding = await OnboardingData.findOne({ userId });
-
     let onboardingData;
 
     if (existingOnboarding) {
-      console.log("Existing onboarding data found:", existingOnboarding);
-
-      // If a draft exists, update it to mark it as final
-      const updatedData = {
-        ...restFormData, // Use restFormData (without isDraft)
-        isDraft: false, // Explicitly set isDraft to false for final storage
-      };
-
-      console.log("Updated data before save:", updatedData);
-
+      // Update existing record
       onboardingData = await OnboardingData.findOneAndUpdate(
-        { userId }, // Query
-        updatedData, // Update
-        { new: true } // Return the updated document
+        { userId },
+        {
+          ...cleanFormData,
+          isDraft: false
+        },
+        { 
+          new: true,
+          runValidators: true
+        }
       );
-
-      console.log("Onboarding data saved as final:", onboardingData);
     } else {
-      // If no draft exists, create a new record as final
-      console.log("Form data before creation:", restFormData);
-
+      // Create new record
       onboardingData = await OnboardingData.create({
-        ...restFormData, // Spread restFormData (without isDraft)
+        ...cleanFormData,
         userId,
-        isDraft: false, // Explicitly set isDraft to false for final storage
+        isDraft: false
       });
-
-      console.log("New onboarding data created as final:", onboardingData);
     }
 
-    // Ensure _id is a string
-    if (onboardingData._id && typeof onboardingData._id !== "string") {
-      onboardingData._id = onboardingData._id.toString();
-    }
+    // Convert MongoDB document to plain object and handle _id
+    onboardingData = onboardingData.toObject();
+    onboardingData._id = onboardingData._id.toString();
 
-    console.log("Onboarding Data saved:", onboardingData);
-
-    // Check if a User exists
+    // Handle user creation/update
     let user = await User.findOne({ userId });
-
     if (!user) {
-      // Create a new User if none exists
       user = await User.create({
         userId,
         instagramUsername: onboardingData.username,
-        onboardingData: onboardingData._id, // Link to OnboardingData
+        onboardingData: onboardingData._id
       });
     } else {
-      // Link OnboardingData to existing User
       user.onboardingData = onboardingData._id;
+      user.instagramUsername = onboardingData.username;
       await user.save();
     }
-    user = user.toObject(); // Convert to plain object
 
-    // Ensure _id is a string
-    if (user._id && typeof user._id !== "string") {
-      user._id = user._id.toString();
-    }
+    // Convert user to plain object and handle IDs
+    user = user.toObject();
+    user._id = user._id.toString();
+    user.onboardingData = user.onboardingData.toString();
 
-    // Ensure onboardingData._id is a string in the user object
-    if (user.onboardingData && typeof user.onboardingData !== "string") {
-      user.onboardingData = user.onboardingData.toString();
-    }
-
-    console.log("User data saved:", user);
-
-    // Return success response with plain objects
-    const response = {
+    return {
       success: true,
       message: "Success",
       data: { onboardingData, user },
-      status: 201,
+      status: 201
     };
 
-    console.log("Final response:", JSON.stringify(response, null, 2)); // Log the final response
-
-    return response;
   } catch (error) {
-    // Return error response
     console.error("Error in server action:", error);
     return {
       success: false,
       message: error.message,
-      status: 500,
+      status: 500
     };
   }
 }

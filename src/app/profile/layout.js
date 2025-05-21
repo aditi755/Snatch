@@ -51,13 +51,15 @@ export default function OnboardingLayout({ children }) {
     }
   
     const storedFormData = localStorage.getItem(`formData_${userId}`);
-  //get the username from the userId
     if (storedFormData) {
       const parsedData = JSON.parse(storedFormData);
       const username = parsedData?.username;
-  
+
       if (username) {
-        router.push(`/public-portfolio/${username}`);
+        // If the logged-in user's ID matches the portfolio's userId, they are the admin
+        const isAdmin = userId === parsedData.userId;
+        const route = isAdmin ? `/${username}/media-kit/adminview` : `/${username}/media-kit`;
+        router.push(route);
       } else {
         console.error("Username not found in formData!");
       }

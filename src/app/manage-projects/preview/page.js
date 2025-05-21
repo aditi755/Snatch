@@ -25,11 +25,13 @@ import SvgComponent from "@/components/svg/Instagramsvg";
   const router = useRouter();
   const searchParams = useSearchParams();
   const activeImageId = searchParams.get("activeImageId");
-
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   //const isBrandCollaboration = searchParams.get('isBrandCollaboration');
 
   const requiredFields = ["titleName", "description", "industries"];
+
+
   const handleSubmit = () => {
     setIsModalOpen(true);
 
@@ -57,7 +59,9 @@ import SvgComponent from "@/components/svg/Instagramsvg";
           body: JSON.stringify({ activeImageId }) // Send the activeImageId in the body
         });
     
-        console.log("FormData deleted successfully");
+        console.log("Project and formdata set draft false succesfully! check admin to see database as well!");
+        alert("Project saved successfully!");
+        router.push("/profile");
       } catch (error) {
         console.error("Error deleting formData:", error);
         throw error;
@@ -76,6 +80,17 @@ const activeProject =
   activeImageId !== null
     ? projects.find((project) => String(project.mediaId) === String(activeImageId))
     : projects[0];
+
+    // Update useEffect to set initial index when activeProject changes
+useEffect(() => {
+  if (activeProject) {
+    const index = projects.findIndex(
+      (project) => String(project.mediaId) === String(activeProject.mediaId)
+    );
+    setCurrentIndex(index >= 0 ? index : 0);
+  }
+}, [activeProject, projects]);
+
 
 console.log("preview activeimageid", activeProject,  activeImageId);
 
@@ -141,6 +156,25 @@ console.log("preview activeimageid", activeProject,  activeImageId);
   const handleBackClick = () => {
    router.push("/manage-projects/add-details")
   }
+
+  // Add these navigation functions
+const handlePrevious = () => {
+  const newIndex = currentIndex > 0 ? currentIndex - 1 : projects.length - 1;
+  const prevProject = projects[newIndex];
+  if (prevProject) {
+    router.push(`/manage-projects/preview/?activeImageId=${prevProject.mediaId}`);
+    setCurrentIndex(newIndex);
+  }
+};
+
+const handleNext = () => {
+  const newIndex = currentIndex < projects.length - 1 ? currentIndex + 1 : 0;
+  const nextProject = projects[newIndex];
+  if (nextProject) {
+    router.push(`/manage-projects/preview/?activeImageId=${nextProject.mediaId}`);
+    setCurrentIndex(newIndex);
+  }
+};
 
   return (
     <div className={`flex flex-col items-start h-[77vh] w-full space-x-8 overflow-x-hidden overflow-y-auto ${isModalOpen ? 'bg-transparent pointer-events-none' : 'bg-transparent'}`} style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
@@ -506,26 +540,43 @@ console.log("preview activeimageid", activeProject,  activeImageId);
           </div>
         </div>
 
-
-        <div className="fixed bottom-2 left-1/2 transform -translate-x-1/2 h-[67px] bg-white rounded-lg w-[210px] border-t border-gray-300 py-2 mb-2">
+            <div className="fixed bottom-2 left-1/2 transform -translate-x-1/2 h-[67px] bg-white rounded-lg w-[530px] border-t border-gray-300 py-2 mb-2">
   <div className="flex gap-2 justify-center items-center mx-auto">
-    <div className="flex gap-2 w-[180px] h-[50px] justify-center bg-gray-100 rounded-lg p-2">
-      <button className="w-[72px] px-4 py-1 border-electric-blue border-2 text-electric-blue rounded hover:bg-blue-700 transition-colors  " onClick={handleBackClick}>
+    <div className="flex gap-2 w-[480px] h-[50px] justify-center bg-gray-100 rounded-lg p-2">
+      <button 
+        className="w-[72px] px-4 py-1 border-electric-blue border-2 text-electric-blue rounded hover:bg-electric-blue hover:text-white transition-colors" 
+        onClick={handleBackClick}
+      >
         Back
       </button>
 
-      <div>
-            <button
-              className="px-5 py-1 bg-electric-blue text-white rounded hover:bg-electric-blue transition-colors pointer-events-auto"
-              onClick={handleSubmit}
-            >
-              Save
-            </button>
-      
-          </div>
-          </div>
-        </div>
-            </div>
+      <div className="flex gap-2">
+        <button
+          className="px-2 py-1  text-electric-blue rounded hover:opacity-80  transition-colors underline underline-offset-4"
+          onClick={handlePrevious}
+          disabled={projects.length <= 1}
+        >
+          ← Previous Project
+        </button>
+        
+        <button
+          className="px-2 py-1  text-electric-blue rounded hover:opacity-80 transition-colors underline underline-offset-4"
+          onClick={handleNext}
+          disabled={projects.length <= 1}
+        >
+          Next Project →
+        </button>
+      </div>
+
+      <button
+        className="px-5 py-1 bg-electric-blue text-white rounded hover:bg-blue-700 transition-colors pointer-events-auto"
+        onClick={handleSubmit}
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>
        
       </div>
       </div>

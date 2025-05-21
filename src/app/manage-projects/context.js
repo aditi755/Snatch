@@ -286,6 +286,7 @@ const addInstagramSelection = (mediaLink, mediaId, name, children = []) => {
       const fileUrl = await cloudinaryUpload(file);
       updateFormDataForMedia(mediaId, { companyLogo: fileUrl });
       console.log("Company logo uploaded successfully. URL:", fileUrl);
+      alert("Company logo uploaded successfully.");
       return fileUrl;
     } catch (error) {
       console.error("Error uploading company logo:", error);
