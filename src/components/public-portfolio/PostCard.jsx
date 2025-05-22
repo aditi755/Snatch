@@ -346,6 +346,7 @@ export default function PostCard({ post, postId, username, allPosts }) {
           </div>
           <span className="text-sm text-gray-700 group-hover:underline">Prev</span>
         </button>
+
         <button
           onClick={() => handleNavigation("next")}
           className="flex flex-col items-center space-y-1 group"
