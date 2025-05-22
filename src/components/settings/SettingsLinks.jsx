@@ -7,6 +7,7 @@ export default function SettingsLinks() {
   const router = useRouter();
   const { signOut } = useClerk();
 
+
   const items = [
     {
       label: "Privacy policy",
@@ -35,6 +36,7 @@ export default function SettingsLinks() {
     },
   ];
 
+
   const handleItemClick = (label, href) => {
     if (label === "Delete Account") {
       setShowDeleteModal(true);
@@ -46,10 +48,12 @@ export default function SettingsLinks() {
     }
   };
 
+
   const handleDelete = () => {
     setShowDeleteModal(false);
     router.push("/delete-account");
   };
+
 
   return (
     <div className="space-y-2 mt-10">
@@ -70,6 +74,7 @@ export default function SettingsLinks() {
           ) : null}
         </button>
       ))}
+
 
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">

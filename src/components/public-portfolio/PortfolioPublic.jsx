@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
 const PortfolioPublic = () => {
   const [projects, setProjects] = useState([]);
   const [carouselIndexes, setCarouselIndexes] = useState({});
@@ -12,8 +14,10 @@ const PortfolioPublic = () => {
     const fetchProjects = async () => {
       try {
         const pathnameParts = window.location.pathname.split("/");
-        const username = pathnameParts[pathnameParts.length - 2];
-        setUsername(username);
+        const username = pathnameParts[1];
+        setUsername(username)
+        // const username = pathnameParts[pathnameParts.length - 2];
+        // setUsername(username);
 
         const url = `/api/public-portfolio/posts?username=${username}`;
         const response = await fetch(url);

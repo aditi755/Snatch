@@ -24,7 +24,7 @@ export default function PostDetailsPage() {
 
     const fetchPostData = async () => {
       try {
-        const res = await fetch(`/api/public-portfolio/preview?postId=${postId}`);
+        const res = await fetch(`/api/public-portfolio/preview?postId=${postId}&username=${username}`);
         const data = await res.json();
 
         if (data.success) {

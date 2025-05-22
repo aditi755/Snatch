@@ -5,7 +5,6 @@ import { fetchProfileData } from "@/utils/postQuestions";
 import Image from "next/image";
 import clsx from "clsx";
 
-
 // Mapping object for image names
 const imageNameMapping = {
   "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740396552/7_r6djcr.jpg": "Sunlit Studio",
@@ -15,7 +14,6 @@ const imageNameMapping = {
   "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740397248/10_o9u87n.jpg": "Minimalist Desktop",
 };
 
-
 export default function UploadImageModal({ isOpen, onClose, onImageSelect, type, questionIndex }) {
   const imagesByType = [
     "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740396552/7_r6djcr.jpg",
@@ -24,7 +22,6 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
     "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740396474/2_svbihw.jpg",
     "https://res.cloudinary.com/dgk9ok5fx/image/upload/v1740397248/10_o9u87n.jpg",
   ];
-
 
   const [uploadedImages, setUploadedImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -48,7 +45,6 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
       let currentQuestion = "";
       let currentAnswer = "";
 
-
       let questionsArray;
       switch (type) {
         case "about":
@@ -67,7 +63,6 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
           console.warn("Invalid type provided");
           return;
       }
-
 
       if (questionsArray && questionsArray.length > 0) {
         const selectedQuestion = questionsArray[questionIndex];
@@ -105,8 +100,11 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
 
   const handleScroll = (direction) => {
     if (scrollRef.current) {
-      const scrollAmount = 180;
-      scrollRef.current.scrollBy({ left: direction === "left" ? -scrollAmount : scrollAmount, behavior: "smooth" });
+      const scrollAmount = 180; // Adjust the number to change the number of images shown
+      scrollRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
     }
   };
 
@@ -121,11 +119,9 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
   const cardType = typeColors[type] || typeColors.about;
   const predefinedImages = imagesByType || [];
 
-
   const handleClose = () => {
     onClose();
   };
-
 
   const handleConfirmUpload = () => {
     if (tempSelectedImage) {
@@ -154,13 +150,11 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
               </button>
             </div>
 
-
             {/* Image Collection */}
             <div className="flex">
               <p className="font-qimano text-graphite">Choose from our collection</p>
               <div className="flex-1 ml-2 mt-2.5 border-t border-gray-200"></div>
             </div>
-
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 mt-5">
               {/* Interactive Preview Card */}
@@ -191,7 +185,6 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
                   )}
                 </div>
               </div>
-
 
               {/* Scrollable Image Row */}
               <div className="relative col-span-2 sm:col-span-3">
@@ -243,7 +236,6 @@ export default function UploadImageModal({ isOpen, onClose, onImageSelect, type,
                 </button>
               </div>
             </div>
-
 
             <button
               onClick={handleConfirmUpload}
