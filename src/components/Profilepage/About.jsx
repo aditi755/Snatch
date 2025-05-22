@@ -147,7 +147,7 @@ const About = () => {
                 value={item.question}
                 onQuestionChange={(e) => handleQuestionChange(e, index, "about", aboutQuestions)}
                 onAnswerChange={(e) => handleAnswerChange(e, index, "about")}
-                maxLength={75}
+                maxWords={75}
                 name={`aboutQuestion_${index}`}
                 answerValue={item.answer}
                 type="about"
@@ -213,7 +213,7 @@ const About = () => {
                 value={item.question}
                 onQuestionChange={(e) => handleQuestionChange(e, index, "audience", audienceQuestions)}
                 onAnswerChange={(e) => handleAnswerChange(e, index, "audience")}
-                maxLength={75}
+                maxWords={75}
                 name={`audienceQuestion_${index}`}
                 answerValue={item.answer}
                 type="audience"
@@ -277,7 +277,7 @@ const About = () => {
                 value={item.question}
                 onQuestionChange={(e) => handleQuestionChange(e, index, "brand", brandQuestions)}
                 onAnswerChange={(e) => handleAnswerChange(e, index, "brand")}
-                maxLength={75}
+                maxWords={75}
                 name={`brandQuestion_${index}`}
                 answerValue={item.answer}
                 type="brand"
