@@ -9,23 +9,14 @@ const REDIRECT_URI = 'https://snatch-pi.vercel.app/manage-projects/pick-projects
 
 
 const SCOPES = [
-<<<<<<< Updated upstream
   'instagram_basic',                // Basic instagram account info
   'instagram_manage_insights',      // Access to account insights
   'pages_show_list',               // Access to page list
   'pages_read_engagement',         // Read page engagement metrics
   'public_profile',                 // Basic Facebook profile info
   'business_management',
- 
-=======
-  'instagram_basic',
-  'instagram_manage_insights',
-  'pages_show_list',
-  'pages_read_engagement',
-  'public_profile',
-  'business_management',
->>>>>>> Stashed changes
 ].join(',');
+
 export async function GET() {
     const instagramAuthUrl = `https://www.facebook.com/v21.0/dialog/oauth?` +
       `client_id=${CLIENT_ID}` +
