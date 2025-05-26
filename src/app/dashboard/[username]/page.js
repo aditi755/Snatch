@@ -9,8 +9,9 @@ import { useQuery } from "@tanstack/react-query";
 
 const DashboardPage = () => {
   const [selectedLocationType, setSelectedLocationType] = useState("country");
-  const [isInstagramLinked, setIsInstagramLinked] = useState(true); // default true to avoid flash
-  const [totalRequests, setTotalRequests] = useState(0); // state to hold total
+  const [isInstagramLinked, setIsInstagramLinked] = useState(true);
+  const [hasMinFollowers, setHasMinFollowers] = useState(true);
+  const [totalRequests, setTotalRequests] = useState(0); 
   const pathname = usePathname();
   const username = pathname.split("/").pop();
 
@@ -44,21 +45,28 @@ const DashboardPage = () => {
         // 1. Check if Instagram is linked
         const instagramResponse = await fetch("/api/auth/check-instagram-connection");
         const instagramData = await instagramResponse.json();
+        
         setIsInstagramLinked(instagramData.connected);
-  
-        // 2. Fetch total collaboration requests
+        
+        if (instagramData.connected) {
+          // 2. Only check followers if Instagram is connected
+          const followerResponse = await fetch("/api/auth/instagram-followers");
+          const followerData = await followerResponse.json();
+          setHasMinFollowers(followerData.count >= 10);
+        }
+
+        // 4. Fetch collaboration requests
         const requestsResponse = await fetch(`/api/influencer-requests?username=${username}`);
         const requestsData = await requestsResponse.json();
-  
         if (requestsData.totalRequests !== undefined) {
-          setTotalRequests(requestsData.totalRequests); // assuming you defined setTotalRequests
+          setTotalRequests(requestsData.totalRequests);
         }
       } catch (error) {
         console.error("Error fetching influencer data:", error);
         setIsInstagramLinked(false);
       }
     };
-  
+
     if (username) {
       fetchInfluencerData();
     }
@@ -108,8 +116,8 @@ const DashboardPage = () => {
 
   return (
     <div className="mt-2 relative p-3">
-      {/* Blur wrapper when Instagram is not linked */}
-      <div className={`${!isInstagramLinked ? "blur-sm pointer-events-none select-none" : ""}`}>
+      {/* Blur wrapper when conditions are not met */}
+      <div className={`${(!isInstagramLinked || !hasMinFollowers) ? "blur-sm pointer-events-none select-none" : ""}`}>
         {/* Top Analytics Cards */}
         <div className="mb-[500px] flex gap-3">
           <DashboardCardwrapper count={analytics.totalVisitors} label="Profile Visits" />
@@ -182,12 +190,10 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      {/* Overlay if Instagram not connected */}
+      {/* Conditional Overlays */}
+      {/* Case 1: Instagram not connected */}
       {!isInstagramLinked && (
-        <div
-          className="absolute inset-0 z-40 bg-black bg-opacity-90 flex flex-col items-center justify-center text-center px-6 rounded-xl"
-          style={{ height: "680px" }}
-        >
+        <div className="absolute inset-0 z-40 bg-black bg-opacity-90 flex flex-col items-center justify-center text-center px-6 rounded-xl" style={{ height: "680px" }}>
           <h2 className="text-3xl md:text-4xl text-[#e7e300] font-qimano mb-4">
             Dashboard Inactive
           </h2>
@@ -199,6 +205,26 @@ const DashboardPage = () => {
             className="bg-[#e7e300] text-black px-6 py-3 rounded-lg hover:bg-yellow-300 transition-all duration-200 flex items-center gap-2"
           >
             Get Started / Complete Press Kit
+            <span className="text-xl">→</span>
+          </button>
+        </div>
+      )}
+
+      {/* Case 2: Instagram connected but less than 1000 followers */}
+      {isInstagramLinked && !hasMinFollowers && (
+        <div className="absolute inset-0 z-40 bg-black bg-opacity-90 flex flex-col items-center justify-center text-center px-6 rounded-xl" style={{ height: "680px" }}>
+          <h2 className="text-3xl md:text-4xl text-[#e7e300] font-qimano mb-4">
+            Dashboard Not Accessible
+          </h2>
+          <p className="text-white mb-6 max-w-lg font-apfel-grotezk-regular">
+            Uh oh, looks like you&#39;re just shy of the 1k mark! Snatch features unlock once you hit that milestone. 
+            We&#39;re rooting for you, can&#39;t wait to welcome you back once you&#39;re there! 🚀
+          </p>
+          <button
+            onClick={handleLogin}
+            className="bg-lime-yellow text-black px-6 py-3 rounded-lg hover:bg-yellow-300 transition-all duration-200 flex items-center gap-2 font-apfel-grotezk-regular"
+          >
+            Try Again
             <span className="text-xl">→</span>
           </button>
         </div>

@@ -65,15 +65,15 @@ export default function Page() {
 
 
 
-          <div className="text-left border-b border-gray-300 text-sm text-gray-700 pb-2 mb-6 font-medium">
+          <div className="text-left border-b border-gray-300 text-sm text-gray-700 pb-2 mb-6 font-medium font-apfel-grotezk-regular">
             Link social media
           </div>
 
 
-          <p className="text-lg font-medium">
+          <p className="text-xl font-medium font-qimano">
             Connect With Instagram To Add Your Projects
           </p>
-          <p className="text-sm text-gray-600 mt-2">
+          <p className="text-md text-gray-600 mt-2 font-apfel-grotezk-regular">
             Linking your Instagram account allows you to directly add your creations to your profile kit on Snatch.
           </p>
 
@@ -81,11 +81,11 @@ export default function Page() {
           <button
             onClick={!isConnected ? handleLogin : null}
             disabled={loading || isConnected}
-            className={`w-[230px] h-[47px] mt-5 ${
+            className={`px-5 py-2.5 mt-5 ${
               isConnected
                 ? "bg-electric-blue text-white cursor-not-allowed"
-                : "bg-[#0044FF] text-white hover:bg-blue-600"
-            } border border-light-grey rounded-md text-sm font-medium transition`}
+                : "bg-electric-blue text-white hover:bg-blue-600"
+            } border border-light-grey rounded-md text-md font-apfel-grotezk-regular font-medium transition`}
           >
             {loading
               ? "Redirecting..."
@@ -95,10 +95,7 @@ export default function Page() {
           </button>
 
 
-          <button className="px-4 py-2 bg-electric-blue text-white rounded-lg ml-10" onClick={handleLogin}>Refresh Instagram login</button>
-
-
-
+          <button className="px-5 py-2.5 bg-electric-blue text-white text-md font-apfel-grotezk-regular font-medium transition rounded-md ml-8 " onClick={handleLogin}>Refresh Instagram login</button>
 
           {/* Settings Links */}
           <SettingsLinks />

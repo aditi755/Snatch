@@ -65,7 +65,7 @@ export default function SettingsLinks() {
         >
           <div className="flex items-center gap-3">
             <Image src={item.icon} alt={item.label} width={18} height={18} />
-            <span className="text-sm text-black group-hover:text-[#0037EB] transition-colors">
+            <span className="text-md text-black group-hover:text-[#0037EB] transition-colors font-apfel-grotezk-regular">
               {item.label}
             </span>
           </div>
@@ -80,7 +80,7 @@ export default function SettingsLinks() {
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
           <div className="bg-white rounded-lg shadow-xl p-6 w-[320px] sm:w-[400px]">
             <div className="flex justify-between items-center border-b pb-2">
-              <h2 className="text-md font-semibold">Hold on!</h2>
+              <h2 className="text-md font-qimano font-semibold">Hold on!</h2>
               <button onClick={() => setShowDeleteModal(false)}>
                 <Image
                   src="/assets/icons/settings/Cross.svg" // replace this path with your actual cross icon
@@ -90,20 +90,20 @@ export default function SettingsLinks() {
                 />
               </button>
             </div>
-            <p className="mt-4 text-sm text-gray-700">
+            <p className="mt-4 text-sm text-gray-700 font-apfel-grotezk-regular">
               Are you sure you want to delete your account? This action is
               permanent and all your data will be removed.
             </p>
-            <div className="mt-6 flex justify-end gap-3">
+            <div className="mt-6 flex justify-end gap-3 font-apfel-grotezk-regular">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="border border-blue-600 text-blue-600 rounded px-4 py-1 hover:bg-blue-50 transition"
+                className="border border-blue-600 text-blue-600 rounded px-4 py-1 hover:bg-blue-50 transition font-apfel-grotezk-regular"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
-                className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition"
+                className="bg-electric-blue text-white px-4 py-1 rounded hover:bg-electric-blue/30 transition"
               >
                 Delete account
               </button>
