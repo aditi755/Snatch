@@ -263,55 +263,55 @@ const handleNext = () => {
 
                   if (activeProject.name === "IMAGE") {
                     return (
-                      <div className="relative h-[400px] p-5 w-[300px]">
+                      <div className="relative aspect-[2/3] p-5 w-[300px]">
                       <Image
                         src={activeProject.mediaLink}
                         alt={activeProject.name}
                         width={300}
                         height={1200}
-                        className=" h-[380px] bg-cover rounded-lg"
+                        className=" aspect-[2/3] bg-cover rounded-lg"
                       />
                       </div>
                     );
                   } else if (activeProject.name === "VIDEO") {
                     return (
-                      <div className="relative h-[400px] p-5 w-[300px]">
+                      <div className="relative aspect-[4/5] p-5 w-[300px]">
                       <video
                         src={activeProject.mediaLink}
                         controls
                         width={300}
                         height={1200}
-                        className=" h-[400px] object-cover rounded-lg"
+                        className="aspect-[2/3] object-cover rounded-lg"
                       />
                       </div>
                     );
                   } if (activeProject.name === "IMAGE") {
                     return (
-                      <div className="relative h-[400px] p-5 w-[300px]">
+                      <div className="relative aspect-[2/3] p-5 w-[300px]">
                         <Image
                           src={activeProject.mediaLink}
                           alt={activeProject.name}
                           width={300}
                           height={1200}
-                          className="h-[380px] bg-cover rounded-lg"
+                          className="aspect-[2/3] bg-cover rounded-lg"
                         />
                       </div>
                     );
                   } else if (activeProject.name === "VIDEO") {
                     return (
-                      <div className="relative h-[400px] p-5 w-[300px]">
+                      <div className="relative aspect-[2/3] p-5 w-[300px]">
                         <video
                           src={activeProject.mediaLink}
                           controls
                           width={300}
                           height={1200}
-                          className="h-[400px] object-cover rounded-lg"
+                          className="aspect-[2/3] object-cover rounded-lg"
                         />
                       </div>
                     );
                   } else if (activeProject.name === "CAROUSEL_ALBUM") {
                     return (
-                      <div className="relative h-[400px] p-5 w-[300px] rounded-lg overflow-hidden">
+                      <div className="relative aspect-[2/3] p-5 w-[300px] rounded-lg overflow-hidden">
                         {activeProject.children.map((child, index) => (
                           <div
                             key={child.id}
@@ -329,14 +329,14 @@ const handleNext = () => {
                                   alt={`Media ${child.id}`}
                                   width={300}
                                   height={400}
-                                  className="h-full w-full rounded-lg bg-cover"
+                                  className="aspect-[2/3] w-full rounded-lg bg-cover"
                                 />
                               </div>
                             ) : (
-                              <div className="flex justify-center items-center h-full w-full rounded-lg">
+                              <div className="flex justify-center items-center aspect-[2/3] w-full rounded-lg">
                                 <video
                                   controls
-                                  className="h-full w-full rounded-lg object-cover"
+                                  className="aspect-[2/3] w-full rounded-lg object-cover"
                                   src={child.media_url}
                                 >
                                   Your browser does not support the video tag.
@@ -375,14 +375,14 @@ const handleNext = () => {
                     );
                   } else if (activeProject.fileUrl) {
                             return (
-                              <div className="relative h-[400px] p-5 w-[300px]">
+                              <div className="relative h-auto p-5 w-[300px]">
                                 {activeProject.fileUrl.match(/\.(jpeg|jpg|gif|png)$/) ? (
                                   <Image
                                     src={activeProject.fileUrl}
                                     alt={activeProject.fileName}
                                     width={200}
                                     height={150}
-                                    className="h-[350px] w-full bg-cover rounded-lg"
+                                    className="h-auto w-full bg-cover rounded-lg"
                                   />
                                 ) : (
                                   <video
@@ -390,7 +390,7 @@ const handleNext = () => {
                                     controls
                                     width={200}
                                     height={150}
-                                    className="h-[350px] w-full object-cover rounded-lg"
+                                    className="aspect-[2/3] h-auto w-full object-cover rounded-lg"
                                   >
                                     Your browser does not support the video tag.
                                   </video>

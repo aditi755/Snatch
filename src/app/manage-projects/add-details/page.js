@@ -398,135 +398,126 @@ const handleRemoveValue = (fieldName, value, mediaId) => {
        
   <div className=" flex ">
     
-  <div className="w-[258px] ml-20 mt-0 relative ">
-  {/* Media Container right side */}
-  <div
-    className="w-full h-full rounded-lg overflow-hidden "
-    style={{
-      height:
-        activeProject?.name === "VIDEO"
-          ? "373px" // Adjust height for video
-          : "335px", // Auto height for image or carousel
-    }}
-  >
-    {(activeImageId !== null || projects.length > 0) &&
-      (() => {
-        if (!activeProject) {
-          return <p className="text-graphite flex justify-center items-center h-full">No project selected</p>;
-        }
+<div className="w-[258px] ml-20 mt-0 relative">
+  {/* Media and Insights Container */}
+  <div className="w-full rounded-lg overflow-hidden ">
+    {/* Media Display */}
+    {(activeImageId !== null || projects.length > 0) && (() => {
+      if (!activeProject) {
+        return (
+          <p className="text-graphite flex justify-center items-center h-full">
+            No project selected
+          </p>
+        );
+      }
 
-        if (activeProject.name === "IMAGE") {
-          return (
-            <Image
-              src={activeProject.mediaLink}
-              alt={activeProject.name}
-              width={20}
-              height={20} 
-              className=" bg-cover  rounded-lg w-full h-full" 
-            />
-          );
-        } else if (activeProject.name === "VIDEO") {
-          return (
-            <video
-              src={activeProject.mediaLink}
-              controls
-              className="w-full h-full object-cover rounded-lg" // Object-cover for videos
-            />
-          );
-        } else if (activeProject.name === "CAROUSEL_ALBUM") {
-          return (
-            <div className="relative w-full h-full">
-              {activeProject.children.map((child, index) => (
-                <div
-                  key={child.id}
-                  className={`absolute inset-0 transition-transform duration-500 ${
-                    (carouselIndexes[activeProject.mediaId] || 0) === index
-                      ? "translate-x-0 opacity-100"
-                      : "translate-x-50 opacity-0"
-                  }`}
-                >
-                  {child.media_type === "IMAGE" ? (
-                    <Image
-                      src={child.media_url}
-                      alt={`Media ${child.id}`}
-                      fill
-                      className="bg-cover rounded-lg" // Object-cover for carousel images
-                    />
-                  ) : (
-                    <video
-                      controls
-                      className="w-full h-full object-cover rounded-lg" // Object-cover for carousel videos
-                      src={child.media_url}
-                    >
-                      Your browser does not support the video tag.
-                    </video>
-                  )}
-                </div>
-              ))}
+      if (activeProject.name === "IMAGE") {
+        return (
+          <Image
+            src={activeProject.mediaLink}
+            alt={activeProject.name}
+            width={1080}
+            height={1080} // 1:1 Instagram aspect
+            className="w-full aspect-[2/3] object-cover rounded-lg"
+          />
+        );
+      }
 
-              {/* Carousel navigation buttons */}
-              <button
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-6 h-6 flex justify-center items-center"
-                onClick={() =>
-                  handleSlide(
-                    activeProject.mediaId,
-                    "prev",
-                    activeProject.children.length
-                  )
-                }
+      if (activeProject.name === "VIDEO") {
+        return (
+          <video
+            src={activeProject.mediaLink}
+            controls
+            className="w-full aspect-[2/3]  object-cover rounded-lg" // Portrait aspect ratio (1080x1350)
+          />
+        );
+      }
+
+      if (activeProject.name === "CAROUSEL_ALBUM") {
+        return (
+          <div className="relative w-full aspect-[2/3] ">
+            {activeProject.children.map((child, index) => (
+              <div
+                key={child.id}
+                className={`absolute inset-0 transition-opacity duration-500 ${
+                  (carouselIndexes[activeProject.mediaId] || 0) === index
+                    ? "opacity-100"
+                    : "opacity-0"
+                }`}
               >
-                ❮
-              </button>
-              <button
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-6 h-6 flex justify-center items-center"
-                onClick={() =>
-                  handleSlide(
-                    activeProject.mediaId,
-                    "next",
-                    activeProject.children.length
-                  )
-                }
-              >
-                ❯
-              </button>
-            </div>
-          );
-        } else if (activeProject.fileUrl) {
-          return (
-            <div className="w-full h-full border-2 border-light-grey rounded-lg flex justify-center items-center">
-              {activeProject.fileUrl.match(/\.(jpeg|jpg|gif|png)$/) ? (
-                <Image
-                  src={activeProject.fileUrl}
-                  alt={activeProject.fileName}
-                  width={200}
-                  height={150}
-                  className="bg-cover h-full w-full"
-                />
-              ) : (
-                <video
-                  src={activeProject.fileUrl}
-                  controls
-                  width={200}
-                  height={150}
-                  className="object-cover h-full w-full"
-                >
-                  Your browser does not support the video tag.
-                </video>
-              )}
-            </div>
-          );
-        }
+                {child.media_type === "IMAGE" ? (
+                  <Image
+                    src={child.media_url}
+                    alt={`Media ${child.id}`}
+                    fill
+                    className="object-cover rounded-lg"
+                  />
+                ) : (
+                  <video
+                    src={child.media_url}
+                    controls
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                )}
+              </div>
+            ))}
+            {/* Navigation buttons */}
+            <button
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white rounded-full w-6 h-6 flex justify-center items-center"
+              onClick={() =>
+                handleSlide(
+                  activeProject.mediaId,
+                  "prev",
+                  activeProject.children.length
+                )
+              }
+            >
+              ❮
+            </button>
+            <button
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white rounded-full w-6 h-6 flex justify-center items-center"
+              onClick={() =>
+                handleSlide(
+                  activeProject.mediaId,
+                  "next",
+                  activeProject.children.length
+                )
+              }
+            >
+              ❯
+            </button>
+          </div>
+        );
+      }
 
-        return null;
-      })()}
+      if (activeProject.fileUrl) {
+        return (
+          <div className="w-full rounded-lg overflow-hidden">
+            {activeProject.fileUrl.match(/\.(jpeg|jpg|gif|png)$/) ? (
+              <Image
+                src={activeProject.fileUrl}
+                alt={activeProject.fileName}
+                width={1080}
+                height={1080}
+                className="w-full h-auto object-cover"
+              />
+            ) : (
+              <video
+                src={activeProject.fileUrl}
+                controls
+                className="w-full h-auto max-h-[400px] object-cover rounded-lg"
+              />
+            )}
+          </div>
+        );
+      }
+
+      return null;
+    })()}
   </div>
 
-  {/* Insights Section */}
-  <div
-    className={`bg-white rounded-lg mt-0 p-4 flex gap-4 justify-center text-black ${
-      activeProject?.name === "VIDEO" ? "h-16 mt-0" : "h-16 mt-0"
-    }`}
-  >
+  {/* Insights Section - Always sticks below media */}
+  <div className="bg-white rounded-lg mt-2 p-4 flex gap-4 justify-center text-black">
     {insights &&
       insights.map((item) => (
         <div key={item.name} className="flex-col text-center">
@@ -535,7 +526,8 @@ const handleRemoveValue = (fieldName, value, mediaId) => {
         </div>
       ))}
   </div>
-     </div>
+</div>
+
 
 
         <div className="ml-20 mt-0 flex flex-col gap-8 overflow-y-scroll overflow-x-hidden h-[70vh]  7xl:h-[80vh] 9xl:h-[80vh]   " style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
