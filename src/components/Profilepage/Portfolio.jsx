@@ -70,7 +70,8 @@ const Portfolio = () => {
 
   return (
     <div className="w-full flex justify-center">
-      <div className="w-full max-w-5xl p-6 overflow-y-auto" style={{ maxHeight: 'calc(85vh - 96px)' }}>
+      <div className="w-full max-w-5xl p-6 overflow-y-auto" style={{ maxHeight: 'calc(85vh - 96px)', scrollbarWidth: 'none',        // Firefox
+    msOverflowStyle: 'none' }} >
         {projects.length > 0 ? (
           <div className="grid grid-cols-3 gap-8">
             {projects.map((project, index) => {

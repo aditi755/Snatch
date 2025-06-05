@@ -62,7 +62,8 @@ const Audience = () => {
   return (
     <div
       className="w-full flex justify-center overflow-y-auto"
-      style={{ height: "calc(87vh - 96px)" }}
+      style={{ height: "calc(87vh - 96px)", scrollbarWidth: 'none',
+    msOverflowStyle: 'none' }}
     >
       <div className="relative w-full max-w-7xl mt-5 px-4">
         {/* AI Generated Insights */}

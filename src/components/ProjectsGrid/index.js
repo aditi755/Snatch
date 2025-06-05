@@ -111,7 +111,6 @@ const ProjectsGrid = ({
                   ) : (
                     <video
                       src={project.mediaLink || project.fileUrl}
-                      controls
                       width={200}
                       height={150}
                       className="object-cover h-36 rounded-md"

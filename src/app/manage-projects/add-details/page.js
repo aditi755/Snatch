@@ -49,7 +49,12 @@ export default function AddDetails() {
   ]);
   
   const [isBrandCollaboration, setIsBrandCollaboration] = useState(true);
+  const [isPortrait, setIsPortrait] = useState(false);
 
+// Add this helper function before the return statement
+const checkOrientation = (width, height) => {
+  return height > width;
+};
 
   const requiredFields = [
     "titleName",
@@ -166,9 +171,81 @@ useEffect(() => {
   }
 }, [currentFormData]);
 
+
+// const getDominantColor = async (imageUrl) => {
+//   try {
+//     console.log("Extracting dominant color from:", imageUrl);
+//     return new Promise((resolve) => {
+//       const img = document.createElement('img');
+//       img.crossOrigin = "Anonymous";
+      
+//       img.onload = () => {
+//         try {
+//           const colorThief = new ColorThief();
+//           const color = colorThief.getColor(img);
+//           resolve(`rgba(${color.join(',')}, 0.9)`);
+//         } catch (e) {
+//           console.error("Error extracting color:", e);
+//           resolve('rgb(75, 75, 75)'); // Fallback to graphite
+//         }
+//       };
+
+//       img.onerror = () => {
+//         console.error("Error loading image");
+//         resolve('rgb(75, 75, 75)'); // Fallback to graphite
+//       };
+
+//       // Add a timestamp to bypass cache
+//       const cacheBuster = `?timestamp=${Date.now()}`;
+//       img.src = `${imageUrl}${cacheBuster}`;
+//     });
+//   } catch (error) {
+//     console.error("Error in getDominantColor:", error);
+//     return 'rgb(75, 75, 75)'; // Fallback to graphite
+//   }
+// };
+
+// useEffect(() => {
+//   const updateDominantColor = async () => {
+//     if (!activeProject) return;
+   
+//     console.log("Active Project for color extraction:", activeProject);
+//     let mediaUrl;
+
+//     // Handle uploaded files
+//     if (activeProject.fileUrl) {
+//       mediaUrl = activeProject.fileUrl;
+//     }
+//     // Handle Instagram media
+//     else if (activeProject.mediaLink) {
+//       console.log("Active Project mediaLink:", activeProject.mediaLink);
+//       mediaUrl = activeProject.mediaLink;
+//     }
+//     // Handle Instagram carousel
+//     else if (activeProject.name === "CAROUSEL_ALBUM" && activeProject.children?.length > 0) {
+//       mediaUrl = activeProject.children[0].media_url;
+//     }
+
+//     if (mediaUrl) {
+//       try {
+//         const color = await getDominantColor(mediaUrl);
+//         setDominantColor(color);
+//         console.log("Extracted color:", color);
+//       } catch (error) {
+//         console.error("Error extracting color:", error);
+//         setDominantColor('rgb(75, 75, 75)'); // Fallback color
+//       }
+//     }
+//   };
+
+//   updateDominantColor();
+// }, [activeProject]);
+
 if (!isHydrated) {
     return null;
   }
+
+
 
   const handleProjectClick = async (mediaId) => {
     if (mediaId === activeImageId) return; // Prevent unnecessary re-renders
@@ -398,9 +475,11 @@ const handleRemoveValue = (fieldName, value, mediaId) => {
        
   <div className=" flex ">
     
-<div className="w-[258px] ml-20 mt-0 relative">
-  {/* Media and Insights Container */}
-  <div className="w-full rounded-lg overflow-hidden ">
+<div className="w-[258px] ml-20 mt-0 relative  ">
+
+{/* Media and Insights Container */}
+<div className="w-[250px] h-auto overflow-hidden rounded-lg  flex items-center">
+  <div className="w-full rounded-lg overflow-hidden">
     {/* Media Display */}
     {(activeImageId !== null || projects.length > 0) && (() => {
       if (!activeProject) {
@@ -417,8 +496,11 @@ const handleRemoveValue = (fieldName, value, mediaId) => {
             src={activeProject.mediaLink}
             alt={activeProject.name}
             width={1080}
-            height={1080} // 1:1 Instagram aspect
-            className="w-full aspect-[2/3] object-cover rounded-lg"
+            height={1080}
+            className={`w-full ${isPortrait ? 'aspect-[4/6]' : 'h-auto'}  object-cover rounded-lg`}
+            onLoadingComplete={({ naturalWidth, naturalHeight }) => {
+              setIsPortrait(checkOrientation(naturalWidth, naturalHeight));
+            }}
           />
         );
       }
@@ -428,18 +510,21 @@ const handleRemoveValue = (fieldName, value, mediaId) => {
           <video
             src={activeProject.mediaLink}
             controls
-            className="w-full aspect-[2/3]  object-cover rounded-lg" // Portrait aspect ratio (1080x1350)
+            className={`w-full  ${isPortrait ? 'aspect-[4/6]' : 'h-auto'} object-cover rounded-lg`}
+            onLoadedMetadata={(e) => {
+              setIsPortrait(checkOrientation(e.target.videoWidth, e.target.videoHeight));
+            }}
           />
         );
       }
 
       if (activeProject.name === "CAROUSEL_ALBUM") {
         return (
-          <div className="relative w-full aspect-[2/3] ">
+          <div className="relative w-full h-auto">
             {activeProject.children.map((child, index) => (
               <div
                 key={child.id}
-                className={`absolute inset-0 transition-opacity duration-500 ${
+                className={`transition-opacity duration-500 ${
                   (carouselIndexes[activeProject.mediaId] || 0) === index
                     ? "opacity-100"
                     : "opacity-0"
@@ -450,19 +535,25 @@ const handleRemoveValue = (fieldName, value, mediaId) => {
                     src={child.media_url}
                     alt={`Media ${child.id}`}
                     fill
-                    className="object-cover rounded-lg"
+                    className={`w-full object-cover rounded-lg  ${isPortrait ? 'aspect-[4/6]' : 'h-auto'}`}
+                    onLoadingComplete={({ naturalWidth, naturalHeight }) => {
+                      setIsPortrait(checkOrientation(naturalWidth, naturalHeight));
+                    }}
                   />
                 ) : (
                   <video
                     src={child.media_url}
                     controls
-                    className="w-full h-full object-cover rounded-lg"
+                    className={`w-full  ${isPortrait ? 'aspect-[4/6]' : 'h-auto'} object-cover rounded-lg`}
+                    onLoadedMetadata={(e) => {
+                      setIsPortrait(checkOrientation(e.target.videoWidth, e.target.videoHeight));
+                    }}
                   />
                 )}
               </div>
             ))}
-            {/* Navigation buttons */}
-            <button
+            {/* Navigation buttons remain the same */}
+              <button
               className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white rounded-full w-6 h-6 flex justify-center items-center"
               onClick={() =>
                 handleSlide(
@@ -492,20 +583,26 @@ const handleRemoveValue = (fieldName, value, mediaId) => {
 
       if (activeProject.fileUrl) {
         return (
-          <div className="w-full rounded-lg overflow-hidden">
+          <div className=" w-full rounded-lg overflow-hidden">
             {activeProject.fileUrl.match(/\.(jpeg|jpg|gif|png)$/) ? (
               <Image
                 src={activeProject.fileUrl}
                 alt={activeProject.fileName}
                 width={1080}
                 height={1080}
-                className="w-full h-auto object-cover"
+                className={` w-full  ${isPortrait ? 'aspect-[4/6]' : 'h-auto'} object-cover`}
+                onLoadingComplete={({ naturalWidth, naturalHeight }) => {
+                  setIsPortrait(checkOrientation(naturalWidth, naturalHeight));
+                }}
               />
             ) : (
               <video
                 src={activeProject.fileUrl}
                 controls
-                className="w-full h-auto max-h-[400px] object-cover rounded-lg"
+                className={`  w-full  ${isPortrait ? 'aspect-[4/6]' : 'h-auto'} object-cover rounded-lg`}
+                onLoadedMetadata={(e) => {
+                  setIsPortrait(checkOrientation(e.target.videoWidth, e.target.videoHeight));
+                }}
               />
             )}
           </div>
@@ -515,6 +612,8 @@ const handleRemoveValue = (fieldName, value, mediaId) => {
       return null;
     })()}
   </div>
+</div>
+
 
   {/* Insights Section - Always sticks below media */}
   <div className="bg-white rounded-lg mt-2 p-4 flex gap-4 justify-center text-black">
@@ -692,3 +791,4 @@ const handleRemoveValue = (fieldName, value, mediaId) => {
     </div>
   );
 }
+

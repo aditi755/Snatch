@@ -30,7 +30,12 @@ import SvgComponent from "@/components/svg/Instagramsvg";
   //const isBrandCollaboration = searchParams.get('isBrandCollaboration');
 
   const requiredFields = ["titleName", "description", "industries"];
+  // Add these near the top of PreviewContent function
+  const [isPortrait, setIsPortrait] = useState(false);
 
+  const checkOrientation = (width, height) => {
+    return height > width;
+  };
 
   const handleSubmit = () => {
     setIsModalOpen(true);
@@ -190,7 +195,7 @@ const handleNext = () => {
       <div className="flex justify-center 7xl:min-w-[93%] mx-auto">
         
       <div className="flex flex-row font-apfel-grotezk-regular">
-<div className="w-[278px] bg-white text-black p-3 rounded-lg 5xl:h-[700px]">
+      <div className="w-[278px] bg-white text-black p-3 rounded-lg 5xl:h-[700px]">
           <div className="flex justify-between items-center border-b w-[260px]  border-light-grey">
             <button
               className={`relative px-4 py-2 text-lg font-medium ${
@@ -248,10 +253,12 @@ const handleNext = () => {
         </div>
 
         {/* preview card */}
-        <div className="w-[864px] h-[430px]  bg-white ml-28 mt-1 rounded-lg">
+        <div className="w-[864px] h-[430px] p-2 bg-white ml-28 mt-1 rounded-lg">
           <div className="flex gap-5 ">
-           <div className="w-[300px] h-full  ">
-           {activeImageId !== null && (
+           <div className="w-[300px] h-full pl-5 pt-5  ">
+
+            <div className={`w-[250px] ${isPortrait ? 'aspect-[4/6]' : 'h-auto'} overflow-hidden rounded-lg flex items-center`}>
+                   {activeImageId !== null && (
                 (() => {
                   const activeProject = projects.find(
                     (project) => String(project.mediaId) === activeImageId
@@ -263,145 +270,125 @@ const handleNext = () => {
 
                   if (activeProject.name === "IMAGE") {
                     return (
-                      <div className="relative aspect-[2/3] p-5 w-[300px]">
-                      <Image
-                        src={activeProject.mediaLink}
-                        alt={activeProject.name}
-                        width={300}
-                        height={1200}
-                        className=" aspect-[2/3] bg-cover rounded-lg"
-                      />
-                      </div>
-                    );
-                  } else if (activeProject.name === "VIDEO") {
-                    return (
-                      <div className="relative aspect-[4/5] p-5 w-[300px]">
-                      <video
-                        src={activeProject.mediaLink}
-                        controls
-                        width={300}
-                        height={1200}
-                        className="aspect-[2/3] object-cover rounded-lg"
-                      />
-                      </div>
-                    );
-                  } if (activeProject.name === "IMAGE") {
-                    return (
-                      <div className="relative aspect-[2/3] p-5 w-[300px]">
+                      <div className="relative w-[300px]">
                         <Image
                           src={activeProject.mediaLink}
                           alt={activeProject.name}
                           width={300}
                           height={1200}
-                          className="aspect-[2/3] bg-cover rounded-lg"
+                          className={`w-full ${isPortrait ? 'aspect-[4/6]' : 'h-auto'} bg-cover rounded-lg`}
+                          onLoadingComplete={({ naturalWidth, naturalHeight }) => {
+                            setIsPortrait(checkOrientation(naturalWidth, naturalHeight));
+                          }}
                         />
                       </div>
                     );
-                  } else if (activeProject.name === "VIDEO") {
+                  }  if (activeProject.name === "VIDEO") {
                     return (
-                      <div className="relative aspect-[2/3] p-5 w-[300px]">
+                      <div className="relative p-0 w-[300px]">
                         <video
                           src={activeProject.mediaLink}
                           controls
                           width={300}
                           height={1200}
-                          className="aspect-[2/3] object-cover rounded-lg"
+                          className={`w-full ${isPortrait ? 'aspect-[4/6]' : 'h-auto'} object-cover rounded-lg`}
+                          onLoadedMetadata={(e) => {
+                            setIsPortrait(checkOrientation(e.target.videoWidth, e.target.videoHeight));
+                          }}
                         />
                       </div>
                     );
-                  } else if (activeProject.name === "CAROUSEL_ALBUM") {
-                    return (
-                      <div className="relative aspect-[2/3] p-5 w-[300px] rounded-lg overflow-hidden">
-                        {activeProject.children.map((child, index) => (
-                          <div
-                            key={child.id}
-                            className={`absolute inset-0 transition-transform duration-500 h-full w-full ${
-                              (carouselIndexes[activeProject.mediaId] || 0) === index
-                                ? "translate-x-0 opacity-100"
-                                : "translate-x-50 opacity-0"
-                            }`}
-                            style={{ padding: '20px' }} // Add padding here
-                          >
-                            {child.media_type === "IMAGE" ? (
-                              <div className="flex justify-center items-center h-full w-full rounded-lg">
-                                <Image
-                                  src={child.media_url}
-                                  alt={`Media ${child.id}`}
-                                  width={300}
-                                  height={400}
-                                  className="aspect-[2/3] w-full rounded-lg bg-cover"
-                                />
-                              </div>
-                            ) : (
-                              <div className="flex justify-center items-center aspect-[2/3] w-full rounded-lg">
-                                <video
-                                  controls
-                                  className="aspect-[2/3] w-full rounded-lg object-cover"
-                                  src={child.media_url}
+                  } // Replace the CAROUSEL_ALBUM case with:
+
+             if (activeProject.name === "CAROUSEL_ALBUM") {
+              return (
+                <div className="relative w-full h-auto">
+                    {activeProject.children.map((child, index) => (
+                                <div
+                                  key={child.id}
+                                  className={`transition-opacity duration-500 ${
+                                    (carouselIndexes[activeProject.mediaId] || 0) === index
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  }`}
                                 >
-                                  Your browser does not support the video tag.
-                                </video>
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                  
-                        {/* Carousel Navigation */}
-                        <button
-                          className="absolute left-6 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-6 h-6 flex justify-center items-center"
-                          onClick={() =>
-                            handleSlide(
-                              activeProject.mediaId,
-                              "prev",
-                              activeProject.children.length
-                            )
-                          }
-                        >
-                          ❮
-                        </button>
-                        <button
-                          className="absolute right-6 top-1/2 transform -translate-y-1/2 bg-black/50 text-white rounded-full w-6 h-6 flex justify-center items-center"
-                          onClick={() =>
-                            handleSlide(
-                              activeProject.mediaId,
-                              "next",
-                              activeProject.children.length
-                            )
-                          }
-                        >
-                          ❯
-                        </button>
-                      </div>
-                    );
-                  } else if (activeProject.fileUrl) {
-                            return (
-                              <div className="relative h-auto p-5 w-[300px]">
-                                {activeProject.fileUrl.match(/\.(jpeg|jpg|gif|png)$/) ? (
-                                  <Image
-                                    src={activeProject.fileUrl}
-                                    alt={activeProject.fileName}
-                                    width={200}
-                                    height={150}
-                                    className="h-auto w-full bg-cover rounded-lg"
-                                  />
-                                ) : (
-                                  <video
-                                    src={activeProject.fileUrl}
-                                    controls
-                                    width={200}
-                                    height={150}
-                                    className="aspect-[2/3] h-auto w-full object-cover rounded-lg"
-                                  >
-                                    Your browser does not support the video tag.
-                                  </video>
-                                )}
-                              </div>
-                            );
-                          }
+                                  {child.media_type === "IMAGE" ? (
+                                    <Image
+                                      src={child.media_url}
+                                      alt={`Media ${child.id}`}
+                                      fill
+                                      className={`w-full object-cover rounded-lg  ${isPortrait ? 'aspect-[4/6]' : 'h-auto'}`}
+                                      onLoadingComplete={({ naturalWidth, naturalHeight }) => {
+                                        setIsPortrait(checkOrientation(naturalWidth, naturalHeight));
+                                      }}
+                                    />
+                                  ) : (
+                                    <video
+                                      src={child.media_url}
+                                      controls
+                                      className={`w-full  ${isPortrait ? 'aspect-[4/6]' : 'h-auto'} object-cover rounded-lg`}
+                                      onLoadedMetadata={(e) => {
+                                        setIsPortrait(checkOrientation(e.target.videoWidth, e.target.videoHeight));
+                                      }}
+                                    />
+                                  )}
+                                </div>
+                              ))}
+                  {/* Navigation buttons */}
+                  <div className="absolute inset-0 flex items-center justify-between px-2">
+                    <button
+                      className="z-10 bg-black/50 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                      onClick={() => handleSlide(activeProject.mediaId, "prev", activeProject.children.length)}
+                    >
+                      ❮
+                    </button>
+                    <button
+                      className="z-10 bg-black/50 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                      onClick={() => handleSlide(activeProject.mediaId, "next", activeProject.children.length)}
+                    >
+                      ❯
+                    </button>
+                  </div>
+                </div>
+              );
+            } else if (activeProject.fileUrl) {
+                                        return (
+                                          <div className="relative h-auto p-0 w-[300px]">
+                                            {activeProject.fileUrl.match(/\.(jpeg|jpg|gif|png)$/) ? (
+                                              <Image
+                                                src={activeProject.fileUrl}
+                                                alt={activeProject.fileName}
+                                                width={200}
+                                                height={150}
+                                                className={`w-full ${isPortrait ? 'aspect-[4/6]' : 'h-auto'} bg-cover rounded-lg`}
+                                                onLoadingComplete={({ naturalWidth, naturalHeight }) => {
+                                                  setIsPortrait(checkOrientation(naturalWidth, naturalHeight));
+                                                }}
+                                              />
+                                            ) : (
+                                              <video
+                                                src={activeProject.fileUrl}
+                                                controls
+                                                width={200}
+                                                height={150}
+                                                className={`w-full ${isPortrait ? 'aspect-[4/6]' : 'h-auto'} object-cover rounded-lg`}
+                                                onLoadedMetadata={(e) => {
+                                                  setIsPortrait(checkOrientation(e.target.videoWidth, e.target.videoHeight));
+                                                }}
+                                              >
+                                                Your browser does not support the video tag.
+                                              </video>
+                                            )}
+                                          </div>
+                                        );
+                                      }
             
                   return null;
                 })()
               )}
+              </div>
+
+      
            </div>
 
            <div className="w-full h-full mt-5">
@@ -596,3 +583,15 @@ export default function Preview() {
 }
 
 
+// .ai-style-change-1 {
+//     *& {
+//         width: 250px;
+//         aspect-ratio: 4 / 6;
+//         background-color: black;
+//         display: flex
+// ;
+//         justify-content: center;
+//         align-items: center;
+//         overflow: hidden;
+//     }
+// }

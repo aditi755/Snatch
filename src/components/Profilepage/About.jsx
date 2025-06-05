@@ -137,7 +137,8 @@ const About = () => {
 
   return (
     <div className="w-full flex justify-center">
-      <div className="w-full max-w-5xl p-6 overflow-y-auto" style={{ maxHeight: 'calc(85vh - 96px)' }}>
+      <div className="w-full max-w-5xl p-6 overflow-y-auto flex flex-col gap-3" style={{ maxHeight: 'calc(85vh - 96px)', scrollbarWidth: 'none',        // Firefox
+    msOverflowStyle: 'none'}}>
       {/* Accordion 1 – About You */}
       <Accordion title="About You*" isOpen={openIndex === 0} onToggle={() => toggleAccordion(0)}>
         <div className="text-gray-600 w-full overflow-y-auto h-[270px]" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
