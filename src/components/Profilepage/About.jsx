@@ -136,7 +136,8 @@ const About = () => {
   
 
   return (
-    <div className="max-w-2xl mx-auto p-4 flex flex-col gap-4">
+    <div className="w-full flex justify-center">
+      <div className="w-full max-w-5xl p-6 overflow-y-auto" style={{ maxHeight: 'calc(85vh - 96px)' }}>
       {/* Accordion 1 – About You */}
       <Accordion title="About You*" isOpen={openIndex === 0} onToggle={() => toggleAccordion(0)}>
         <div className="text-gray-600 w-full overflow-y-auto h-[270px]" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
@@ -330,6 +331,7 @@ const About = () => {
           </div>
         </div>
       </Accordion>
+    </div>
     </div>
   );
 };
