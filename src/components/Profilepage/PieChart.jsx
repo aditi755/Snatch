@@ -91,6 +91,11 @@ const DoughnutChart = ({apiEndpoint}) => {
         position: "bottom",
         labels: {
           padding: 32, 
+          boxWidth: 24,          // width of the colored box
+          boxHeight: 6,          // height to make it look like a bar
+          pointStyle: 'rectRounded',     // make it rounded like a pill
+          padding: 16,           // space between legend items
+          usePointStyle: false,
         },
       },
       title: {
@@ -115,15 +120,15 @@ const DoughnutChart = ({apiEndpoint}) => {
         <div className="mt-2 flex gap-3 text-black">
           <div className="flex items-center gap-2" style={{fontFamily: "Open Sans"}}>
             <span
-              className="w-8 h-2 "
+              className="w-4 h-1 rounded-sm "
               
             ></span>
           {chartData.datasets[0].data[0].toFixed(1)}%
           </div>
 
-          <div className="flex items-center gap-2" style={{fontFamily: "Open Sans"}}>
+          <div className="flex items-center gap-3" style={{fontFamily: "Open Sans"}}>
             <span
-              className="w-8 h-2 " 
+              className="w-4 h-1 rounded-sm " 
               
             ></span>
            {chartData.datasets[0].data[1].toFixed(1)}%

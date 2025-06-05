@@ -131,7 +131,7 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
 
     {/* Main Content */}
     <motion.div
-      className={`w-full text-white relative rounded-3xl z-10 ${
+      className={`w-full text-white relative rounded-3xl overflow-visible z-10 ${
         isMobile ? "h-[560px] bg-neutral-800" : ""
       }`}
       style={
@@ -143,7 +143,7 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
               position: "sticky",
               top: 0,
               zIndex: 10,
-              overflow: "hidden",
+              // overflow: "hidden",
               visibility: isMobile ? "visible" : visibility,
               opacity: isMobile ? 0.2 : opacity,
             }
@@ -268,30 +268,33 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
 
           {/*2 Center - Profile Image desktop */}
           <motion.div
-            className="block relative left-[22%] mt-5 lg:mt-0 lg:left-1/3 transform -translate-x-1/3 -translate-y-3/4 top-[100%] lg:-top-5 lg:right-10 rounded-xl overflow-visible z-20"
-            style={{
-              scale: isMobile ? "0" :profileImageScale,
-              opacity: isMobile? "1" :profileImageOpacity,
-              zIndex: 100,
-              position: "absolute",
-              bottom: "-20px",
-            }}
-          >
-         <div className="lg:absolute overflow-visible z-[9999]">
-        <div className="absolute -top-6 -left-6 bg-black bg-opacity-70 rounded-full p-2 z-[9999]">
-          {/* heart icon */}
-        </div>
-        <div className="absolute  lg:translate-x-1/2 rounded-xl w-64 h-80 overflow-visible ">
-          <Image
-            src={formData?.profilePicture || "/assets/images/profile_defaultOnborad.svg"}
-            alt={`${formData?.firstName} ${formData?.lastName}`}
-            width={276}
-            height={320}
-            className="object-cover lg:w-80 lg:h-96 w-56 h-80 relative z-[9999] rounded-xl right-4"
-          />
-        </div>
-      </div>
-          </motion.div>
+  className="block relative left-[22%] mt-5 lg:mt-0 lg:left-1/3 transform -translate-x-1/3 -translate-y-3/4 top-[100%] lg:-top-5 lg:right-10 rounded-xl overflow-visible z-20"
+  style={{
+    scale: isMobile ? "0" : profileImageScale,
+    opacity: isMobile ? "1" : profileImageOpacity,
+    zIndex: 100,
+    position: "absolute",
+    bottom: "-20px",
+  }}
+>
+  <div className="lg:absolute overflow-visible z-[9999]">
+    <div className="absolute -top-6 -left-6 bg-black bg-opacity-70 rounded-full p-2 z-[9999]">
+      {/* heart icon */}
+    </div>
+
+    {/* ↓ Updated this part ↓ */}
+    <div className="absolute lg:translate-x-1/2 lg:translate-y-10 rounded-xl w-64 h-80 overflow-visible">
+      <Image
+        src={formData?.profilePicture || "/assets/images/profile_defaultOnborad.svg"}
+        alt={`${formData?.firstName} ${formData?.lastName}`}
+        width={276}
+        height={320}
+        className="object-cover lg:w-80 lg:h-76 w-56 h-80 relative z-[9999] rounded-xl right-4"
+      />
+    </div>
+  </div>
+</motion.div>
+
 
          {/* 3 Right Side - Stats */}
 <div className="w-full lg:w-1/2 flex lg:flex-col items-end justify-center lg:justify-normal mr-16 gap-6 pt-4 z-20 ">

@@ -13,10 +13,7 @@ const Portfolio = () => {
         const response = await fetch("/api/projects/all-projects");
         const data = await response.json();
 
-        console.log("Project data in Portfolio:", data);
-
         if (data.success && data.instagram && data.uploaded) {
-          // Process projects: For carousel albums, keep album details instead of flattening children.
           const processedProjects = [
             ...data.instagram.map((item) => {
               if (item.name === "CAROUSEL_ALBUM" && item.children?.length > 0) {
@@ -45,7 +42,6 @@ const Portfolio = () => {
               title: item.name,
             })),
           ];
-          console.log("processedprojects", processedProjects);
           setProjects(processedProjects);
         } else {
           console.error("Error:", data.error);
@@ -73,103 +69,106 @@ const Portfolio = () => {
   };
 
   return (
-    <div className="w-full max-w-5xl p-6">
-{projects.length > 0 ? ( 
-  <div className="grid grid-cols-3 gap-8">
-    {projects.map((project, index) => {
-      const activeImageId = project.mediaId || project.id; // use mediaId for Instagram, id for uploaded projects
-      return (
-        <Link
-          key={index}
-          href={`/manage-projects/preview?activeImageId=${activeImageId}`}
-        >
-          <div className="rounded-lg p-2 cursor-pointer hover:shadow-lg transition">
-            {project.mediaType === "CAROUSEL_ALBUM" && project.children ? (
-              <div className="relative w-[165px] h-[170px] group">
-                {project.children.map((child, idx) => (
-                  <div
-                    key={child.id}
-                    className={`absolute inset-0 transition-transform duration-500 ${
-                      (carouselIndexes[project.mediaId] || 0) === idx
-                        ? "translate-x-0 opacity-100"
-                        : "translate-x-50 opacity-0"
-                    }`}
-                  >
-                    {child.mediaType === "IMAGE" ? (
-                      <Image
-                        src={child.mediaUrl}
-                        alt={`Media ${child.mediaId}`}
-                        fill
-                        className="object-cover rounded-md"
-                      />
-                    ) : (
+    <div className="w-full flex justify-center">
+      <div className="w-full max-w-5xl p-6 overflow-y-auto" style={{ maxHeight: 'calc(85vh - 96px)' }}>
+        {projects.length > 0 ? (
+          <div className="grid grid-cols-3 gap-8">
+            {projects.map((project, index) => {
+              const activeImageId = project.mediaId || project.id;
+              return (
+                <Link
+                  key={index}
+                  href={`/manage-projects/preview?activeImageId=${activeImageId}`}
+                >
+                  <div className="rounded-lg p-2 cursor-pointer hover:shadow-lg transition">
+                    {project.mediaType === "CAROUSEL_ALBUM" && project.children ? (
+                      <div className="relative w-[165px] h-[170px] group">
+                        {project.children.map((child, idx) => (
+                          <div
+                            key={child.id}
+                            className={`absolute inset-0 transition-transform duration-500 ${
+                              (carouselIndexes[project.mediaId] || 0) === idx
+                                ? "translate-x-0 opacity-100"
+                                : "translate-x-50 opacity-0"
+                            }`}
+                          >
+                            {child.mediaType === "IMAGE" ? (
+                              <Image
+                                src={child.mediaUrl}
+                                alt={`Media ${child.mediaId}`}
+                                fill
+                                className="object-cover rounded-md"
+                              />
+                            ) : (
+                              <video
+                                className="w-full h-full object-cover rounded-md"
+                                src={child.mediaUrl}
+                              />
+                            )}
+                          </div>
+                        ))}
+                        {project.children.length > 1 && (
+                          <div className="absolute z-10 inset-0 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <button
+                              onClick={(e) =>
+                                handleSlide(
+                                  e,
+                                  project.mediaId,
+                                  "prev",
+                                  project.children.length
+                                )
+                              }
+                              className="bg-black/50 text-white rounded-full w-6 h-6 ml-1"
+                            >
+                              ❮
+                            </button>
+                            <button
+                              onClick={(e) =>
+                                handleSlide(
+                                  e,
+                                  project.mediaId,
+                                  "next",
+                                  project.children.length
+                                )
+                              }
+                              className="bg-black/50 text-white rounded-full w-6 h-6 mr-1"
+                            >
+                              ❯
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ) : project.mediaType.includes("VIDEO") ||
+                      project.mediaType.endsWith(".mp4") ? (
                       <video
-                        className="w-full h-full object-cover rounded-md"
-                        src={child.mediaUrl}
+                        controls
+                        className="w-[165px] h-[170px] object-cover rounded-md"
+                      >
+                        <source src={project.mediaUrl} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : (
+                      <Image
+                        width={32}
+                        height={32}
+                        src={project.mediaUrl}
+                        alt={`Project ${index + 1}`}
+                        className="w-[165px] h-[170px] object-cover rounded-md"
                       />
                     )}
                   </div>
-                ))}
-                {project.children.length > 1 && (
-                  <div className="absolute z-10 inset-0 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <button
-                      onClick={(e) =>
-                        handleSlide(
-                          e,
-                          project.mediaId,
-                          "prev",
-                          project.children.length
-                        )
-                      }
-                      className="bg-black/50 text-white rounded-full w-6 h-6 ml-1"
-                    >
-                      ❮
-                    </button>
-                    <button
-                      onClick={(e) =>
-                        handleSlide(
-                          e,
-                          project.mediaId,
-                          "next",
-                          project.children.length
-                        )
-                      }
-                      className="bg-black/50 text-white rounded-full w-6 h-6 mr-1"
-                    >
-                      ❯
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : project.mediaType.includes("VIDEO") || project.mediaType.endsWith(".mp4") ? (
-              <video
-                controls
-                className="w-[165px] h-[170px] object-cover rounded-md"
-              >
-                <source src={project.mediaUrl} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            ) : (
-              <Image
-                width={32}
-                height={32}
-                src={project.mediaUrl}
-                alt={`Project ${index + 1}`}
-                className="w-[165px] h-[170px] object-cover rounded-md"
-              />
-            )}
+                </Link>
+              );
+            })}
           </div>
-        </Link>
-      );
-    })}
-  </div>
-) : (
-  <p className="text-center text-gray-500 font-qimano">Finding your projects...</p>
-)}
-
+        ) : (
+          <p className="text-center text-gray-500 font-qimano">
+            Finding your projects...
+          </p>
+        )}
+      </div>
     </div>
   );
 };
 
 export default Portfolio;
-
