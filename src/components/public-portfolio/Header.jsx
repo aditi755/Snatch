@@ -6,26 +6,27 @@ const Header = ({ formData, data, headerOpacity, isAdminView }) => {
   const router = useRouter();
   const pathname = usePathname();
   const isMobile = useCheckScreenSize();
+  const isAdminViewRoute = pathname.includes('/adminview');
 
   if (isMobile) return null;
 
   const handleRequest = () => {
-    const parts = pathname.split("/");
-    const influencerUsername = parts[1];
-    router.push(`/request-popup?username=${influencerUsername}`);
-  };
-
-  const handleCopyLink = async () => {
-    const parts = pathname.split("/");
-    const username = parts[1];
-    const portfolioUrl = `${window.location.origin}/${username}/media-kit`;
-    
-    try {
-      await navigator.clipboard.writeText(portfolioUrl);
-      alert("Portfolio link copied to clipboard!");
-    } catch (err) {
-      console.error("Failed to copy link:", err);
-      alert("Failed to copy link");
+    if (isAdminViewRoute) {
+      const parts = pathname.split("/");
+      const username = parts[1];
+      const portfolioUrl = `${window.location.origin}/${username}/media-kit`;
+      
+      try {
+        navigator.clipboard.writeText(portfolioUrl);
+        alert("Portfolio link copied to clipboard!");
+      } catch (err) {
+        console.error("Failed to copy link:", err);
+        alert("Failed to copy link");
+      }
+    } else {
+      const parts = pathname.split("/");
+      const influencerUsername = parts[1];
+      router.push(`/request-popup?username=${influencerUsername}`);
     }
   };
 
@@ -40,7 +41,7 @@ const Header = ({ formData, data, headerOpacity, isAdminView }) => {
 
       <div className="container mx-auto flex items-center justify-between">
         <motion.button className="bg-lime-yellow text-graphite font-outline py-2 px-6 w-[300px] max-w-[300px] rounded font-apfel-grotezk-regular" onClick={handleRequest}>
-          {isAdminView ? "Send Request" : "Copy Portfolio Link"}
+          {isAdminViewRoute ? "Copy Portfolio link" : "Send Request"}
         </motion.button>
 
         <div className="flex items-center">

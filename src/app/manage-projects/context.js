@@ -84,8 +84,64 @@ export function SelectedProjectsProvider({ children }) {
     setIsBrandCollaboration(prev => !prev);
   }, []);
 
+// const updateFormDataForMedia = (mediaId, newFormData) => {
+//   if (!mediaId) return;
+
+//   setSelectionState((prevState) => {
+//     console.log("Updating formData for mediaId:", mediaId);
+//     console.log("Previous state:", prevState);
+
+//     // Ensure formData is an array
+//     const currentFormData = Array.isArray(prevState.formData) ? prevState.formData : [];
+
+//     // Check if entry already exists
+//     const existingIndex = currentFormData.findIndex(item => item.key === mediaId);
+    
+//     // Create updated form data array
+//     let newFormDataArray;
+//     if (existingIndex >= 0) {
+//       // Update existing entry
+//       newFormDataArray = currentFormData.map((item, index) => 
+//         index === existingIndex 
+//           ? { ...item, ...newFormData, key: mediaId }
+//           : item
+//       );
+//     } else {
+//       // Add new entry
+//       newFormDataArray = [
+//         ...currentFormData,
+//         { ...newFormData, key: mediaId }
+//       ];
+//     }
+
+//     const newState = {
+//       ...prevState,
+//       formData: newFormDataArray
+//     };
+
+//     // Save to localStorage and database
+//     const timestamp = new Date().toISOString();
+//     const stateToSave = {
+//       ...newState,
+//       updatedAt: timestamp
+//     };
+
+//     localStorage.setItem(`selectionState_${userId}`, JSON.stringify(stateToSave));
+//     saveDraftToDatabase(stateToSave);
+
+
+//     console.log("Updated state:", newState);
+//     return newState;
+//   });
+// };
+
+// Add Instagram selection without map key
+
 const updateFormDataForMedia = (mediaId, newFormData) => {
-  if (!mediaId) return;
+  if (!mediaId) {
+    console.error("No mediaId provided to updateFormDataForMedia");
+    return;
+  }
 
   setSelectionState((prevState) => {
     console.log("Updating formData for mediaId:", mediaId);
@@ -94,8 +150,11 @@ const updateFormDataForMedia = (mediaId, newFormData) => {
     // Ensure formData is an array
     const currentFormData = Array.isArray(prevState.formData) ? prevState.formData : [];
 
+    // Convert mediaId to string for consistent comparison
+    const mediaIdString = mediaId.toString();
+
     // Check if entry already exists
-    const existingIndex = currentFormData.findIndex(item => item.key === mediaId);
+    const existingIndex = currentFormData.findIndex(item => item.key === mediaIdString);
     
     // Create updated form data array
     let newFormDataArray;
@@ -103,14 +162,14 @@ const updateFormDataForMedia = (mediaId, newFormData) => {
       // Update existing entry
       newFormDataArray = currentFormData.map((item, index) => 
         index === existingIndex 
-          ? { ...item, ...newFormData, key: mediaId }
+          ? { ...item, ...newFormData, key: mediaIdString }
           : item
       );
     } else {
       // Add new entry
       newFormDataArray = [
         ...currentFormData,
-        { ...newFormData, key: mediaId }
+        { ...newFormData, key: mediaIdString }
       ];
     }
 
@@ -119,23 +178,22 @@ const updateFormDataForMedia = (mediaId, newFormData) => {
       formData: newFormDataArray
     };
 
-    // Save to localStorage and database
+    // Add timestamp and save to both localStorage and database
     const timestamp = new Date().toISOString();
     const stateToSave = {
       ...newState,
       updatedAt: timestamp
     };
 
+    // Force immediate save to both localStorage and database
     localStorage.setItem(`selectionState_${userId}`, JSON.stringify(stateToSave));
     saveDraftToDatabase(stateToSave);
-
 
     console.log("Updated state:", newState);
     return newState;
   });
 };
 
-// Add Instagram selection without map key
 const addInstagramSelection = (mediaLink, mediaId, name, children = []) => {
   setSelectionState((prevState) => {
     const newState = {

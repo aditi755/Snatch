@@ -125,15 +125,21 @@ console.log("preview activeimageid", activeProject,  activeImageId);
   }));
 
     // Fetch insights whenever the active project changes
-    useEffect(() => {
-      if (activeProject) {
-        const fetchData = async () => {
-          const response = await fetchMediaInsights(activeProject.mediaId);
-          setInsights(response?.insights?.data || []);
-        };
-        fetchData();
-      }
-    }, [activeProject]);
+ // Modify the existing useEffect for insights
+useEffect(() => {
+  const fetchInsights = async () => {
+    // Only fetch insights for Instagram content
+    if (activeProject && activeTab === "instagram") {
+      const response = await fetchMediaInsights(activeProject.mediaId);
+      setInsights(response?.insights?.data || []);
+    } else {
+      // Clear insights for uploaded files
+      setInsights([]);
+    }
+  };
+
+  fetchInsights();
+}, [activeProject, activeTab]);
 
   if (!isHydrated) {
     return null;
@@ -393,9 +399,26 @@ const handleNext = () => {
 
            <div className="w-full h-full mt-5">
 
-            <p className="text-2xl text-graphite font-qimano">{Array.isArray(selectionState?.formData) 
+            {/* <p className="text-2xl text-graphite font-qimano">{Array.isArray(selectionState?.formData) 
     ? selectionState.formData.find(item => item.key === activeProject?.mediaId)?.titleName || "Title of the project"
-    : "Loading..."}</p>
+    : "Loading..."}</p> */}
+
+<p className="text-2xl text-graphite font-qimano">
+  {(() => {
+    // Find the form data for the active project
+    const formData = Array.isArray(selectionState?.formData)
+      ? selectionState.formData.find(item => String(item.key) === String(activeImageId))
+      : null;
+
+    // If we have form data, show the title
+    if (formData?.titleName) {
+      return formData.titleName;
+    }
+
+    // If no form data or no title, show placeholder
+    return "Title of the project";
+  })()}
+</p>
 
             <div className="flex gap-1 flex-wrap max-w-xl">
 
@@ -503,25 +526,32 @@ const handleNext = () => {
         {selectedItem?.description || "Description of the project"}
       </p>
 
-      <div className={`w-full border-b-[0.5px] border-gray-300 ${selectedItem?.isBrandCollaboration ? "mt-8" : "mt-40"}`}></div>
+     {activeTab === "instagram" && (
+        <div
+          className={`w-full border-b-[0.5px] border-gray-300 ${
+            selectedItem?.isBrandCollaboration ? "mt-8" : "mt-40"
+          }`}
+        ></div>
+      )}
     </>
   );
 })()}
 
 
           
-<div className="mt-5 ml-20 flex gap-20 justify-center items-center text-black w-[300px]">     
-{insights &&
-  insights.map((item) => (
-    <div key={item.name} className="flex-col text-center">
-      <p className="text-[19px]">
-        {projects === selectionState.uploads ? 0 : item.values[0]?.value || 0}
-      </p>
-      <p className="text-[12px] text-gray-500">{item.title}</p>
-    </div>
-  ))
-}
-            </div>
+{/* Insights Section - Only for Instagram content */}
+{activeTab === "instagram" && insights && insights.length > 0 && (
+  <div className="mt-5 ml-20 flex gap-20 justify-center items-center text-black w-[300px]">     
+    {insights.map((item) => (
+      <div key={item.name} className="flex-col text-center">
+        <p className="text-[19px]">
+          {item.values[0]?.value || 0}
+        </p>
+        <p className="text-[12px] text-gray-500">{item.title}</p>
+      </div>
+    ))}
+  </div>
+)}
            </div>           
             
           </div>

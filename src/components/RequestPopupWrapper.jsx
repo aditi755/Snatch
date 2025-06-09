@@ -2,10 +2,11 @@
 import { useState } from "react";
 import SendRequestPopup from "@/components/SendRequestPopup";
 import { useSearchParams } from "next/navigation";
-
+import { useRouter } from "next/navigation";
 export default function RequestPopupWrapper() {
   const [showPopup, setShowPopup] = useState(true);
   const searchParams = useSearchParams();
+  const router = useRouter();
   const username = searchParams.get("username") || "unknown influencer";
 
   return (
@@ -18,7 +19,9 @@ export default function RequestPopupWrapper() {
       </button>
 
       {showPopup && (
-        <SendRequestPopup onClose={() => setShowPopup(false)} username={username} />
+        <SendRequestPopup   onClose={() => {
+        router.push(`/${username}/media-kit`);}}  
+        username={username} />
       )}
     </div>
   );

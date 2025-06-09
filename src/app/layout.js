@@ -2,6 +2,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import { Providers } from "./providers";
+// import Script from "next/script";
 
 // ✅ Font setup
 const apfelGrotezkMittel = localFont({
@@ -40,6 +41,14 @@ export default function RootLayout({ children }) {
         <Providers>
           {children}
         </Providers>
+
+          {/* ✅ Feedbask Widget Script */}
+        {/* <Script
+          id="feedbask-widget-script"
+          strategy="lazyOnload"
+          src="https://cdn.feedbask.com/widget.js"
+          data-client-key="d847c202-9bd5-4a9d-8e3a-8ec8f95ce897"
+        /> */}
       </body>
     </html>
   );

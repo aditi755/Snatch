@@ -14,6 +14,7 @@ import { fetchMediaInsights } from "@/utils/fetchMediaInsights";
 import ProjectCustomFileInput from "@/components/ProjectCustomFileInput";
 import SvgComponent from "@/components/svg/Instagramsvg";
 import Uploadsvg from "@/components/svg/Uploadsvg";
+import {generateFormDataFromUserInput} from "@/utils/generateFormDataFromUserInput";
 
 export default function AddDetails() {
   const {
@@ -50,7 +51,8 @@ export default function AddDetails() {
   
   const [isBrandCollaboration, setIsBrandCollaboration] = useState(true);
   const [isPortrait, setIsPortrait] = useState(false);
-
+  const [userInput, setUserInput] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
 // Add this helper function before the return statement
 const checkOrientation = (width, height) => {
   return height > width;
@@ -171,89 +173,25 @@ useEffect(() => {
   }
 }, [currentFormData]);
 
-
-// const getDominantColor = async (imageUrl) => {
-//   try {
-//     console.log("Extracting dominant color from:", imageUrl);
-//     return new Promise((resolve) => {
-//       const img = document.createElement('img');
-//       img.crossOrigin = "Anonymous";
-      
-//       img.onload = () => {
-//         try {
-//           const colorThief = new ColorThief();
-//           const color = colorThief.getColor(img);
-//           resolve(`rgba(${color.join(',')}, 0.9)`);
-//         } catch (e) {
-//           console.error("Error extracting color:", e);
-//           resolve('rgb(75, 75, 75)'); // Fallback to graphite
-//         }
-//       };
-
-//       img.onerror = () => {
-//         console.error("Error loading image");
-//         resolve('rgb(75, 75, 75)'); // Fallback to graphite
-//       };
-
-//       // Add a timestamp to bypass cache
-//       const cacheBuster = `?timestamp=${Date.now()}`;
-//       img.src = `${imageUrl}${cacheBuster}`;
-//     });
-//   } catch (error) {
-//     console.error("Error in getDominantColor:", error);
-//     return 'rgb(75, 75, 75)'; // Fallback to graphite
-//   }
-// };
-
-// useEffect(() => {
-//   const updateDominantColor = async () => {
-//     if (!activeProject) return;
-   
-//     console.log("Active Project for color extraction:", activeProject);
-//     let mediaUrl;
-
-//     // Handle uploaded files
-//     if (activeProject.fileUrl) {
-//       mediaUrl = activeProject.fileUrl;
-//     }
-//     // Handle Instagram media
-//     else if (activeProject.mediaLink) {
-//       console.log("Active Project mediaLink:", activeProject.mediaLink);
-//       mediaUrl = activeProject.mediaLink;
-//     }
-//     // Handle Instagram carousel
-//     else if (activeProject.name === "CAROUSEL_ALBUM" && activeProject.children?.length > 0) {
-//       mediaUrl = activeProject.children[0].media_url;
-//     }
-
-//     if (mediaUrl) {
-//       try {
-//         const color = await getDominantColor(mediaUrl);
-//         setDominantColor(color);
-//         console.log("Extracted color:", color);
-//       } catch (error) {
-//         console.error("Error extracting color:", error);
-//         setDominantColor('rgb(75, 75, 75)'); // Fallback color
-//       }
-//     }
-//   };
-
-//   updateDominantColor();
-// }, [activeProject]);
-
 if (!isHydrated) {
     return null;
   }
 
 
 
-  const handleProjectClick = async (mediaId) => {
-    if (mediaId === activeImageId) return; // Prevent unnecessary re-renders
-
-    setActiveImageId(mediaId);
+const handleProjectClick = async (mediaId) => {
+  if (mediaId === activeImageId) return;
+  setActiveImageId(mediaId);
+  
+  // Only fetch insights for Instagram files
+  if (activeTab === "instagram") {
     const response = await fetchMediaInsights(mediaId);
     setInsights(response?.insights?.data || []);
-  };
+  } else {
+    // Clear insights for uploaded files
+    setInsights([]);
+  }
+};
 
 
 const handleInputChange = (e, mediaId) => {
@@ -306,34 +244,64 @@ const handleRemoveValue = (fieldName, value, mediaId) => {
 
 
   //20 may not create duplicate though but see preview disable 
-  const handleToggle = () => {
+//   const handleToggle = () => {
+//   const newIsBrandCollaboration = !isBrandCollaboration;
+//   setIsBrandCollaboration(newIsBrandCollaboration);
+
+//   // Only update if we have an activeImageId and existing form data
+//   if (activeImageId) {
+//     const existingFormData = selectionState.formData.find(
+//       (item) => item.key === activeImageId
+//     );
+
+//     // Only send API request if form data exists
+//     if (existingFormData) {
+//       const updatedEntry = {
+//         ...existingFormData,
+//         isBrandCollaboration: newIsBrandCollaboration
+//       };
+//       updateFormDataForMedia(activeImageId, updatedEntry);
+//     }
+
+//     // Update currentFormData
+//     setCurrentFormData(prevData => ({
+//       ...prevData,
+//       isBrandCollaboration: newIsBrandCollaboration
+//     }));
+//   }
+// };
+
+const handleToggle = () => {
   const newIsBrandCollaboration = !isBrandCollaboration;
   setIsBrandCollaboration(newIsBrandCollaboration);
 
-  // Only update if we have an activeImageId and existing form data
+  // Only update if we have an activeImageId
   if (activeImageId) {
-    const existingFormData = selectionState.formData.find(
-      (item) => item.key === activeImageId
-    );
+    // Create a new form data entry if it doesn't exist
+    const updatedEntry = {
+      ...currentFormData,
+      key: activeImageId.toString(),
+      isBrandCollaboration: newIsBrandCollaboration,
+      // Add required empty fields if switching to brand collaboration
+      ...(newIsBrandCollaboration ? {
+        companyName: currentFormData.companyName || "",
+        companyLocation: currentFormData.companyLocation || "",
+        eventName: currentFormData.eventName || "",
+        eventTypes: currentFormData.eventTypes || [],
+      } : {})
+    };
 
-    // Only send API request if form data exists
-    if (existingFormData) {
-      const updatedEntry = {
-        ...existingFormData,
-        isBrandCollaboration: newIsBrandCollaboration
-      };
-      updateFormDataForMedia(activeImageId, updatedEntry);
-    }
+    // Force string conversion for mediaId and ensure it's passed correctly
+    const mediaIdString = activeImageId.toString();
+    console.log("Updating form data for mediaId:", mediaIdString, updatedEntry);
+    
+    // Call updateFormDataForMedia with string ID
+    updateFormDataForMedia(mediaIdString, updatedEntry);
 
-    // Update currentFormData
-    setCurrentFormData(prevData => ({
-      ...prevData,
-      isBrandCollaboration: newIsBrandCollaboration
-    }));
+    // Update local state
+    setCurrentFormData(updatedEntry);
   }
 };
-
-
 
   const handleSlide = (mediaId, direction, totalSlides) => {
     setCarouselIndexes((prev) => {
@@ -397,9 +365,91 @@ const handleRemoveValue = (fieldName, value, mediaId) => {
     status: getProjectStatus(project),
   }));
 
-
-
+// const handleUserInput = async () => {
+//   if (!userInput.trim()) return;
   
+//   setIsGenerating(true);
+//   try {
+//     const result = await generateFormDataFromUserInput(userInput, isBrandCollaboration);
+    
+//     // Update form data with AI generated content
+//     setCurrentFormData(prev => ({
+//       ...prev,
+//       titleName: result.title || prev.titleName,
+//       description: result.description || prev.description,
+//       industries: result.industries || prev.industries,
+//       ...(isBrandCollaboration ? {
+//         companyName: result.company_name || prev.companyName,
+//         companyLocation: result.company_location || prev.companyLocation,
+//         eventName: result.event_name || prev.eventName,
+//         eventTypes: [result.event_type] || prev.eventTypes,
+//       } : {})
+//     }));
+
+//     // Update backend if there's an active image
+//     if (activeImageId) {
+//       updateFormDataForMedia(activeImageId.toString(), currentFormData);
+//     }
+
+//     // Clear input after successful generation
+//     setUserInput('');
+    
+//   } catch (err) {
+//     console.error("AI form generation failed:", err);
+//     alert("Failed to generate form data. Please try again.");
+//   } finally {
+//     setIsGenerating(false);
+//   }
+// };
+  
+
+const handleUserInput = async () => {
+  if (!userInput.trim()) return;
+  
+  setIsGenerating(true);
+  try {
+    const result = await generateFormDataFromUserInput(userInput, isBrandCollaboration);
+    console.log('AI Response:', result); // Add this debug log
+    
+    if (!result) {
+      throw new Error('No data received from AI');
+    }
+
+    // Update form data with AI generated content
+    setCurrentFormData(prev => {
+      const updatedData = {
+        ...prev,
+        titleName: result.title || prev.titleName,
+        description: result.description || prev.description,
+        industries: result.industries || prev.industries,
+        ...(isBrandCollaboration ? {
+          companyName: result.company_name === 'needs_confirmation' ? '' : result.company_name,
+          companyLocation: result.company_location === 'needs_confirmation' ? '' : result.company_location,
+          eventName: result.event_name === 'needs_confirmation' ? '' : result.event_name,
+          eventTypes: result.event_type ? [result.event_type] : prev.eventTypes,
+        } : {})
+      };
+
+      // Update backend
+      if (activeImageId) {
+        updateFormDataForMedia(activeImageId.toString(), updatedData);
+      }
+
+      return updatedData;
+    });
+
+    // Clear input after successful generation
+    setUserInput('');
+    
+  } catch (err) {
+    console.error("AI form generation error:", err); // Add detailed error logging
+    alert(`Failed to generate form data: ${err.message}`);
+  } finally {
+    setIsGenerating(false);
+  }
+};
+
+
   return (
     <div className="flex flex-col items-start space-x-8 h-[77vh] w-full overflow-x-hidden overflow-y-hidden">
       <div className="flex flex-col mx-auto items-start">
@@ -614,17 +664,17 @@ const handleRemoveValue = (fieldName, value, mediaId) => {
   </div>
 </div>
 
-
-  {/* Insights Section - Always sticks below media */}
+ {/* Insights Section - Only for Instagram content */}
+{activeTab === "instagram" && insights && insights.length > 0 && (
   <div className="bg-white rounded-lg mt-2 p-4 flex gap-4 justify-center text-black">
-    {insights &&
-      insights.map((item) => (
-        <div key={item.name} className="flex-col text-center">
-          <p className="text-[19px]">{item.values[0]?.value || 0}</p>
-          <p className="text-[12px] text-gray-500">{item.title}</p>
-        </div>
-      ))}
+    {insights.map((item) => (
+      <div key={item.name} className="flex-col text-center">
+        <p className="text-[19px]">{item.values[0]?.value || 0}</p>
+        <p className="text-[12px] text-gray-500">{item.title}</p>
+      </div>
+    ))}
   </div>
+)}
 </div>
 
 
@@ -761,6 +811,32 @@ const handleRemoveValue = (fieldName, value, mediaId) => {
               </div>
             </>
           )}
+
+          {/* AI Form Generation Section - New Code Block */}
+          <div className="flex flex-col gap-4 bg-white p-4 rounded-lg">
+  <p className="text-graphite font-apfel-grotezk-mittel">Test AI Form Generation</p>
+  
+  <textarea
+    className="w-full text-graphite p-2 border border-light-grey rounded-lg min-h-[100px]"
+    placeholder="Describe your project or brand collaboration..."
+    value={userInput}
+    onChange={(e) => setUserInput(e.target.value)}
+  />
+  
+  <button
+    className={`px-4 py-2 rounded-lg ${
+      isGenerating 
+        ? 'bg-gray-300 text-gray-500' 
+        : 'bg-electric-blue text-white hover:bg-blue-700'
+    }`}
+    onClick={handleUserInput}
+    disabled={isGenerating || !userInput.trim()}
+  >
+    {isGenerating ? 'Generating...' : 'Generate Form Data'}
+  </button>
+</div>
+
+<div className="border-b border-light-grey"></div>
 
 <div className="fixed bottom-2 left-1/2 transform -translate-x-1/2 bg-white rounded-lg border-t border-gray-300 py-1 px-4 mb-2">
   <div className="flex gap-2 justify-center mx-auto">

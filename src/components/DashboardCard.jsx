@@ -12,20 +12,3 @@ const DashboardCard = ({count,label}) => {
 }
 
 export default DashboardCard
-
-// import React from 'react';
-
-// const DashboardCard = ({ count, label }) => {
-//   return (
-//     <div className="w-full max-w-[400px] bg-white rounded-md relative font-qimano p-6 sm:p-8 lg:p-[8%] ">
-//       <h5 className="absolute top-4 right-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium">
-//         {count}
-//       </h5>
-//       <h3 className="absolute bottom-4 left-4 text-lg sm:text-xl md:text-2xl lg:text-3xl">
-//         {label}
-//       </h3>
-//     </div>
-//   );
-// };
-
-// export default DashboardCard;
