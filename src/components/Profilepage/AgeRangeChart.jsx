@@ -85,7 +85,7 @@ const AgeRangeChart = ({ apiEndpoint }) => {
                   style={{ width: `${parseFloat(percentage)}%` }}
                 />
               </div>
-              <span className="text-xs sm:text-sm text-[#0037EB] w-[30px] sm:w-[38px] text-right">
+              <span className="text-xs sm:text-sm text-[#0037EB] w-[30px] sm:w-[38px] font-apfel-grotesk-semibold text-right">
                 {parseFloat(percentage).toFixed(1)}%
               </span>
             </div>

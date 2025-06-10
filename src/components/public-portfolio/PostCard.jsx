@@ -9,6 +9,13 @@ export default function PostCard({ post, postId, username, allPosts }) {
   const [carouselIndex, setCarouselIndex] = useState(0);
   const router = useRouter();
 
+    // Add these near the top of PreviewContent function
+    const [isPortrait, setIsPortrait] = useState(false);
+
+    const checkOrientation = (width, height) => {
+      return height > width;
+    };
+
   useEffect(() => {
     if (!username || !postId) {
       console.error("Missing required props:", { username, postId });

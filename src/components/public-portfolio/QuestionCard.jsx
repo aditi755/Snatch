@@ -7,9 +7,13 @@ import { usePathname } from "next/navigation";
 const Questionnaire = ({ name }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const scrollRef = useRef(null);
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const pathname = usePathname();
+
+  // Define desktopScrollRef for desktop scrollable area and mobileScrollRef for mobile scrollable area
+  const desktopScrollRef = useRef(null);
+  const mobileScrollRef = useRef(null);
+  const [scrollResetTrigger, setScrollResetTrigger] = useState(0);
+
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -28,17 +32,6 @@ const Questionnaire = ({ name }) => {
     fetchQuestions();
   }, []);
 
-  const scroll = (direction) => {
-    const container = scrollRef.current;
-    if (container) {
-      const scrollAmount = 200;
-      container.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      });
-    }
-  };
-
   const allCards = data.flatMap((item) =>
     item.sections.flatMap((section) =>
       section.questions.map((q, i) => ({
@@ -51,56 +44,66 @@ const Questionnaire = ({ name }) => {
     )
   );
 
-  const handlePrev = () => {
-    setCurrentCardIndex((prev) => Math.max(prev - 1, 0));
-  };
-
-  const handleNext = () => {
-    setCurrentCardIndex((prev) => Math.min(prev + 1, allCards.length - 1));
-  };
-
   if (loading) return <div>Loading...</div>;
 
+  // Function to scroll for desktop view
+  const scrollDesktop = (direction) => {
+    const container = desktopScrollRef.current;
+    if (container) {
+      const scrollAmount = 200;
+      container.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
-    <div className="relative lg:mt-10 pb-10 ml-4 lg:ml-10">
-      <h3 className="lg:text-6xl text-2xl font-qimano text-electric-blue mb-4">About {name}</h3>
+    <div className={clsx(
+      "relative pb-10 ml-4",
+      "lg:mt-10 lg:ml-10",
+      "flex flex-col"
+    )}>
+      <h3 className=" text-[45px] lg:text-6xl text-2xl font-qimano text-electric-blue mb-4">About {name}</h3>
 
-      {/* Mobile view: one card with side buttons */}
-      <div className="lg:hidden relative flex justify-center items-center">
-        {currentCardIndex > 0 && (
-          <button
-            onClick={handlePrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 rounded-2xl p-2 shadow-md hover:bg-white"
-          >
-            <Image src="/assets/images/Lefthand.svg" alt="left-arrow" width={30} height={30} />
-          </button>
-        )}
-
+      {/* Mobile view: horizontal scroll with snap and partial next card visibility */}
+      <div className="lg:hidden relative flex-grow flex justify-center items-center">
         {allCards.length > 0 && (
-          <QuestionCard
-            question={allCards[currentCardIndex].question}
-            answer={allCards[currentCardIndex].answer}
-            coverImage={allCards[currentCardIndex].coverImage}
-            cardType={allCards[currentCardIndex].cardType}
-            isMobile
-          />
-        )}
-
-        {currentCardIndex < allCards.length - 1 && (
-          <button
-            onClick={handleNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 rounded-2xl p-2 shadow-md hover:bg-white"
+          <div
+            ref={mobileScrollRef}
+            className="flex overflow-x-scroll scrollbar-hide snap-x snap-mandatory w-full"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            onScroll={() => setScrollResetTrigger(prev => prev + 1)}
           >
-            <Image src="/assets/images/next.svg" alt="right-arrow" width={30} height={30} />
-          </button>
+            {allCards.map((card, index) => (
+              <div
+                key={card.key}
+                className="flex-shrink-0 snap-center"
+                style={{
+                  width: '85vw',
+                  marginRight: (index < allCards.length - 1) ? '5vw' : '0',
+                  marginLeft: (index === 0) ? '5vw' : '0'
+                }}
+              >
+                <QuestionCard
+                  question={card.question}
+                  answer={card.answer}
+                  coverImage={card.coverImage}
+                  cardType={card.cardType}
+                  isMobile
+                  scrollResetTrigger={scrollResetTrigger}
+                />
+              </div>
+            ))}
+          </div>
         )}
       </div>
 
       {/* Desktop view: horizontal scroll */}
-     <div className="hidden lg:block relative">
+     <div className="hidden lg:block relative flex-grow">
   {/* Left Scroll Button */}
   <button
-    onClick={() => scroll("left")}
+    onClick={() => scrollDesktop("left")}
     className="absolute left-0 top-1/2 -translate-y-1/2 z-10 transition-transform hover:scale-110 w-14 h-14"
     aria-label="Scroll Left"
   >
@@ -117,7 +120,7 @@ const Questionnaire = ({ name }) => {
 
   {/* Scrollable Cards */}
   <div
-    ref={scrollRef}
+    ref={desktopScrollRef}
     className="mt-5 lg:mt-10 pb-5 lg:pb-0 overflow-x-auto scrollbar-hide max-w-full"
     style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
   >
@@ -136,7 +139,7 @@ const Questionnaire = ({ name }) => {
 
   {/* Right Scroll Button */}
   <button
-    onClick={() => scroll("right")}
+    onClick={() => scrollDesktop("right")}
     className="absolute right-0 top-1/2 -translate-y-1/2 z-10 transition-transform hover:scale-110 w-8 h-14"
     aria-label="Scroll Right"
   >
@@ -156,17 +159,46 @@ const Questionnaire = ({ name }) => {
   );
 };
 
-const QuestionCard = ({ question, answer, coverImage, cardType, isMobile = false }) => {
+const QuestionCard = ({ question, answer, coverImage, cardType, isMobile = false, scrollResetTrigger }) => {
   const [hovered, setHovered] = useState(false);
+  const [touched, setTouched] = useState(false);
+  const [isRevealed, setIsRevealed] = useState(false);
+
+  const handleTouchStart = () => {
+    if (isMobile) {
+      setTouched(true);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (isMobile) {
+      setTouched(false);
+    }
+  };
+
+  const handleClick = () => {
+    if (isMobile) {
+      setIsRevealed(!isRevealed);
+    }
+  };
+
+  // Reset revealed state when card changes
+  useEffect(() => {
+    setIsRevealed(false);
+  }, [question, scrollResetTrigger]);
 
   return (
     <div
       className={clsx(
-        "relative flex border rounded-3xl overflow-hidden cursor-pointer shrink-0 mr-3",
-        isMobile ? "w-[90vw] h-[400px]" : "w-[360px] h-[500px]"
+        "relative flex border rounded-3xl overflow-hidden cursor-pointer shrink-0 transition-transform duration-300",
+        isMobile ? "w-[65vw] h-[450px]" : "w-[360px] h-[500px] mr-3",
+        isMobile && touched ? "-translate-y-4" : ""
       )}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={() => !isMobile && setHovered(true)}
+      onMouseLeave={() => !isMobile && setHovered(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onClick={handleClick}
     >
       <Image
         src={coverImage || "/default-image.jpg"}
@@ -176,12 +208,19 @@ const QuestionCard = ({ question, answer, coverImage, cardType, isMobile = false
         height={228}
       />
 
+      {/* Overlay for 'Click to reveal' on mobile when not revealed */}
+      {isMobile && !isRevealed && (
+        <div className="absolute inset-0 flex flex-col justify-center items-center bottom-20 font-qimano  bg-black/40 text-white text-[38px] ">
+          <p>Click to reveal</p>
+        </div>
+      )}
+
       <div
         className={clsx(
           `absolute left-0 bottom-0 w-full flex flex-col items-center justify-center transition-all duration-300 rounded-t-xl`,
           cardType.bg,
           cardType.text,
-          hovered ? "h-[100%]" : "h-[50%]"
+          isMobile ? (isRevealed ? "h-[100%]" : "h-[50%]") : (hovered ? "h-[100%]" : "h-[50%]")
         )}
       >
         <Image
@@ -195,7 +234,7 @@ const QuestionCard = ({ question, answer, coverImage, cardType, isMobile = false
           {question}
         </p>
 
-        {hovered && (
+        {(isMobile ? isRevealed : hovered) && (
           <p
             className={clsx(
               "text-xs lg:text-xl text-center font-apfel-grotezk-regular mt-4",

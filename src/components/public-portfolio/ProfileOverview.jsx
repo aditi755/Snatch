@@ -149,10 +149,10 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
             }
       }
     >
-      <div className="container mx-auto px-4 py-8 flex flex-col items-center">
+      <div className="container mx-auto mt- px-4 py-8 flex flex-col items-center">
         {/* Name and Location */}
         <motion.h1
-          className="flex items-center gap-2 font-qimano text-2xl lg:text-6xl"
+          className="flex items-center gap-2 font-qimano text-6xl lg:text-[74.12px]"
           style={{ fontSize: fontSizeStyle  }}
         >
            {formData?.firstName
@@ -164,7 +164,7 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
             : ""}
         </motion.h1>
 
-        <motion.p className="text-gray-300 text-lg font-apfel-grotezk-regular" style={{ opacity: contentOpacity }}>
+        <motion.p className="text-gray-300 text-lg font-apfel-grotezk-regular mt-" style={{ opacity: contentOpacity }}>
           @{formData?.username} • {formData?.location}
         </motion.p>
 
@@ -268,7 +268,7 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
 
           {/*2 Center - Profile Image desktop */}
           <motion.div
-  className="block relative left-[22%] mt-5 lg:mt-0 lg:left-1/3 transform -translate-x-1/3 -translate-y-3/4 top-[100%] lg:-top-5 lg:right-10 rounded-xl overflow-visible z-20"
+  className="block relative left-[24%] mt-5 lg:mt-0 lg:left-1/3 transform -translate-x-1/3 -translate-y-3/4 top-[100%] lg:-top-5 lg:right-10 rounded-xl overflow-visible z-20"
   style={{
     scale: isMobile ? "0" : profileImageScale,
     opacity: isMobile ? "1" : profileImageOpacity,
@@ -297,26 +297,27 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
 
 
          {/* 3 Right Side - Stats */}
-<div className="w-full lg:w-1/2 flex lg:flex-col items-end justify-center lg:justify-normal mr-16 gap-6 pt-4 z-20 ">
-  <div className="text-center">
+         <div className="w-full lg:w-1/2 flex flex-row lg:flex-col items-center lg:items-end justify-center lg:justify-normal mr-0 lg:mr-10 gap-6 pt-4 z-20">
+  <div className="text-center lg:text-end">
     <h2 className="text-5xl font-medium font-qimano">
       <motion.span>{reach}</motion.span>
     </h2>
     <p className="text-sm text-white font-apfel-grotezk-regular">avg reach</p>
   </div>
-  <div className="text-center">
+  <div className="text-center lg:text-end">
     <h2 className="text-5xl font-medium font-qimano">
       <motion.span>{followers}</motion.span>
     </h2>
     <p className="text-sm text-white font-apfel-grotezk-regular">followers</p>
   </div>
-  <div className="text-center">
+  <div className="text-center lg:text-end">
     <h2 className="text-5xl font-medium font-qimano">
       <motion.span>{posts}</motion.span>
     </h2>
     <p className="text-sm text-white font-apfel-grotezk-regular">posts</p>
   </div>
 </div>
+
 
 
         </motion.div>
@@ -402,7 +403,7 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
       ref={pressKitRef}
     >
       <div className="container mx-auto">
-        <h2 className="text-5xl lg:text-7xl font-qimano text-[#0044FF] text-center mb-8 text-electric-blue">
+        <h2 className="text-5xl lg:text-7xl font-qimano text-[#0044FF] text-center  lg:mt-8 text-electric-blue">
           Press Kit
         </h2>
 
@@ -410,50 +411,55 @@ const finalHeight = isMobile ? defaultHeight : headerHeight;
         <PortfolioPublic />
 
         {/* social links */}
-       <div className="text-graphite mt-4 text-nowrap text-sm lg:text-xl flex ">
-        <span>My social media</span>
-        <span className="flex items-center w-[75%]">
-        <span className="border-b-[0.5px] border-gray-400 mx-2 w-full "></span>
-        </span>
-       
-        <span className="flex gap-2">
-        <span className=" bg-gray-100 rounded flex items-center justify-center">
-          <Image
-            src="/assets/images/insta.svg"
-            alt="Instagram"
-            width={30}
-            height={25}
+        <div className="text-graphite mt-4 text-nowrap text-sm lg:text-xl flex items-center">
+  {/* Visible only on lg screens */}
+  <span className="hidden lg:inline ml-6">My social media</span>
 
-          />
-        </span>
-        <span className=" bg-gray-100 rounded flex items-center justify-center">
-          <Image
-            src="/assets/images/X.svg"
-            alt="Instagram"
-            width={30}
-            height={20}
-          />
-        </span>
-        <span className=" bg-gray-100 rounded flex items-center justify-center">
-          <Image
-            src="/assets/icons/facebook.svg"
-            alt="Instagram"
-            width={30}
-            height={20}
-          />
-        </span>
-        <span className=" bg-gray-100 rounded flex items-center justify-center">
-          <Image
-            src="/assets/icons/linkedin.svg"
-            alt="Instagram"
-            width={30}
-            height={20}
-          />
-        </span>
-        </span>
-       </div>
+  <span className="hidden lg:flex items-center w-[500%]">
+    <span className="border-b-[0.5px] border-gray-400 mx-2 w-full"></span>
+  </span>
+
+  {/* Icons (visible on all screen sizes, justified between for mobile) */}
+  <span className="flex w-full max-w-[300px] justify-between mx-auto lg:ml-2 gap-2 lg:max-w-none lg:justify-start">
+    <span className="bg-gray-100 rounded flex items-center justify-center w-10 h-10">
+      <Image
+        src="/assets/images/insta.svg"
+        alt="Instagram"
+        width={30}
+        height={25}
+      />
+    </span>
+    <span className="bg-gray-100 rounded flex items-center justify-center w-10 h-10">
+      <Image
+        src="/assets/images/X.svg"
+        alt="X"
+        width={30}
+        height={20}
+      />
+    </span>
+    <span className="bg-gray-100 rounded flex items-center justify-center w-10 h-10">
+      <Image
+        src="/assets/icons/facebook.svg"
+        alt="Facebook"
+        width={30}
+        height={20}
+      />
+    </span>
+    <span className="bg-gray-100 rounded flex items-center justify-center w-10 h-10">
+      <Image
+        src="/assets/icons/linkedin.svg"
+        alt="LinkedIn"
+        width={30}
+        height={20}
+      />
+    </span>
+  </span>
+</div>
+
+
+
        
-        <div className=" w-full mx-auto lg:max-w-[1900px] max-w-[500px]">
+        <div className=" w-full mt-4 mx-auto lg:max-w-[1900px] max-w-[500px]">
         <Questionnaire name={formData?.firstName
           ? formData.firstName.charAt(0).toUpperCase() + formData.firstName.slice(1)
             : ""}/>
