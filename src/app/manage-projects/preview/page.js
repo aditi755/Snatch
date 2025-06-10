@@ -33,13 +33,9 @@ import SvgComponent from "@/components/svg/Instagramsvg";
   // Add these near the top of PreviewContent function
   const [isPortrait, setIsPortrait] = useState(false);
 
-<<<<<<< Updated upstream
   const checkOrientation = (width, height) => {
     return height > width;
   };
-=======
-  
->>>>>>> Stashed changes
 
   const handleSubmit = () => {
     setIsModalOpen(true);
