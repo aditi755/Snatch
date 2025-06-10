@@ -58,14 +58,14 @@ const AudienceCard = () => {
 
   return (
     <div className="lg:mt-10 w-full flex flex-col justify-center items-center mb-10">
-      <h3 className="lg:text-6xl text-2xl font-qimano text-electric-blue text-center px-4 py-2 rounded-xl">
+      <h3 className="text-[45px] lg:text-6xl text-[100px] font-qimano text-electric-blue text-center px-4 py-2 rounded-xl">
         Audience
       </h3>
 
       {/* AI-generated insights */}
       {insights ? (
         <div className="mx-auto">
-          <div className="text-gray-700 whitespace-pre-line text-center text-lg font-qimano mt-2">
+          <div className="text-gray-700 whitespace-pre-line text-center text-[16px] font-Apfel Grotezk mt-2">
             {insights}
           </div>
         </div>
@@ -81,15 +81,17 @@ const AudienceCard = () => {
   {/* Gender */}
   {genderEndpoint && (
     <div className="bg-gray-100 shadow-md rounded-xl p-4 w-full lg:w-1/3 flex flex-col items-center justify-between min-h-[350px]">
-      <h3 className="text-lg font-semibold text-gray-700 mb-2">Gender</h3>
-      <PieChart apiEndpoint={genderEndpoint} />
+      <h3 className="text-lg font-Qimano text-gray-700 mb-2">Gender</h3>
+      <div className="mb-6 w-full flex justify-center">
+    <PieChart apiEndpoint={genderEndpoint} />
+  </div>
     </div>
   )}
 
   {/* Age Range */}
   {ageEndpoint && (
     <div className="bg-gray-100 shadow-md rounded-xl p-4 w-full lg:w-1/3 flex flex-col items-center justify-between min-h-[350px]">
-      <h3 className="text-lg font-semibold text-gray-700 mb-2">Age Range</h3>
+      <h3 className="text-lg font-Qimano text-gray-700 mb-2">Age Range</h3>
       <AgeRangeChart apiEndpoint={ageEndpoint} />
     </div>
   )}
@@ -97,7 +99,7 @@ const AudienceCard = () => {
   {/* Location */}
   {locationEndpoint && (
     <div className="bg-gray-100 shadow-md rounded-xl p-4 w-full lg:w-1/3 flex flex-col items-center justify-between min-h-[350px]">
-      <h3 className="text-lg font-semibold text-gray-700 mb-2">Top Locations</h3>
+      <h3 className="text-lg font-Qimano text-gray-700 mb-2">Top Locations</h3>
       <SimpleWorldMap apiEndpoint={locationEndpoint} />
     </div>
   )}

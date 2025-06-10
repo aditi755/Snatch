@@ -81,11 +81,12 @@ const PortfolioPublic = () => {
   };
 
   return (
-    <div className="w-full mx-auto max-w-[500px] lg:max-w-[1600px] p-2 sm:p-4">
+    <div className="w-full mx-auto max-w-[600px] lg:max-w-[1600px] p-2 sm:p-4">
       {projects.length > 0 ? (
-        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-4 lg:gap-8">
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-2 lg:gap-8">
           {projects.map((project, index) => (
-            <div key={index} className="relative w-full aspect-[4/5] p-1 sm:p-2">
+           <div key={index} className="relative w-full aspect-square p-[6px] sm:p-2">
+
               <Link
                 href={`/${username}/media-kit/post/?postId=${project.mediaId}`}
                 className="block w-full h-full"
