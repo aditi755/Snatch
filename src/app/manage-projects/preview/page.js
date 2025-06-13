@@ -187,6 +187,8 @@ const handleNext = () => {
   }
 };
 
+
+
   return (
     <div className={`flex flex-col items-start h-[77vh] w-full space-x-8 overflow-x-hidden overflow-y-auto ${isModalOpen ? 'bg-transparent pointer-events-none' : 'bg-transparent'}`} style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
       <div className="flex flex-col mx-auto items-start">
@@ -420,7 +422,7 @@ const handleNext = () => {
   })()}
 </p>
 
-            <div className="flex gap-1 flex-wrap max-w-xl">
+            <div className="flex gap-1 flex-wrap max-w-xl mr-10">
 
           {Array.isArray(selectionState?.formData) &&
             selectionState.formData.find((item) => item.key === activeImageId)?.industries?.length > 0 ? (
@@ -429,7 +431,7 @@ const handleNext = () => {
                 ?.industries.map((industry, index) => (
                   <span
                     key={index}
-                    className="bg-dark/10 text-dark-grey m-2 inline-block rounded border border-transparent py-1 px-2.5 text-xs font-medium"
+                    className="bg-[#0037EB]/5 text-graphite my-2 inline-block rounded border border-transparent py-1 px-2.5 text-xs font-medium"
                   >
                     {industry}
                   </span>
@@ -439,12 +441,12 @@ const handleNext = () => {
             )}
           </div>
 
-          <div className="w-full border-b-[0.5px] border-gray-300 mt-4"></div>
+          <div className="w-full border-b-[0.5px] border-gray-300 mt-2"></div>
 
-          <div className={`flex items-center space-x-4 ${
+          <div className={`flex items-center space-x-2 ${
   Array.isArray(selectionState?.formData) &&
   selectionState.formData.find(item => item.key === activeImageId)?.isBrandCollaboration
-    ? "mt-[3rem]"
+    ? "mt-[2rem]"
     : "mt-[0]"
 }`}>
 
@@ -462,58 +464,71 @@ const handleNext = () => {
   const selectedItem = selectionState.formData.find(item => item.key === activeImageId);
   if (!selectedItem?.isBrandCollaboration) return null;
 
+  // Only render the section if there's at least one piece of brand collaboration data
+  const hasAnyBrandData = selectedItem.companyLogo || 
+                         selectedItem.companyName || 
+                         selectedItem.eventName ||
+                         selectedItem.companyLocation || 
+                         (selectedItem.eventTypes?.length > 0);
+
+  if (!hasAnyBrandData) return null;
+
   return (
     <div className="brand-collaboration-section flex gap-3">
-      {/* Company Logo */}
-      {selectedItem.companyLogo ? (
-        <Image
-          src={selectedItem.companyLogo}
-          width={50}
-          height={50}
-          alt="Company Logo"
-          className="h-12 w-12 bg-cover rounded-full"
-        />
-      ) : (
-        <Image
-          src="/assets/images/logo.svg"
-          width={50}
-          height={50}
-          alt="CAI Logo"
-          className="h-12 w-12 object-contain rounded-full"
-        />
+      {/* Logo section with conditional rendering */}
+      {selectedItem.isBrandCollaboration && (
+        <>
+          <Image
+            src={selectedItem.companyLogo || "/assets/images/logo.svg"} // Default logo if no company logo
+            width={50}
+            height={50}
+            alt={selectedItem.companyLogo ? "Company Logo" : "Default Logo"}
+            className="h-12 w-12 bg-cover rounded-full"
+          />
+          {/* Only show divider if we have both logo and other details */}
+          {(selectedItem.companyName || selectedItem.companyLocation || selectedItem.eventTypes?.length > 0) && (
+            <div className="h-12 border-l border-gray-400"></div>
+          )}
+        </>
       )}
 
-      {/* Divider */}
-      <div className="h-12 border-l border-gray-400"></div>
+      {/* Rest of the brand collaboration content */}
+      {(selectedItem.companyName || selectedItem.companyLocation || selectedItem.eventTypes?.length > 0) && (
+        <div className="text-gray-500 text-sm space-y-1">
+          {/* Company name and location line */}
+          {(selectedItem.companyName || selectedItem.companyLocation) && (
+            <p>
+              {selectedItem.companyName && (
+                <> <span className="text-graphite">{selectedItem.companyName}</span></>
+              )}
+              {selectedItem.companyLocation && (
+                <> • {selectedItem.companyLocation}</>
+              )}
+            </p>
+          )}
 
-      {/* Text Details */}
-      <div className="text-gray-500 text-sm space-y-1">
-        <p>
-          • <span className="text-graphite">
-            {selectedItem.companyName || "Name of company"}
-          </span>{" "}
-          • {selectedItem.companyLocation || "Location of company"}
-        </p>
+          <div className="flex gap-2">
+          {/* Event name line */}
+          {selectedItem.eventName && (
+            <p> <span className="text-graphite">{selectedItem.eventName}</span></p>
+          )}
 
-        <p>
-          • {selectedItem.companyLocation || "Location of company"}
+          {/* Event types line */}
           {selectedItem.eventTypes?.length > 0 && (
-            <>
-              {" • "}
+            <p className="">
               {selectedItem.eventTypes.map((eventType, index) => (
-                <span key={index} className="px-1 text-sm">
-                  {eventType}
+                <span key={index} className="px-1 -ml-2 text-sm">
+                  {index > 0 ? " | " : " • "}{eventType}
                 </span>
               ))}
-            </>
+            </p>
           )}
-        </p>
-      </div>
+            </div>
+        </div>
+      )}
     </div>
   );
 })()}
-
-
           </div>
           </div>
 
@@ -522,14 +537,14 @@ const handleNext = () => {
 
   return (
     <>
-      <p className={`${selectedItem?.isBrandCollaboration ? 'text-graphite mr-3 mt-5' : 'text-graphite mr-3 mt-0'}`}>
+      <p className={`${selectedItem?.isBrandCollaboration ? 'text-graphite mr-3 mt-5' : 'text-graphite mr-3 mt-6'}`}>
         {selectedItem?.description || "Description of the project"}
       </p>
 
      {activeTab === "instagram" && (
         <div
           className={`w-full border-b-[0.5px] border-gray-300 ${
-            selectedItem?.isBrandCollaboration ? "mt-8" : "mt-40"
+            selectedItem?.isBrandCollaboration ? "mt-8" : "mt-36"
           }`}
         ></div>
       )}

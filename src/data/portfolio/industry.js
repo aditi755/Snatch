@@ -10,7 +10,7 @@ export const industryList = [
     "Events Management", "Fashion", "Financial Services", "Fitness & Wellness",
     "Food & Beverage", "Gaming & Esports", "Games & Toys", "Government", "Haircare",
     "Healthcare & Medicine", "History", "Home & Decor", "Hospitality", "Human Rights",
-    "Insurance", "Internet & Software", "Investments", "Jewelry", "Legal Services",
+    "Insurance", "Internet & Software", "Investments", "Jewelry", "Legal Services", "Lifestyle",
     "Literature", "Luxury Goods", "Makeup & Skincare", "Manufacturing", "Marketing",
     "Media & Publishing", "Mental Health", "Modeling", "Music", "Nonprofit & Social Causes",
     "Nutrition", "Outdoor Recreation", "Parenting & Kids", "Performing Arts", "Personal Care",
@@ -19,7 +19,7 @@ export const industryList = [
     "Social Impact", "Social Media", "Software Development", "Spirituality", "Sports",
     "Sustainability", "Teaching & Education", "Tech & Gadgets", "Telecommunications",
     "Transportation", "Travel & Tourism", "Video & Production", "Virtual Reality",
-    "Web Design & Development", "Wine & Spirits",
+    "Web Design & Development", "Wine & Spirits", 
   ];
 
   export const eventTypes = ["Conference", "Workshop", "Webinar", "Networking", "Product Launch", "Brand Activation", "Store Opening", "Exclusive Brand Experience", "Networking", "Industry Conference","Panel Livestream", "Virtual Event", "Podcast or Interview ", "Workshop or Training Session"];

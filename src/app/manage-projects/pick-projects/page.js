@@ -31,19 +31,6 @@ export default function PickProjects() {
 
 
   useEffect(() => {
-    // Use URLSearchParams to get the query parameters
-    // const queryParams = new URLSearchParams(window.location.search);
-    // const code = queryParams.get("code");
-
-    // if (code) {
-    //   fetchInstagramMedia(code)
-    //     .then((mediaData) => setMedia(mediaData))
-    //     .catch((error) => alert(error.message));
-    // } else {
-    //   const mediaData = await getMediaFromDatabase();
-    //   setMedia(mediaData);
-    // }
-
     const fetchMedia = async () => {
       const queryParams = new URLSearchParams(window.location.search);
       const code = queryParams.get("code");

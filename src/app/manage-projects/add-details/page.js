@@ -53,6 +53,8 @@ export default function AddDetails() {
   const [isPortrait, setIsPortrait] = useState(false);
   const [userInput, setUserInput] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+
 // Add this helper function before the return statement
 const checkOrientation = (width, height) => {
   return height > width;
@@ -242,35 +244,6 @@ const handleRemoveValue = (fieldName, value, mediaId) => {
   });
 };
 
-
-  //20 may not create duplicate though but see preview disable 
-//   const handleToggle = () => {
-//   const newIsBrandCollaboration = !isBrandCollaboration;
-//   setIsBrandCollaboration(newIsBrandCollaboration);
-
-//   // Only update if we have an activeImageId and existing form data
-//   if (activeImageId) {
-//     const existingFormData = selectionState.formData.find(
-//       (item) => item.key === activeImageId
-//     );
-
-//     // Only send API request if form data exists
-//     if (existingFormData) {
-//       const updatedEntry = {
-//         ...existingFormData,
-//         isBrandCollaboration: newIsBrandCollaboration
-//       };
-//       updateFormDataForMedia(activeImageId, updatedEntry);
-//     }
-
-//     // Update currentFormData
-//     setCurrentFormData(prevData => ({
-//       ...prevData,
-//       isBrandCollaboration: newIsBrandCollaboration
-//     }));
-//   }
-// };
-
 const handleToggle = () => {
   const newIsBrandCollaboration = !isBrandCollaboration;
   setIsBrandCollaboration(newIsBrandCollaboration);
@@ -364,43 +337,6 @@ const handleToggle = () => {
     ...project,
     status: getProjectStatus(project),
   }));
-
-// const handleUserInput = async () => {
-//   if (!userInput.trim()) return;
-  
-//   setIsGenerating(true);
-//   try {
-//     const result = await generateFormDataFromUserInput(userInput, isBrandCollaboration);
-    
-//     // Update form data with AI generated content
-//     setCurrentFormData(prev => ({
-//       ...prev,
-//       titleName: result.title || prev.titleName,
-//       description: result.description || prev.description,
-//       industries: result.industries || prev.industries,
-//       ...(isBrandCollaboration ? {
-//         companyName: result.company_name || prev.companyName,
-//         companyLocation: result.company_location || prev.companyLocation,
-//         eventName: result.event_name || prev.eventName,
-//         eventTypes: [result.event_type] || prev.eventTypes,
-//       } : {})
-//     }));
-
-//     // Update backend if there's an active image
-//     if (activeImageId) {
-//       updateFormDataForMedia(activeImageId.toString(), currentFormData);
-//     }
-
-//     // Clear input after successful generation
-//     setUserInput('');
-    
-//   } catch (err) {
-//     console.error("AI form generation failed:", err);
-//     alert("Failed to generate form data. Please try again.");
-//   } finally {
-//     setIsGenerating(false);
-//   }
-// };
   
 
 const handleUserInput = async () => {
@@ -449,6 +385,45 @@ const handleUserInput = async () => {
   }
 };
 
+// Add these navigation functions near your other handlers
+const handlePrevious = () => {
+  const currentIndex = projects.findIndex(project => project.mediaId === activeImageId);
+  const newIndex = currentIndex > 0 ? currentIndex - 1 : projects.length - 1;
+  const prevProject = projects[newIndex];
+  if (prevProject) {
+    setActiveImageId(prevProject.mediaId);
+  }
+};
+
+const handleNext = () => {
+  const currentIndex = projects.findIndex(project => project.mediaId === activeImageId);
+  const newIndex = currentIndex < projects.length - 1 ? currentIndex + 1 : 0;
+  const nextProject = projects[newIndex];
+  if (nextProject) {
+    setActiveImageId(nextProject.mediaId);
+  }
+};
+
+  const handleHamburgerClick = () => {
+    setIsMenuVisible((prev) => !prev); // Toggle menu visibility
+  };
+
+
+  const handleProfileClick = () => {
+    router.push("/onboarding/step-1");
+  };
+
+  const handleNextClick = () => {
+    router.push("/manage-projects/pick-projects");
+  };
+
+  const handleDashboardClick = () => {
+    router.push("/dashboard");
+  }
+
+  const handleSettingClick = () => {
+   router.push("/settings")
+  }
 
   return (
     <div className="flex flex-col items-start space-x-8 h-[77vh] w-full overflow-x-hidden overflow-y-hidden">
@@ -840,7 +815,63 @@ const handleUserInput = async () => {
 
 <div className="fixed bottom-2 left-1/2 transform -translate-x-1/2 bg-white rounded-lg border-t border-gray-300 py-1 px-4 mb-2">
   <div className="flex gap-2 justify-center mx-auto">
-    <div className="flex gap-2 px-2 py-1.5 justify-center bg-gray-100 rounded-md">
+    <div className="flex gap-2 px-3 py-1.5 justify-center bg-gray-100 rounded-md">
+        <button onClick={handleNextClick} className="w-[90px] h-[37px] bg-gray-100 text-electric-blue text-2xl font-semibold    text-center">
+           Snatch
+          </button>
+       <button
+                  onClick={handleHamburgerClick}
+                  className="w-[50px] h-[37px] bg-gray-100 text-electric-blue border  rounded-md mx-auto font-medium hover:bg-transparent relative"
+                >
+                  <Image
+                    className="mx-auto w-8"
+                    src="/assets/icons/onboarding/Hamburger.svg"
+                    alt="hamburger"
+                    width={20}
+                    height={20}
+                  />
+                </button>
+      
+                {/* Dropdown Menu */}
+                {isMenuVisible && (
+                  <div className="absolute top-[-260%] left-[-29px] w-[200px] bg-white shadow-lg rounded-md border border-light-grey z-50">
+                    <ul className="flex flex-col p-3 gap-2">
+                      <li
+                        onClick={handleDashboardClick}
+                        className="cursor-pointer text-electric-blue hover:bg-gray-100 rounded-md p-2"
+                      >
+                        Dashboard
+                      </li>
+                      <li
+                        onClick={handleSettingClick}
+                        className="cursor-pointer text-electric-blue hover:bg-gray-100 rounded-md p-2"
+                      >
+                        Settings
+                      </li>
+                      <li
+                        onClick={handleProfileClick}
+                        className="cursor-pointer text-electric-blue hover:bg-gray-100 rounded-md p-2"
+                      >
+                        Profile
+                      </li>
+                    </ul>
+                  </div>
+                )}
+          <button
+          className="px-2 py-1.5 text-electric-blue rounded hover:opacity-80 transition-colors underline underline-offset-4"
+          onClick={handlePrevious}
+          disabled={projects.length <= 1}
+        >
+          ← Previous Project
+        </button>
+        
+        <button
+          className="px-2 py-1.5 text-electric-blue rounded hover:opacity-80 transition-colors underline underline-offset-4"
+          onClick={handleNext}
+          disabled={projects.length <= 1}
+        >
+          Next Project →
+        </button>
       <button className=" px-4 py-1.5 border-electric-blue border-2 text-electric-blue rounded hover:bg-electric-blue hover:text-white transition-colors" onClick={handleBackClick}>
         Back
       </button>

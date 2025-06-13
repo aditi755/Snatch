@@ -10,8 +10,11 @@ import { PostHogProvider as PHProvider } from "posthog-js/react";
 
 // 🌟 PostHogProvider component
 function PostHogProvider({ children }) {
+  const pathname = usePathname();
+  
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    // Only initialize PostHog if we're on a public portfolio path
+    if (typeof window !== "undefined" && pathname.includes('/media-kit')) {
       posthog.init(
         process.env.NEXT_PUBLIC_POSTHOG_KEY || "phc_j5chnS7H8Lbghn45GojA3yDiYxxbJi4VjnxQW1SEHtn",
         {
@@ -19,11 +22,20 @@ function PostHogProvider({ children }) {
           capture_pageview: false,
           debug: true,
           person_profiles: "identified_only",
+          // Only load PostHog on public portfolio paths
+          loaded: (posthog) => {
+            posthog.debug = window.location.pathname.includes('/media-kit');
+          }
         }
       );
-      console.log("✅ PostHog initialized successfully");
+      console.log("✅ PostHog initialized for public portfolio view");
     }
-  }, []);
+  }, [pathname]);
+
+  // Only render PostHog provider if we're on a public portfolio path
+  if (!pathname.includes('/media-kit')) {
+    return children;
+  }
 
   return (
     <PHProvider client={posthog}>
@@ -40,12 +52,19 @@ function PostHogPageView() {
   const posthog = usePostHog();
 
   useEffect(() => {
-    if (pathname && posthog) {
+    // Only track views for public portfolio paths
+    if (pathname && posthog && pathname.includes('/media-kit')) {
       let url = window.location.origin + pathname;
       if (searchParams.toString()) {
         url = url + "?" + searchParams.toString();
       }
-      posthog.capture("$pageview", { $current_url: url });
+      
+      // Capture pageview with additional context
+      posthog.capture("$pageview", {
+        $current_url: url,
+        path_type: 'public_portfolio',
+        username: pathname.split('/')[1] // Captures the username from the URL
+      });
     }
   }, [pathname, searchParams, posthog]);
 
